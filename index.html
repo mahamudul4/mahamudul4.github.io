@@ -1,10 +1,2739 @@
-<!DOCTYPE html>
-<html>
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
 <head>
-  <title>Mahamudul Hasan</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mahamudul Hasan - Portfolio</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- AOS (Animate on Scroll) -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+    /* Root variables for consistent theming */
+    :root {
+      --primary: #6366f1;
+      --primary-light: #818cf8;
+      --primary-dark: #4f46e5;
+      --secondary: #8b5cf6;
+      --accent: #ec4899;
+      --bg-primary: #ffffff;
+      --bg-secondary: #f9fafb;
+      --bg-accent: #f3f4f6;
+      --text-primary: #111827;
+      --text-secondary: #6b7280;
+      --border-light: #e5e7eb;
+      --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      scroll-behavior: smooth;
+      line-height: 1.6;
+    }
+    .navbar {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+    .navbar::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #6366f1, #a78bfa, #ec4899);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+    .navbar.scrolled {
+      background-color: rgba(255, 255, 255, 0.98);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      backdrop-filter: blur(20px);
+      border-bottom-color: rgba(229, 231, 235, 1);
+    }
+    .navbar.scrolled::after {
+      width: var(--scroll-progress, 0%);
+    }
+    .card {
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.6s;
+    }
+    .card:hover::before {
+      left: 100%;
+    }
+    .card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: var(--shadow-xl);
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(180deg, #6366f1, #a78bfa, #ec4899);
+      transform: translateX(-50%);
+      border-radius: 2px;
+      box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+    }
+    .timeline-item:nth-child(odd) .card {
+      margin-left: 50%;
+      padding-left: 20px;
+    }
+    .timeline-item:nth-child(even) .card {
+      margin-right: 50%;
+      padding-right: 20px;
+    }
+    @media (max-width: 768px) {
+      .timeline::before {
+        left: 20px;
+      }
+      .timeline-item:nth-child(odd) .card,
+      .timeline-item:nth-child(even) .card {
+        margin-left: 40px;
+        margin-right: 20px;
+        padding-left: 0;
+        padding-right: 0;
+      }
+      h1 {
+        font-size: 2.5rem !important;
+      }
+      h2 {
+        font-size: 2rem !important;
+      }
+      h3 {
+        font-size: 1.25rem !important;
+      }
+    }
+    .filter-btn {
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .filter-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(99, 102, 241, 0.1);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+    .filter-btn:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+    .filter-btn.active {
+      background: linear-gradient(135deg, #6366f1, #a78bfa);
+      color: white;
+      box-shadow: var(--shadow-md);
+      transform: scale(1.05);
+    }
+    .student-list {
+      column-count: 3;
+      column-gap: 2rem;
+      column-rule: 1px solid #e5e7eb;
+    }
+
+    @media (max-width: 768px) {
+      .student-list {
+        column-count: 1;
+      }
+      :root {
+        font-size: 14px;
+      }
+      .scroll-to-top {
+        bottom: 1rem;
+        right: 1rem;
+        width: 3rem;
+        height: 3rem;
+      }
+    }
+    
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .student-list {
+        column-count: 2;
+      }
+    }
+
+    /* Enhanced Animations */
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { 
+        box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        transform: scale(1);
+      }
+      50% { 
+        box-shadow: 0 0 40px rgba(99, 102, 241, 0.6);
+        transform: scale(1.05);
+      }
+    }
+
+    @keyframes slide-in-left {
+      from {
+        opacity: 0;
+        transform: translateX(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slide-in-right {
+      from {
+        opacity: 0;
+        transform: translateX(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes fade-in-up {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes rotate-slow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    /* Enhanced Card Animations */
+    .enhanced-card {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .enhanced-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .enhanced-card:hover::before {
+      left: 100%;
+    }
+
+    .enhanced-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(99, 102, 241, 0.3);
+    }
+
+    /* Floating Animation for Icons */
+    .floating-icon {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    /* Pulse Glow for Important Elements */
+    .pulse-glow {
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+
+    /* Shimmer Effect for Loading States */
+    .shimmer {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+
+    /* Enhanced Button Animations */
+    .enhanced-btn {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .enhanced-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.6s ease-out, height 0.6s ease-out;
+    }
+
+    .enhanced-btn:hover::before {
+      width: 400px;
+      height: 400px;
+    }
+
+    .enhanced-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-xl);
+    }
+    
+    .enhanced-btn:active {
+      transform: translateY(-1px);
+    }
+
+    /* Scroll-triggered animations */
+    .scroll-fade-in {
+      opacity: 1;
+      transform: translateY(0);
+      transition: all 0.6s ease-out;
+    }
+
+    .scroll-fade-in.animate {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    .scroll-fade-in.animate.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Parallax effect for background elements */
+    .parallax-bg {
+      transform: translateZ(0);
+      will-change: transform;
+    }
+
+    /* Enhanced particle system */
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    /* Gradient text animation */
+    .gradient-text {
+      background: linear-gradient(45deg, #4f46e5, #7c3aed, #ec4899, #4f46e5);
+      background-size: 400% 400%;
+      animation: gradient-shift 3s ease infinite;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    @keyframes gradient-shift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    
+    /* Scroll to top button */
+    .scroll-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 3.5rem;
+      height: 3.5rem;
+      background: var(--primary-gradient);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: var(--shadow-lg);
+      z-index: 1000;
+    }
+    .scroll-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+    .scroll-to-top:hover {
+      transform: translateY(-5px) scale(1.1);
+      box-shadow: var(--shadow-xl);
+    }
+
+    /* Enhanced mobile menu animation */
+    .mobile-menu-slide {
+      transform: translateX(-100%);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .mobile-menu-slide.open {
+      transform: translateX(0);
+    }
+
+    /* Loading animation for charts */
+    .chart-loading {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .chart-loading::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      animation: shimmer 1.5s infinite;
+    }
+  </style>
 </head>
-<body>
-  <h1>Mahamudul Hasan</h1>
-  <p>PhD Student | Recommender Systems</p>
+<body class="min-h-screen">
+  <!-- Navbar (Redesigned) -->
+  <nav class="navbar fixed top-0 w-full z-50 bg-white/95 backdrop-blur-lg border-b border-gray-200 shadow-sm transition-all duration-300">
+    <div class="container mx-auto flex justify-between items-center px-6 py-4">
+      <h1 class="text-2xl md:text-3xl font-extrabold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent drop-shadow-sm tracking-tight">Mahamudul Hasan</h1>
+      <button id="nav-toggle" class="md:hidden text-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 p-2 rounded-lg">
+        <i class="fas fa-bars fa-2x"></i>
+      </button>
+      <ul id="nav-menu" class="hidden md:flex space-x-6 text-lg font-medium">
+        <li><a href="#home" class="nav-link">Home</a></li>
+        <li><a href="#about" class="nav-link">About</a></li>
+        <li><a href="#education" class="nav-link">Education</a></li>
+        <li><a href="#experience" class="nav-link">Experience</a></li>
+        <li><a href="#skills" class="nav-link">Skills</a></li>
+        <li><a href="#courses" class="nav-link">Instructor</a></li>
+        <li><a href="#publications" class="nav-link">Publications</a></li>
+        <li><a href="#reviewer" class="nav-link">Reviewer</a></li>
+        <li><a href="#network" class="nav-link">Networking</a></li>
+        <li><a href="#funding" class="nav-link">Funding</a></li>
+        <li><a href="#awards" class="nav-link">Awards</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+      </ul>
+    </div>
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="md:hidden fixed top-0 left-0 w-full h-full bg-white/95 backdrop-blur-xl z-50 hidden flex-col items-center justify-center transition-opacity duration-300" style="opacity: 0;">
+      <button id="nav-close" class="absolute top-6 right-6 text-indigo-700 focus:outline-none hover:scale-110 transition-transform duration-300"><i class="fas fa-times fa-2x"></i></button>
+      <ul class="flex flex-col space-y-8 text-2xl font-semibold">
+        <li data-aos="fade-down" data-aos-delay="100"><a href="#home" class="nav-link block text-center py-2 px-6 rounded-lg hover:bg-indigo-50 transition-all">Home</a></li>
+        <li data-aos="fade-down" data-aos-delay="150"><a href="#about" class="nav-link block text-center py-2 px-6 rounded-lg hover:bg-indigo-50 transition-all">About</a></li>
+        <li data-aos="fade-down" data-aos-delay="200"><a href="#education" class="nav-link block text-center py-2 px-6 rounded-lg hover:bg-indigo-50 transition-all">Education</a></li>
+        <li data-aos="fade-down" data-aos-delay="250"><a href="#experience" class="nav-link block text-center py-2 px-6 rounded-lg hover:bg-indigo-50 transition-all">Experience</a></li>
+        <li data-aos="fade-down" data-aos-delay="300"><a href="#skills" class="nav-link block text-center py-2 px-6 rounded-lg hover:bg-indigo-50 transition-all">Skills</a></li>
+        <li data-aos="fade-down" data-aos-delay="350"><a href="#courses" class="nav-link block text-center py-2 px-6 rounded-lg hover:bg-indigo-50 transition-all">Instructor</a></li>
+        <li data-aos="fade-down" data-aos-delay="400"><a href="#publications" class="nav-link block text-center py-2 px-6 rounded-lg hover:bg-indigo-50 transition-all">Publications</a></li>
+        <li data-aos="fade-down" data-aos-delay="450"><a href="#reviewer" class="nav-link block text-center py-2 px-6 rounded-lg hover:bg-indigo-50 transition-all">Reviewer</a></li>
+        <li data-aos="fade-down" data-aos-delay="500"><a href="#network" class="nav-link block text-center py-2 px-6 rounded-lg hover:bg-indigo-50 transition-all">Network</a></li>
+        <li data-aos="fade-down" data-aos-delay="550"><a href="#funding" class="nav-link block text-center py-2 px-6 rounded-lg hover:bg-indigo-50 transition-all">Funding</a></li>
+        <li data-aos="fade-down" data-aos-delay="600"><a href="#awards" class="nav-link block text-center py-2 px-6 rounded-lg hover:bg-indigo-50 transition-all">Awards</a></li>
+        <li data-aos="fade-down" data-aos-delay="650"><a href="#contact" class="nav-link block text-center py-2 px-6 rounded-lg hover:bg-indigo-50 transition-all">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <style>
+    .nav-link {
+      position: relative;
+      color: #4f46e5;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      padding-bottom: 4px;
+      font-weight: 500;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #6366f1 0%, #a78bfa 100%);
+      border-radius: 2px;
+      transform: scaleX(0);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+    }
+    .nav-link:hover, .nav-link:focus {
+      color: #7c3aed;
+      transform: translateY(-2px);
+    }
+    .nav-link:hover::after, .nav-link:focus::after, .nav-link.active-section::after {
+      transform: scaleX(1);
+    }
+    .nav-link.active-section {
+      color: #7c3aed;
+      font-weight: 600;
+    }
+  </style>
+
+  <script>
+    // Wait for DOM to be loaded before initializing
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize AOS with enhanced settings
+      if (typeof AOS !== 'undefined') {
+        AOS.init({
+          duration: 1000,
+          easing: 'ease-out-cubic',
+          once: true,
+          mirror: false,
+          offset: 120,
+          delay: 50,
+          anchorPlacement: 'top-bottom'
+        });
+      }
+
+      // Enhanced Navbar scroll effect with progress indicator
+      window.addEventListener('scroll', () => {
+        const navbar = document.querySelector('.navbar');
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrollProgress = (scrollTop / scrollHeight) * 100;
+        
+        navbar.style.setProperty('--scroll-progress', scrollProgress + '%');
+        
+        if (window.scrollY > 50) {
+          navbar.classList.add('scrolled');
+        } else {
+          navbar.classList.remove('scrolled');
+        }
+      });
+
+      // Smooth scrolling for nav links with enhanced behavior
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      });
+
+      // Enhanced Mobile menu toggle with better animations
+      const navToggle = document.getElementById('nav-toggle');
+      const navMenu = document.getElementById('nav-menu');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const navClose = document.getElementById('nav-close');
+      
+      if (navToggle && mobileMenu && navClose) {
+        const openMenu = () => {
+          mobileMenu.classList.remove('hidden');
+          setTimeout(() => {
+            mobileMenu.classList.add('flex');
+            mobileMenu.style.opacity = '1';
+            document.body.style.overflow = 'hidden';
+          }, 10);
+        };
+        
+        const closeMenu = () => {
+          mobileMenu.style.opacity = '0';
+          setTimeout(() => {
+            mobileMenu.classList.add('hidden');
+            mobileMenu.classList.remove('flex');
+            document.body.style.overflow = '';
+          }, 300);
+        };
+        
+        navToggle.addEventListener('click', openMenu);
+        navClose.addEventListener('click', closeMenu);
+        
+        // Close mobile menu on link click with smooth transition
+        mobileMenu.querySelectorAll('a').forEach(link => {
+          link.addEventListener('click', closeMenu);
+        });
+        
+        // Close on escape key
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && !mobileMenu.classList.contains('hidden')) {
+            closeMenu();
+          }
+        });
+      }
+
+      // Enhanced particle system for hero section with improved performance
+      const canvas = document.getElementById('heroParticles');
+      if (canvas) {
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const colors = ['#6366f1', '#8b5cf6', '#a78bfa', '#c084fc', '#ec4899', '#f472b6'];
+        
+        function resize() {
+          canvas.width = window.innerWidth;
+          canvas.height = document.getElementById('home').offsetHeight;
+        }
+        
+        function createParticles() {
+          particles = [];
+          const particleCount = Math.min(80, Math.floor(canvas.width / 15));
+          
+          for (let i = 0; i < particleCount; i++) {
+            particles.push({
+              x: Math.random() * canvas.width,
+              y: Math.random() * canvas.height,
+              r: Math.random() * 4 + 1,
+              dx: (Math.random() - 0.5) * 1.2,
+              dy: (Math.random() - 0.5) * 1.2,
+              color: colors[Math.floor(Math.random() * colors.length)],
+              opacity: Math.random() * 0.6 + 0.3,
+              pulse: Math.random() * 0.02 + 0.01,
+              originalR: Math.random() * 4 + 1
+            });
+          }
+        }
+        
+        function drawParticles() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          
+          for (const p of particles) {
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI);
+            const alpha = Math.floor(p.opacity * 255).toString(16).padStart(2, '0');
+            ctx.fillStyle = p.color + alpha;
+            ctx.shadowColor = p.color;
+            ctx.shadowBlur = 15;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+            
+            // Enhanced pulsing effect
+            p.r = p.originalR + Math.sin(Date.now() * p.pulse) * 1.5;
+          }
+        }
+        
+        function updateParticles() {
+          for (const p of particles) {
+            p.x += p.dx;
+            p.y += p.dy;
+            
+            // Smooth boundary bouncing
+            if (p.x < 0 || p.x > canvas.width) {
+              p.dx *= -1;
+              p.x = Math.max(0, Math.min(canvas.width, p.x));
+            }
+            if (p.y < 0 || p.y > canvas.height) {
+              p.dy *= -1;
+              p.y = Math.max(0, Math.min(canvas.height, p.y));
+            }
+          }
+        }
+        
+        function animate() {
+          drawParticles();
+          updateParticles();
+          requestAnimationFrame(animate);
+        }
+        
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+          clearTimeout(resizeTimeout);
+          resizeTimeout = setTimeout(() => {
+            resize();
+            createParticles();
+          }, 250);
+        });
+        
+        resize();
+        createParticles();
+        animate();
+      }
+
+      // Enhanced Skills Chart with better animations
+      const skillsCtx = document.getElementById('skillsChart');
+      if (skillsCtx && typeof Chart !== 'undefined') {
+        new Chart(skillsCtx, {
+          type: 'radar',
+          data: {
+            labels: ['Python', 'Java', 'SQL', 'JavaScript', 'R', 'C'],
+            datasets: [{
+              label: 'Proficiency',
+              data: [95, 90, 85, 80, 75, 70],
+              backgroundColor: 'rgba(79, 70, 229, 0.2)',
+              borderColor: '#4f46e5',
+              borderWidth: 3,
+              pointBackgroundColor: '#4f46e5',
+              pointBorderColor: '#fff',
+              pointBorderWidth: 2,
+              pointRadius: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              r: {
+                beginAtZero: true,
+                max: 100,
+                ticks: {
+                  stepSize: 20,
+                  color: '#6b7280'
+                },
+                grid: {
+                  color: 'rgba(107, 114, 128, 0.2)'
+                },
+                pointLabels: {
+                  color: '#374151',
+                  font: {
+                    size: 14,
+                    weight: 'bold'
+                  }
+                }
+              }
+            },
+            plugins: {
+              legend: { 
+                position: 'top',
+                labels: {
+                  color: '#374151',
+                  font: {
+                    size: 16,
+                    weight: 'bold'
+                  }
+                }
+              }
+            },
+            animation: {
+              duration: 2000,
+              easing: 'easeOutQuart'
+            }
+          }
+        });
+      }
+
+      // Enhanced Courses Chart with better styling
+      const coursesCtx = document.getElementById('coursesChart');
+      if (coursesCtx && typeof Chart !== 'undefined') {
+        const coursesData = {
+          Summer_2015: ['Data Mining', 'Computer Fundamentals'],
+          Fall_2015: ['Computer Fundamentals', 'Operating Systems'],
+          Spring_2016: ['Artificial Intelligence', 'Object Oriented Programming', 'Computer Fundamentals', 'Discrete Mathematics'],
+          Summer_2016: ['Theory of Computations', 'Computer Fundamentals'],
+          Fall_2016: ['Information Retrieval and Recommender Systems', 'Computer Fundamentals'],
+          Spring_2017: ['Data Structure', 'Computer Fundamentals'],
+          Summer_2017: ['Compiler Designs', 'Theory of Computations'],
+          Fall_2017: ['Database Management Systems', 'Advance Database Management Systems'],
+          Spring_2018: ['Database Management Systems', 'Web Programming', 'Computer Fundamentals'],
+          Summer_2018: ['Database Management Systems', 'Web Programming', 'Computer Fundamentals'],
+          Fall_2018: ['Database Management Systems', 'Web Programming', 'Computer Fundamentals'],
+          Spring_2019: ['Database Management Systems', 'Web Programming', 'Computer Fundamentals'],
+          Summer_2019: ['Database Management Systems', 'Web Programming', 'Computer Fundamentals'],
+          Fall_2019: ['Database Management Systems', 'Web Programming', 'Computer Fundamentals'],
+          Spring_2020: ['Web Programming', 'Object Oriented Programming'],
+          Summer_2020: ['Web Programming', 'Object Oriented Programming', 'Structured Programming'],
+          Spring_2021: ['Object Oriented Programming', 'Web Programming'],
+          Summer_2021: ['Object Oriented Programming', 'Web Programming'],
+          Fall_2021: ['Object Oriented Programming', 'Web Programming', 'Database Management Systems'],
+          Spring_2022: ['Object Oriented Programming', 'Web Programming', 'Algorithms'],
+          Summer_2022: ['Object Oriented Programming', 'Web Programming', 'Computer Fundamentals'],
+          Fall_2022: ['Object Oriented Programming', 'Web Programming'],
+          Spring_2023: ['Object Oriented Programming', 'Computer Fundamentals', 'Database Management Systems'],
+          Summer_2023: ['Object Oriented Programming', 'Computer Aided Designs', 'Web Programming'],
+          Fall_2023: ['Object Oriented Programming', 'Computer Aided Designs', 'Web Programming'],
+          Spring_2024: ['Object Oriented Programming', 'Computer Aided Designs', 'Web Programming', 'Differential and Integral Calculus', 'Co-ordinate Geometry and Linear Algebra'],
+          Summer_2024: ['Object Oriented Programming', 'Computer Aided Designs', 'Web Programming']
+        };
+
+        new Chart(coursesCtx, {
+          type: 'bar',
+          data: {
+            labels: Object.keys(coursesData),
+            datasets: [{
+              label: 'Number of Courses',
+              data: Object.values(coursesData).map(courses => courses.length),
+              backgroundColor: 'rgba(79, 70, 229, 0.7)',
+              borderColor: '#4f46e5',
+              borderWidth: 2,
+              borderRadius: 8,
+              hoverBackgroundColor: 'rgba(79, 70, 229, 0.9)',
+              hoverBorderColor: '#3730a3'
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+                title: { 
+                  display: true, 
+                  text: 'Number of Courses',
+                  color: '#374151',
+                  font: {
+                    size: 14,
+                    weight: 'bold'
+                  }
+                },
+                ticks: { 
+                  stepSize: 1,
+                  color: '#6b7280'
+                },
+                grid: {
+                  color: 'rgba(107, 114, 128, 0.2)'
+                }
+              },
+              x: {
+                title: { 
+                  display: true, 
+                  text: 'Semester/Year',
+                  color: '#374151',
+                  font: {
+                    size: 14,
+                    weight: 'bold'
+                  }
+                },
+                ticks: {
+                  color: '#6b7280',
+                  maxRotation: 45
+                },
+                grid: {
+                  color: 'rgba(107, 114, 128, 0.1)'
+                }
+              }
+            },
+            plugins: {
+              legend: { 
+                position: 'top',
+                labels: {
+                  color: '#374151',
+                  font: {
+                    size: 16,
+                    weight: 'bold'
+                  }
+                }
+              },
+              tooltip: {
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                titleColor: '#fff',
+                bodyColor: '#fff',
+                borderColor: '#4f46e5',
+                borderWidth: 1,
+                callbacks: {
+                  label: function(context) {
+                    let label = context.dataset.label || '';
+                    if (label) label += ': ';
+                    label += context.raw;
+                    const semester = context.label.replace('_', ' ');
+                    const courses = coursesData[semester.replace(' ', '_')];
+                    return [label, 'Courses: ' + courses.join(', ')];
+                  }
+                }
+              }
+            },
+            animation: {
+              duration: 2500,
+              easing: 'easeOutQuart'
+            }
+          }
+        });
+      }
+
+      // Enhanced Publication Filter with smooth animations
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      const publications = document.querySelectorAll('.publication');
+
+      filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const filter = button.getAttribute('data-filter');
+          
+          // Update active button with enhanced animation
+          filterButtons.forEach(btn => {
+            btn.classList.remove('active');
+            btn.style.transform = 'scale(1)';
+          });
+          button.classList.add('active');
+          button.style.transform = 'scale(1.05)';
+          
+          // Filter publications with smooth transitions
+          publications.forEach((pub, index) => {
+            if (filter === 'all' || pub.classList.contains(filter)) {
+              pub.style.display = 'block';
+              pub.style.opacity = '0';
+              pub.style.transform = 'translateY(20px)';
+              
+              setTimeout(() => {
+                pub.style.transition = 'all 0.5s ease-out';
+                pub.style.opacity = '1';
+                pub.style.transform = 'translateY(0)';
+              }, index * 100);
+            } else {
+              pub.style.transition = 'all 0.3s ease-out';
+              pub.style.opacity = '0';
+              pub.style.transform = 'translateY(-20px)';
+              setTimeout(() => {
+                pub.style.display = 'none';
+              }, 300);
+            }
+          });
+        });
+      });
+
+      // Scroll-triggered animations for enhanced user experience
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, observerOptions);
+
+      // Observe elements for scroll animations
+      document.querySelectorAll('.scroll-fade-in').forEach(el => {
+        observer.observe(el);
+      });
+
+      // Enhanced floating icons animation
+      document.querySelectorAll('.floating-icon').forEach(icon => {
+        icon.style.animationDelay = Math.random() * 2 + 's';
+      });
+
+      // Add enhanced card effects
+      document.querySelectorAll('.enhanced-card').forEach(card => {
+        card.addEventListener('mouseenter', function() {
+          this.style.transform = 'translateY(-8px) scale(1.02)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+          this.style.transform = 'translateY(0) scale(1)';
+        });
+      });
+
+      // Enhanced button effects
+      document.querySelectorAll('.enhanced-btn').forEach(btn => {
+        btn.addEventListener('mouseenter', function() {
+          this.style.transform = 'translateY(-2px)';
+        });
+        
+        btn.addEventListener('mouseleave', function() {
+          this.style.transform = 'translateY(0)';
+        });
+      });
+
+      // Scroll to top button
+      const scrollToTopBtn = document.createElement('div');
+      scrollToTopBtn.className = 'scroll-to-top';
+      scrollToTopBtn.innerHTML = '<i class="fas fa-arrow-up"></i>';
+      document.body.appendChild(scrollToTopBtn);
+      
+      scrollToTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+      
+      window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 500) {
+          scrollToTopBtn.classList.add('visible');
+        } else {
+          scrollToTopBtn.classList.remove('visible');
+        }
+      });
+      
+      // Active section highlighting in navigation
+      const sections = document.querySelectorAll('section[id]');
+      const navLinks = document.querySelectorAll('.nav-link');
+      
+      function highlightNavigation() {
+        const scrollY = window.pageYOffset;
+        
+        sections.forEach(section => {
+          const sectionHeight = section.offsetHeight;
+          const sectionTop = section.offsetTop - 100;
+          const sectionId = section.getAttribute('id');
+          
+          if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
+            navLinks.forEach(link => {
+              link.classList.remove('active-section');
+              if (link.getAttribute('href') === '#' + sectionId) {
+                link.classList.add('active-section');
+              }
+            });
+          }
+        });
+      }
+      
+      window.addEventListener('scroll', highlightNavigation);
+      
+      // Performance optimization: Throttle scroll events
+      let ticking = false;
+      function updateOnScroll() {
+        highlightNavigation();
+        ticking = false;
+      }
+
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          requestAnimationFrame(updateOnScroll);
+          ticking = true;
+        }
+      });
+
+      // Add loading animation for charts
+      document.querySelectorAll('canvas').forEach(canvas => {
+        canvas.parentElement.classList.add('chart-loading');
+        setTimeout(() => {
+          canvas.parentElement.classList.remove('chart-loading');
+        }, 2000);
+      });
+    });
+  </script>
+
+  <!-- Hero Section (Redesigned) -->
+  <section id="home" class="relative min-h-screen flex items-center justify-center text-center overflow-hidden bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
+    <!-- Animated Gradient/Particles Background -->
+    <div class="absolute inset-0 z-0">
+      <div class="absolute inset-0 bg-gradient-to-br from-indigo-100/40 via-purple-100/40 to-pink-100/40"></div>
+      <canvas id="heroParticles" class="w-full h-full"></canvas>
+    </div>
+    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-white/10 to-white/30 z-0"></div>
+    <div class="relative z-10 container mx-auto px-6" data-aos="fade-up" data-aos-duration="1200">  
+      <div class="mb-8 flex justify-center" data-aos="zoom-in" data-aos-delay="200">
+        <div class="relative">
+          <div class="absolute inset-0 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full blur-3xl opacity-30 animate-pulse"></div>
+          <img src="https://raw.githubusercontent.com/mahamudul4/mahamudul/refs/heads/main/profile.jpg" alt="Mahamudul Hasan" class="relative w-44 h-44 md:w-56 md:h-56 rounded-full mx-auto border-4 border-white shadow-2xl transition-all duration-500 hover:scale-110" style="box-shadow:0 0 60px 10px rgba(99, 102, 241, 0.2);">
+        </div>
+      </div>
+      <h1 class="text-6xl md:text-8xl font-extrabold mb-6 leading-tight tracking-tight text-gray-900" data-aos="fade-up" data-aos-delay="300" style="text-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+        Mahamudul Hasan
+      </h1>
+      <p class="text-xl md:text-3xl mb-6 font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent leading-relaxed max-w-3xl mx-auto" data-aos="fade-up" data-aos-delay="400">
+        Research Assistant | Senior Lecturer | Recommender Systems Researcher
+      </p>
+      <p class="text-lg md:text-xl mb-10 font-medium text-gray-600" data-aos="fade-up" data-aos-delay="500">
+        Department of Computer Science and Engineering, University of Minnesota, Twin Cities, USA
+      </p>
+      <div class="flex flex-col sm:flex-row justify-center gap-6" data-aos="fade-up" data-aos-delay="600">
+        <a href="#about" class="enhanced-btn bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-10 py-5 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl hover:scale-105 transform transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-indigo-300">
+          <span class="relative z-10">Explore My Work</span>
+        </a>
+        <a href="#contact" class="enhanced-btn bg-white text-indigo-600 border-2 border-indigo-200 px-10 py-5 rounded-full font-bold text-lg shadow-lg hover:shadow-xl hover:bg-indigo-50 hover:scale-105 transform transition-all duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-indigo-300">
+          <span class="relative z-10">Get in Touch</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    /* Simplified hero background */
+  </style>
+  <!-- End Hero Section -->
+
+  <!-- About Section (Redesigned) -->
+  <section id="about" class="py-24 bg-white relative overflow-hidden">
+    <!-- Background decoration -->
+    <div class="absolute inset-0 bg-gradient-to-br from-indigo-50/30 via-transparent to-purple-50/30"></div>
+    
+    <div class="container mx-auto px-6 relative z-10">
+      <div class="text-center mb-16" data-aos="fade-up">
+        <h2 class="text-5xl md:text-6xl font-extrabold mb-6 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+          About Me
+        </h2>
+        <div class="w-24 h-1.5 bg-gradient-to-r from-indigo-600 to-purple-600 mx-auto rounded-full shadow-lg"></div>
+      </div>
+      
+      <div class="flex flex-col lg:flex-row items-center gap-16">
+        <div class="lg:w-1/2" data-aos="zoom-in" data-aos-delay="200">
+          <div class="relative group">
+            <div class="absolute inset-0 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-3xl blur-2xl opacity-30 group-hover:opacity-50 transition-opacity duration-500"></div>
+            <img src="https://raw.githubusercontent.com/mahamudul4/mahamudul/refs/heads/main/profile.jpg" 
+                 alt="Mahamudul Hasan" 
+                 class="relative w-96 h-96 mx-auto rounded-3xl object-cover shadow-2xl transition-all duration-500 group-hover:scale-105"
+                 style="box-shadow: 0 25px 50px rgba(99, 102, 241, 0.25);">
+            <div class="absolute inset-0 rounded-3xl bg-gradient-to-br from-indigo-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          </div>
+        </div>
+        
+        <div class="lg:w-1/2" data-aos="fade-left" data-aos-delay="400">
+          <div class="bg-white/80 backdrop-blur-xl rounded-3xl p-10 shadow-2xl border border-white/30 hover:shadow-indigo-400/20 transition-all duration-500">
+            <p class="text-lg leading-loose text-gray-700 font-normal">
+              I am a PhD Candidate and Research Assistant in the Department of Computer Science and Engineering at the University of Minnesota, Twin Cities, where I specialize in Recommender Systems and Human-Computer Interactions. My current research focuses on the POPROX News Recommender System and MovieLens Movie Recommender Systems, exploring how AI can enhance personalized content delivery and user experience.
+            </p>
+            <p class="text-lg leading-loose text-gray-700 font-normal mt-4">
+              With over 8 years of teaching and research experience in Bangladesh, I served as a Senior Lecturer at East West University, where I contributed to cutting-edge research in Machine Learning, Computer Vision, and Blockchain technologies. My work has been recognized with prestigious awards including the Best Researcher Award, Best Paper Award at CIIR 2023, and a Publication Award from East West University. I am passionate about leveraging artificial intelligence to solve real-world challenges and advancing the frontiers of academic research.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Education Section (Redesigned) -->
+  <section id="education" class="py-24 bg-gray-50 relative overflow-hidden">
+    <!-- Background decoration -->
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(99,102,241,0.03)_0%,transparent_70%)]"></div>
+    
+    <div class="container mx-auto px-6 relative z-10">
+      <div class="text-center mb-16" data-aos="fade-up">
+        <h2 class="text-5xl md:text-6xl font-extrabold mb-6 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+          Education
+        </h2>
+        <div class="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full"></div>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-6xl mx-auto">
+        <div class="group" data-aos="fade-right" data-aos-delay="200">
+          <div class="card enhanced-card bg-white/85 backdrop-blur-xl rounded-3xl p-10 shadow-2xl border border-white/30 hover:border-indigo-200/50 h-full">
+            <div class="flex items-start gap-5">
+              <div class="w-14 h-14 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-xl group-hover:scale-110 transition-transform duration-300">
+                <i class="fas fa-graduation-cap"></i>
+              </div>
+              <div class="flex-1">
+                <h3 class="text-2xl font-bold text-gray-800 mb-3 group-hover:text-indigo-600 transition-colors">
+                  PhD Candidate, Computer Science and Engineering
+                </h3>
+                <p class="text-indigo-600 font-semibold mb-2 text-lg">University of Minnesota, Twin Cities, USA</p>
+                <p class="text-gray-600 font-medium">Present</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-left" data-aos-delay="300">
+          <div class="card enhanced-card bg-white/85 backdrop-blur-xl rounded-3xl p-10 shadow-2xl border border-white/30 hover:border-purple-200/50 h-full">
+            <div class="flex items-start gap-5">
+              <div class="w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-xl group-hover:scale-110 transition-transform duration-300">
+                <i class="fas fa-university"></i>
+              </div>
+              <div class="flex-1">
+                <h3 class="text-2xl font-bold text-gray-800 mb-3 group-hover:text-indigo-600 transition-colors">
+                  M.S., Computer Science and Engineering
+                </h3>
+                <p class="text-indigo-600 font-semibold mb-2 text-lg">University of Minnesota, Twin Cities, USA</p>
+                <p class="text-gray-600 font-medium">2024-2025</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-right" data-aos-delay="400">
+          <div class="card enhanced-card bg-white/85 backdrop-blur-xl rounded-3xl p-10 shadow-2xl border border-white/30 hover:border-pink-200/50 h-full">
+            <div class="flex items-start gap-5">
+              <div class="w-14 h-14 bg-gradient-to-br from-pink-500 to-red-500 rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-xl group-hover:scale-110 transition-transform duration-300">
+                <i class="fas fa-book"></i>
+              </div>
+              <div class="flex-1">
+                <h3 class="text-2xl font-bold text-gray-800 mb-3 group-hover:text-indigo-600 transition-colors">
+                  M.S., Computer Science and Engineering
+                </h3>
+                <p class="text-indigo-600 font-semibold mb-2 text-lg">University of Dhaka, Bangladesh</p>
+                <p class="text-gray-600 font-medium">2014 - 2015</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-left" data-aos-delay="500">
+          <div class="card enhanced-card bg-white/85 backdrop-blur-xl rounded-3xl p-10 shadow-2xl border border-white/30 hover:border-red-200/50 h-full">
+            <div class="flex items-start gap-5">
+              <div class="w-14 h-14 bg-gradient-to-br from-red-500 to-orange-500 rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-xl group-hover:scale-110 transition-transform duration-300">
+                <i class="fas fa-certificate"></i>
+              </div>
+              <div class="flex-1">
+                <h3 class="text-2xl font-bold text-gray-800 mb-3 group-hover:text-indigo-600 transition-colors">
+                  B.Sc., Computer Science and Engineering
+                </h3>
+                <p class="text-indigo-600 font-semibold mb-2 text-lg">University of Dhaka, Bangladesh</p>
+                <p class="text-gray-600 font-medium">2011 - 2014</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Experience Section (Redesigned) -->
+  <section id="experience" class="py-24 bg-white relative overflow-hidden">
+    <!-- Background decoration -->
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(99,102,241,0.02)_0%,transparent_70%)]"></div>
+    
+    <div class="container mx-auto px-6 relative z-10">
+      <div class="text-center mb-16" data-aos="fade-up">
+        <h2 class="text-5xl md:text-6xl font-extrabold mb-6 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+          Experience
+        </h2>
+        <div class="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full"></div>
+      </div>
+      
+      <div class="relative">
+        <!-- Timeline line -->
+        <div class="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-indigo-500 to-purple-500 rounded-full hidden lg:block"></div>
+        
+        <div class="space-y-12">
+          <!-- Experience Item 1 -->
+          <div class="relative group" data-aos="fade-right" data-aos-delay="200">
+            <div class="lg:w-1/2 lg:pr-12">
+              <div class="card enhanced-card bg-white/85 backdrop-blur-xl rounded-3xl p-10 shadow-2xl border border-white/30 hover:border-indigo-200/50">
+                <div class="flex items-start gap-5">
+                  <div class="w-14 h-14 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-xl group-hover:scale-110 transition-transform duration-300">
+                    <i class="fas fa-microscope"></i>
+                  </div>
+                  <div class="flex-1">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-3 group-hover:text-indigo-600 transition-colors">
+                      PhD Candidate and Research Assistant
+                    </h3>
+                    <p class="text-indigo-600 font-semibold mb-3 text-lg">University of Minnesota, Twin Cities, USA</p>
+                    <p class="text-gray-600 mb-4 font-medium">Present</p>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2 leading-relaxed">
+                      <li>Conducting research in Recommender Systems and Human-Computer Interactions.</li>
+                      <li>Working on POPROX News Recommender System and MovieLens Movie Recommender Systems.</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Experience Item 2 -->
+          <div class="relative group" data-aos="fade-left" data-aos-delay="300">
+            <div class="lg:w-1/2 lg:ml-auto lg:pl-12">
+              <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2">
+                <div class="flex items-start gap-4">
+                  <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                  </div>
+                  <div class="flex-1">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">
+                      Senior Lecturer (on Study Leave)
+                    </h3>
+                    <p class="text-indigo-600 font-semibold mb-3">East West University, Dhaka, Bangladesh</p>
+                    <p class="text-gray-600 mb-4">Present</p>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2">
+                      <li>on Study Leave for Higher Studies.</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Experience Item 3 -->
+          <div class="relative group" data-aos="fade-right" data-aos-delay="400">
+            <div class="lg:w-1/2 lg:pr-12">
+              <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2">
+                <div class="flex items-start gap-4">
+                  <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-red-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                    <i class="fas fa-laptop-code"></i>
+                  </div>
+                  <div class="flex-1">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">
+                      Part-Time Senior Lecturer
+                    </h3>
+                    <p class="text-indigo-600 font-semibold mb-3">University of Liberal Arts, Dhaka, Bangladesh</p>
+                    <p class="text-gray-600 mb-4">2024</p>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2">
+                      <li>Taught advanced topics in Computer Science.</li>
+                      <li>Guides Students for Higher Studies.</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Experience Item 4 -->
+          <div class="relative group" data-aos="fade-left" data-aos-delay="500">
+            <div class="lg:w-1/2 lg:ml-auto lg:pl-12">
+              <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2">
+                <div class="flex items-start gap-4">
+                  <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-orange-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                    <i class="fas fa-brain"></i>
+                  </div>
+                  <div class="flex-1">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">
+                      Senior Lecturer
+                    </h3>
+                    <p class="text-indigo-600 font-semibold mb-3">East West University, Dhaka, Bangladesh</p>
+                    <p class="text-gray-600 mb-4">2019 - 2024</p>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2">
+                      <li>Led research initiatives in Recommender Systems, Deep Learning, Computer Vision and Blockchain.</li>
+                      <li>Moderated the Computer Programming Club (2023 - 2024).</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Experience Item 5 -->
+          <div class="relative group" data-aos="fade-right" data-aos-delay="600">
+            <div class="lg:w-1/2 lg:pr-12">
+              <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2">
+                <div class="flex items-start gap-4">
+                  <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                    <i class="fas fa-code"></i>
+                  </div>
+                  <div class="flex-1">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">
+                      Lecturer
+                    </h3>
+                    <p class="text-indigo-600 font-semibold mb-3">East West University, Dhaka, Bangladesh</p>
+                    <p class="text-gray-600 mb-4">2017 - 2019</p>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2">
+                      <li>Taught introductory programming and data structures.</li>
+                      <li>Guided student projects in Machine Learning.</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Experience Item 6 -->
+          <div class="relative group" data-aos="fade-left" data-aos-delay="700">
+            <div class="lg:w-1/2 lg:ml-auto lg:pl-12">
+              <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2">
+                <div class="flex items-start gap-4">
+                  <div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-green-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                    <i class="fas fa-database"></i>
+                  </div>
+                  <div class="flex-1">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">
+                      Lecturer
+                    </h3>
+                    <p class="text-indigo-600 font-semibold mb-3">United International University, Dhaka, Bangladesh</p>
+                    <p class="text-gray-600 mb-4">2017</p>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2">
+                      <li>Delivered lectures on algorithms and databases.</li>
+                      <li>Contributed to curriculum development.</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Experience Item 7 -->
+          <div class="relative group" data-aos="fade-right" data-aos-delay="800">
+            <div class="lg:w-1/2 lg:pr-12">
+              <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2">
+                <div class="flex items-start gap-4">
+                  <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-teal-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                    <i class="fas fa-cogs"></i>
+                  </div>
+                  <div class="flex-1">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">
+                      Lecturer
+                    </h3>
+                    <p class="text-indigo-600 font-semibold mb-3">Eastern University, Dhaka, Bangladesh</p>
+                    <p class="text-gray-600 mb-4">2016</p>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2">
+                      <li>Taught computer science fundamentals.</li>
+                      <li>Organized Programming Contests.</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Experience Item 8 -->
+          <div class="relative group" data-aos="fade-left" data-aos-delay="900">
+            <div class="lg:w-1/2 lg:ml-auto lg:pl-12">
+              <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2">
+                <div class="flex items-start gap-4 mb-4">
+                  <div class="w-12 h-12 bg-gradient-to-br from-teal-500 to-cyan-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                    <i class="fas fa-rocket"></i>
+                  </div>
+                  <div class="flex-1">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">
+                      Lecturer
+                    </h3>
+                    <p class="text-indigo-600 font-semibold mb-3">Primeasia University, Dhaka, Bangladesh</p>
+                    <p class="text-gray-600 mb-4">2015 - 2017</p>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2">
+                      <li>Developed teaching materials for programming courses.</li>
+                      <li>Mentored students in competitive programming.</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills Section with Chart.js (Redesigned) -->
+  <section id="skills" class="py-24 bg-gray-50 relative overflow-hidden">
+    <!-- Background decoration -->
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(99,102,241,0.03)_0%,transparent_70%)]"></div>
+    
+    <div class="container mx-auto px-6 relative z-10">
+      <div class="text-center mb-16" data-aos="fade-up">
+        <h2 class="text-5xl md:text-6xl font-extrabold mb-6 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+          Skills & Expertise
+        </h2>
+        <div class="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full"></div>
+      </div>
+      
+      <div class="flex flex-col lg:flex-row gap-16 items-center">
+        <div class="lg:w-1/2" data-aos="zoom-in" data-aos-delay="200">
+          <div class="bg-white/85 backdrop-blur-xl rounded-3xl p-10 shadow-2xl border border-white/30 flex items-center justify-center" style="min-height: 400px;">
+            <canvas id="skillsChart" class="w-full h-80" style="max-width: 100%; height: 360px;"></canvas>
+          </div>
+        </div>
+        
+        <div class="lg:w-1/2 grid grid-cols-1 sm:grid-cols-2 gap-8" data-aos="fade-left" data-aos-delay="400">
+          <div class="group">
+            <div class="card enhanced-card bg-white/85 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/30 hover:border-indigo-200/50">
+              <div class="flex items-center gap-4 mb-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center text-white font-bold shadow-xl group-hover:scale-110 transition-transform duration-300">
+                  <i class="fas fa-language"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 group-hover:text-indigo-600 transition-colors">Languages</h3>
+              </div>
+              <p class="text-gray-700 font-medium leading-relaxed">English, Bangla</p>
+            </div>
+          </div>
+          
+          <div class="group">
+            <div class="card enhanced-card bg-white/85 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/30 hover:border-purple-200/50">
+              <div class="flex items-center gap-4 mb-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center text-white font-bold shadow-xl group-hover:scale-110 transition-transform duration-300">
+                  <i class="fas fa-code"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 group-hover:text-indigo-600 transition-colors">Coding</h3>
+              </div>
+              <p class="text-gray-700 font-medium leading-relaxed">Java, C, Python, R, SQL, XML, JSON, LaTeX, Pine Script, MQL5</p>
+            </div>
+          </div>
+          
+          <div class="group">
+            <div class="card enhanced-card bg-white/85 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/30 hover:border-pink-200/50">
+              <div class="flex items-center gap-4 mb-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-red-500 rounded-2xl flex items-center justify-center text-white font-bold shadow-xl group-hover:scale-110 transition-transform duration-300">
+                  <i class="fas fa-database"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 group-hover:text-indigo-600 transition-colors">Databases</h3>
+              </div>
+              <p class="text-gray-700 font-medium leading-relaxed">MySQL, MongoDB, SQL, SQLite, Microsoft Access, Oracle</p>
+            </div>
+          </div>
+          
+          <div class="group">
+            <div class="card enhanced-card bg-white/85 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/30 hover:border-red-200/50">
+              <div class="flex items-center gap-4 mb-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-orange-500 rounded-2xl flex items-center justify-center text-white font-bold shadow-xl group-hover:scale-110 transition-transform duration-300">
+                  <i class="fas fa-globe"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 group-hover:text-indigo-600 transition-colors">Web Development</h3>
+              </div>
+              <p class="text-gray-700 font-medium leading-relaxed">HTML, CSS, JavaScript, Apache Web Server, PHP</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Courses Section (Redesigned) -->
+  <section id="courses" class="py-24 bg-white relative overflow-hidden">
+    <!-- Background decoration -->
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(99,102,241,0.02)_0%,transparent_70%)]"></div>
+    
+    <div class="container mx-auto px-6 relative z-10">
+      <div class="text-center mb-16" data-aos="fade-up">
+        <h2 class="text-5xl md:text-6xl font-extrabold mb-6 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+          Courses Taught
+        </h2>
+        <div class="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full"></div>
+        <p class="text-xl text-gray-600 mt-6 max-w-3xl mx-auto">
+          Comprehensive teaching experience across various computer science disciplines, from fundamentals to advanced topics
+        </p>
+      </div>
+      
+      <div class="bg-white/85 backdrop-blur-xl rounded-3xl p-10 shadow-2xl border border-white/30" data-aos="zoom-in" data-aos-delay="200">
+        <div class="w-full h-96">
+          <canvas id="coursesChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Publications Section (Redesigned) -->
+  <section id="publications" class="py-24 bg-gradient-to-br from-purple-50/50 via-white to-indigo-50/50 relative overflow-hidden">
+    <!-- Background decoration -->
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(139,92,246,0.08)_0%,transparent_50%)]"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(236,72,153,0.08)_0%,transparent_50%)]"></div>
+    
+    <div class="container mx-auto px-6 relative z-10">
+      <div class="text-center mb-16" data-aos="fade-up">
+        <h2 class="text-5xl md:text-6xl font-extrabold mb-6 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+          Publications
+        </h2>
+        <div class="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full"></div>
+        <p class="text-xl text-gray-600 mt-6 max-w-3xl mx-auto">
+          Cutting-edge research contributions in recommender systems, machine learning, computer vision, and blockchain technology
+        </p>
+      </div>
+      
+      <div class="flex justify-center mb-12 space-x-4" data-aos="fade-up" data-aos-delay="200">
+        <button class="filter-btn active bg-gradient-to-r from-indigo-500 to-purple-500 text-white px-6 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105" data-filter="all">
+          <i class="fas fa-th-large mr-2"></i>All
+        </button>
+        <button class="filter-btn bg-white/80 backdrop-blur-lg text-gray-700 px-6 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-white/20" data-filter="journal">
+          <i class="fas fa-book-open mr-2"></i>Journal
+        </button>
+        <button class="filter-btn bg-white/80 backdrop-blur-lg text-gray-700 px-6 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-white/20" data-filter="conference">
+          <i class="fas fa-users mr-2"></i>Conference
+        </button>
+        <button class="filter-btn bg-white/80 backdrop-blur-lg text-gray-700 px-6 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-white/20" data-filter="book">
+          <i class="fas fa-book mr-2"></i>Book
+        </button>
+        <button class="filter-btn bg-white/80 backdrop-blur-lg text-gray-700 px-6 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-white/20" data-filter="arxiv">
+          <i class="fas fa-file-alt mr-2"></i>arXiv
+        </button>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="group publication journal" data-aos="flip-left" data-aos-delay="100">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
+                <i class="fas fa-microscope"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-indigo-100 text-indigo-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Journal</span>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors line-clamp-3">An Ensemble Learning Framework with Explainable AI for interpretable leaf disease detection</h3>
+                <p class="text-indigo-600 font-semibold mb-3">Array, 2025</p>
+                <a href="https://scholar.google.com/citations?user=_Jit0HQAAAAJ&hl=en&oi=ao" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-semibold transition-colors">
+                  View Publication <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group publication journal" data-aos="flip-right" data-aos-delay="150">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
+                <i class="fas fa-database"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-indigo-100 text-indigo-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Journal</span>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors line-clamp-3">A comprehensive dataset for sentiment and emotion classification from Bangladesh e-commerce reviews</h3>
+                <p class="text-indigo-600 font-semibold mb-3">Data in Brief, 2024</p>
+                <a href="https://scholar.google.com/citations?user=_Jit0HQAAAAJ&hl=en&oi=ao" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-semibold transition-colors">
+                  View Publication <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group publication journal" data-aos="flip-left" data-aos-delay="200">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-10 h-10 bg-gradient-to-br from-pink-500 to-red-500 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
+                <i class="fas fa-shield-alt"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-indigo-100 text-indigo-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Journal</span>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors line-clamp-3">Design of a real-time crime monitoring system using deep learning techniques</h3>
+                <p class="text-indigo-600 font-semibold mb-3">Intelligent Systems with Applications, 2024</p>
+                <a href="https://scholar.google.com/citations?user=_Jit0HQAAAAJ&hl=en&oi=ao" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-semibold transition-colors">
+                  View Publication <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group publication journal" data-aos="flip-right" data-aos-delay="250">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-10 h-10 bg-gradient-to-br from-red-500 to-orange-500 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
+                <i class="fas fa-link"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-indigo-100 text-indigo-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Journal</span>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors line-clamp-3">Enhancing land management policy in Bangladesh: A blockchain-based framework for transparent and efficient land management</h3>
+                <p class="text-indigo-600 font-semibold mb-3">Land Use Policy, 2024</p>
+                <a href="https://scholar.google.com/citations?user=_Jit0HQAAAAJ&hl=en&oi=ao" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-semibold transition-colors">
+                  View Publication <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group publication journal" data-aos="flip-left" data-aos-delay="300">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-10 h-10 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
+                <i class="fas fa-eye"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-indigo-100 text-indigo-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Journal</span>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors line-clamp-3">Exploring Deep Learning Approaches for Image Captioning to Mimic Human Understanding</h3>
+                <p class="text-indigo-600 font-semibold mb-3">Bulletin of Electrical Engineering and Informatics (BEEI), 2024</p>
+                <a href="https://scholar.google.com/citations?user=_Jit0HQAAAAJ&hl=en&oi=ao" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-semibold transition-colors">
+                  View Publication <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group publication journal" data-aos="flip-right" data-aos-delay="350">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-10 h-10 bg-gradient-to-br from-yellow-500 to-green-500 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
+                <i class="fas fa-fish"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-indigo-100 text-indigo-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Journal</span>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors line-clamp-3">Framework for fish freshness detection and rotten fish removal in Bangladesh using mask R-CNN method with robotic arm and fisheye analysis</h3>
+                <p class="text-indigo-600 font-semibold mb-3">Journal of Agriculture and Food Research, 2024</p>
+                <a href="https://scholar.google.com/citations?user=_Jit0HQAAAAJ&hl=en&oi=ao" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-semibold transition-colors">
+                  View Publication <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group publication book" data-aos="flip-left" data-aos-delay="400">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-teal-500 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
+                <i class="fas fa-lock"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Book</span>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors line-clamp-3">Ransomware Prevention Strategies: Building Robust Cyber Defenses</h3>
+                <p class="text-indigo-600 font-semibold mb-3">Book Chapter, Ransomware Evolution, 2024</p>
+                <a href="https://scholar.google.com/citations?user=_Jit0HQAAAAJ&hl=en&oi=ao" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-semibold transition-colors">
+                  View Publication <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group publication journal" data-aos="flip-right" data-aos-delay="450">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-10 h-10 bg-gradient-to-br from-teal-500 to-cyan-500 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
+                <i class="fas fa-drumstick-bite"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-indigo-100 text-indigo-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Journal</span>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors line-clamp-3">Real-time Sorting of Broiler Chicken Meat with Robotic arm: XAI-enhanced Deep Learning and LIME</h3>
+                <p class="text-indigo-600 font-semibold mb-3">Journal of Agriculture and Food Research, 2024</p>
+                <a href="https://scholar.google.com/citations?user=_Jit0HQAAAAJ&hl=en&oi=ao" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-semibold transition-colors">
+                  View Publication <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group publication journal" data-aos="flip-left" data-aos-delay="500">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-500 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
+                <i class="fas fa-seedling"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-indigo-100 text-indigo-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Journal</span>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors line-clamp-3">Smartphone image dataset for radish plant leaf disease classification from Bangladesh</h3>
+                <p class="text-indigo-600 font-semibold mb-3">Data in Brief, 2024</p>
+                <a href="https://scholar.google.com/citations?user=_Jit0HQAAAAJ&hl=en&oi=ao" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-semibold transition-colors">
+                  View Publication <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group publication journal" data-aos="flip-right" data-aos-delay="550">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
+                <i class="fas fa-leaf"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-indigo-100 text-indigo-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Journal</span>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors line-clamp-3">Smartphone Image Dataset to Distinguish Healthy and Unhealthy Leaves in Papaya Orchards in Bangladesh</h3>
+                <p class="text-indigo-600 font-semibold mb-3">Data in Brief, 2024</p>
+                <a href="https://scholar.google.com/citations?user=_Jit0HQAAAAJ&hl=en&oi=ao" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-semibold transition-colors">
+                  View Publication <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group publication journal" data-aos="flip-left" data-aos-delay="600">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
+                <i class="fas fa-atom"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-indigo-100 text-indigo-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Journal</span>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors line-clamp-3">Smartphone Image Dataset for Radish Plant Leaf Disease Classification from Bangladesh</h3>
+                <p class="text-indigo-600 font-semibold mb-3">Heliyon, 2024</p>
+                <a href="https://scholar.google.com/citations?user=_Jit0HQAAAAJ&hl=en&oi=ao" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-semibold transition-colors">
+                  View Publication <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group publication journal" data-aos="flip-right" data-aos-delay="650">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
+                <i class="fas fa-network-wired"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-indigo-100 text-indigo-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Journal</span>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors line-clamp-3">Int. Journal of Computer Applications & Network Security</h3>
+                <p class="text-indigo-600 font-semibold mb-3">2024</p>
+                <a href="https://scholar.google.com/citations?user=_Jit0HQAAAAJ&hl=en&oi=ao" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-semibold transition-colors">
+                  View Publication <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group publication journal" data-aos="flip-left" data-aos-delay="700">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-10 h-10 bg-gradient-to-br from-pink-500 to-red-500 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
+                <i class="fas fa-code"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-indigo-100 text-indigo-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Journal</span>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors line-clamp-3">Vietnam Journal of Computer Science</h3>
+                <p class="text-indigo-600 font-semibold mb-3">2024</p>
+                <a href="https://scholar.google.com/citations?user=_Jit0HQAAAAJ&hl=en&oi=ao" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-semibold transition-colors">
+                  View Publication <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group publication journal" data-aos="flip-right" data-aos-delay="750">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-10 h-10 bg-gradient-to-br from-red-500 to-orange-500 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
+                <i class="fas fa-bolt"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-indigo-100 text-indigo-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Journal</span>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors line-clamp-3">Indonesian Journal of Electrical Engineering and Computer Science</h3>
+                <p class="text-indigo-600 font-semibold mb-3">2024</p>
+                <a href="https://scholar.google.com/citations?user=_Jit0HQAAAAJ&hl=en&oi=ao" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-semibold transition-colors">
+                  View Publication <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group publication conference" data-aos="flip-left" data-aos-delay="800">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-10 h-10 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
+                <i class="fas fa-users"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-orange-100 text-orange-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Conference</span>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors line-clamp-3">Best Paper Award at CIIR 2023</h3>
+                <p class="text-indigo-600 font-semibold mb-3">Conference on Information and Knowledge Management, 2023</p>
+                <a href="https://scholar.google.com/citations?user=_Jit0HQAAAAJ&hl=en&oi=ao" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-semibold transition-colors">
+                  View Publication <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group publication arxiv" data-aos="flip-right" data-aos-delay="850">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-10 h-10 bg-gradient-to-br from-yellow-500 to-green-500 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
+                <i class="fas fa-file-alt"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-yellow-100 text-yellow-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">arXiv</span>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors line-clamp-3">Additional Research Papers and Preprints</h3>
+                <p class="text-indigo-600 font-semibold mb-3">arXiv Preprints, 2023-2024</p>
+                <a href="https://scholar.google.com/citations?user=_Jit0HQAAAAJ&hl=en&oi=ao" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-semibold transition-colors">
+                  View Publications <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reviewer & Editorial Roles Section (Redesigned) -->
+  <section id="reviewer" class="py-24 bg-gradient-to-br from-indigo-50/50 via-white to-purple-50/50 relative overflow-hidden">
+    <!-- Background decoration -->
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_40%_60%,rgba(139,92,246,0.08)_0%,transparent_50%)]"></div>
+    
+    <div class="container mx-auto px-6 relative z-10">
+      <div class="text-center mb-16" data-aos="fade-up">
+        <h2 class="text-5xl md:text-6xl font-extrabold mb-6 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+          Reviewer & Editorial Roles
+        </h2>
+        <div class="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full"></div>
+        <p class="text-xl text-gray-600 mt-6 max-w-3xl mx-auto">
+          Contributing to academic excellence through peer review and editorial leadership in prestigious journals and conferences
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="group" data-aos="fade-right" data-aos-delay="100">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <i class="fas fa-edit"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-indigo-100 text-indigo-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Q1 Journal</span>
+                <h3 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">Guest Editor, PLOS One</h3>
+                <p class="text-indigo-600 font-semibold mb-2">ISSN: 1932-6203</p>
+                <p class="text-gray-600 text-sm">Impact Factor: 2.9, Scopus Q1</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-left" data-aos-delay="150">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <i class="fas fa-book-open"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-purple-100 text-purple-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Q3 Journal</span>
+                <h3 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">Editor & Reviewer, Computer Science Journal</h3>
+                <p class="text-indigo-600 font-semibold mb-2">ISSN: 1508-2806</p>
+                <p class="text-gray-600 text-sm">Impact Factor: 0.3, Scopus Q3</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-right" data-aos-delay="200">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-red-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <i class="fas fa-users"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-pink-100 text-pink-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Editorial Board</span>
+                <h3 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">Editorial Board Member</h3>
+                <p class="text-indigo-600 font-semibold mb-2">Computer Science and Engineering Research (CSER)</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-left" data-aos-delay="250">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-orange-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <i class="fas fa-globe-asia"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-red-100 text-red-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Conference</span>
+                <h3 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">Technical Committee Member & Reviewer</h3>
+                <p class="text-indigo-600 font-semibold mb-2">10th ICDPA, Phuket, Thailand, 2024</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-right" data-aos-delay="300">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <i class="fas fa-mountain"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-orange-100 text-orange-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Conference</span>
+                <h3 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">Technical Committee Member</h3>
+                <p class="text-indigo-600 font-semibold mb-2">11th ICDPA, Jeju Island, South Korea, 2025</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-left" data-aos-delay="350">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-green-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <i class="fab fa-acquisitions-incorporated"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-yellow-100 text-yellow-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Q1 Journal</span>
+                <h3 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">Reviewer, ACM Transactions on Information Systems</h3>
+                <p class="text-indigo-600 font-semibold mb-2">Impact Factor: 5.4, Scopus Q1</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-right" data-aos-delay="400">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-teal-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <i class="fas fa-wifi"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Q1 Journal</span>
+                <h3 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">Reviewer, IEEE Access</h3>
+                <p class="text-indigo-600 font-semibold mb-2">Impact Factor: 3.4, Scopus Q1</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-left" data-aos-delay="450">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-teal-500 to-cyan-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <i class="fas fa-robot"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-teal-100 text-teal-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Q1 Journal</span>
+                <h3 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">Reviewer, Engineering Applications of AI</h3>
+                <p class="text-indigo-600 font-semibold mb-2">Impact Factor: 7.5, Scopus Q1</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-right" data-aos-delay="500">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-500 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
+                <i class="fas fa-brain"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-cyan-100 text-cyan-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Q1 Journal</span>
+                <h3 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">Reviewer, Applied Soft Computing</h3>
+                <p class="text-indigo-600 font-semibold mb-2">Impact Factor: 7.2, Scopus Q1</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-left" data-aos-delay="550">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
+                <i class="fas fa-heartbeat"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Q1 Journal</span>
+                <h3 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">Reviewer, Artificial Intelligence in Medicine</h3>
+                <p class="text-indigo-600 font-semibold mb-2">Impact Factor: 6.1, Scopus Q1</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-right" data-aos-delay="600">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
+                <i class="fas fa-atom"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-indigo-100 text-indigo-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Q1 Journal</span>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">Reviewer, Heliyon</h3>
+                <p class="text-indigo-600 font-semibold mb-2">Impact Factor: 3.4, Scopus Q1</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-left" data-aos-delay="650">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center text-white font-bold shadow-lg">
+                <i class="fas fa-heartbeat"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-purple-100 text-purple-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Q1 Journal</span>
+                <h3 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">Reviewer, Biomedical Signal Processing & Control</h3>
+                <p class="text-indigo-600 font-semibold mb-2">Impact Factor: 4.9, Scopus Q1</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-right" data-aos-delay="700">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-red-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <i class="fas fa-video"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-pink-100 text-pink-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Q1 Journal</span>
+                <h3 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">Reviewer, Multimedia Tools and Applications</h3>
+                <p class="text-indigo-600 font-semibold mb-2">Impact Factor: 3.0, Scopus Q1</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-left" data-aos-delay="750">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-orange-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <i class="fas fa-database"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-red-100 text-red-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Q1 Journal</span>
+                <h3 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">Reviewer, Int. Journal of Information Management Data Insights</h3>
+                <p class="text-indigo-600 font-semibold mb-2">Scopus Q1</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-right" data-aos-delay="800">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <i class="fas fa-recycle"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-orange-100 text-orange-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Q1 Journal</span>
+                <h3 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">Reviewer, Waste Management</h3>
+                <p class="text-indigo-600 font-semibold mb-2">Impact Factor: 7.1, Scopus Q1</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-left" data-aos-delay="850">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-green-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <i class="fas fa-chart-bar"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-yellow-100 text-yellow-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Q3 Journal</span>
+                <h3 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">Reviewer, Data in Brief</h3>
+                <p class="text-indigo-600 font-semibold mb-2">Impact Factor: 1.0, Scopus Q3</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-right" data-aos-delay="900">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-teal-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <i class="fas fa-cloud"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Q1 Journal</span>
+                <h3 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">Reviewer, Big Data Research</h3>
+                <p class="text-indigo-600 font-semibold mb-2">Impact Factor: 3.5, Scopus Q1</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-left" data-aos-delay="950">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-teal-500 to-cyan-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <i class="fas fa-seedling"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-teal-100 text-teal-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Q1 Journal</span>
+                <h3 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">Reviewer, Journal of Agriculture and Food Research</h3>
+                <p class="text-indigo-600 font-semibold mb-2">Impact Factor: 4.8, Scopus Q1</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-right" data-aos-delay="1000">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <i class="fas fa-user-md"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-cyan-100 text-cyan-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Q2 Journal</span>
+                <h3 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">Reviewer, Health Professions Education</h3>
+                <p class="text-indigo-600 font-semibold mb-2">Impact Factor: 4.1, Scopus Q2</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Awards Section (Redesigned) -->
+  <section id="awards" class="py-24 bg-gradient-to-br from-purple-50/50 via-white to-indigo-50/50 relative overflow-hidden">
+    <!-- Background decoration -->
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_60%_40%,rgba(139,92,246,0.08)_0%,transparent_50%)]"></div>
+    
+    <div class="container mx-auto px-6 relative z-10">
+      <div class="text-center mb-16" data-aos="fade-up">
+        <h2 class="text-5xl md:text-6xl font-extrabold mb-6 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+          Awards & Recognition
+        </h2>
+        <div class="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full"></div>
+        <p class="text-xl text-gray-600 mt-6 max-w-3xl mx-auto">
+          Recognition for outstanding contributions to research, teaching, and academic excellence
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="group" data-aos="fade-right" data-aos-delay="100">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <i class="fas fa-trophy"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-indigo-100 text-indigo-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Best Researcher</span>
+                <h3 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">Best Researcher Reward</h3>
+                <p class="text-indigo-600 font-semibold mb-2">East West University, 2025</p>
+                <p class="text-gray-600 text-sm">Received Research Excellence for Research Work at East West University</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-left" data-aos-delay="150">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <i class="fas fa-medal"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-purple-100 text-purple-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Best Paper Award</span>
+                <h3 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">CIIR 2023 Best Paper Award</h3>
+                <p class="text-indigo-600 font-semibold mb-2">CIIR 2023, Springer</p>
+                <p class="text-gray-600 text-sm">For "Advancing Cucumber Disease Detection in Agriculture through Machine Vision and Drone Technology"</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-right" data-aos-delay="200">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-red-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <i class="fas fa-star"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-pink-100 text-pink-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Publication Reward</span>
+                <h3 class="text-xl font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">Publication Reward</h3>
+                <p class="text-indigo-600 font-semibold mb-2">East West University, 2024</p>
+                <p class="text-gray-600 text-sm">Received BDT 82,368 for publication in Journal of Agriculture and Food Research (Q1)</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Collaborators Section (Redesigned) -->
+  <section id="network" class="py-24 bg-gradient-to-br from-indigo-50/50 via-white to-purple-50/50 relative overflow-hidden">
+    <!-- Background decoration -->
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_40%_60%,rgba(99,102,241,0.08)_0%,transparent_50%)]"></div>
+    <div class="container mx-auto px-6 relative z-10">
+      <div class="text-center mb-16" data-aos="fade-up">
+        <h2 class="text-5xl md:text-6xl font-extrabold mb-6 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+          Network & Mentorship
+        </h2>
+        <div class="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full"></div>
+        <p class="text-xl text-gray-600 mt-6 max-w-3xl mx-auto">
+          Collaborating with leading researchers and mentoring the next generation of computer scientists
+        </p>
+      </div>
+      <div class="mb-12" data-aos="fade-up">
+        <h3 class="text-3xl font-bold text-center mb-8 text-gray-800">Academic and Industry Research Collaborators</h3>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Collaborator Card Example -->
+        <div class="group bg-white/90 rounded-2xl p-6 shadow-xl border border-white/30 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 flex flex-col items-center text-center">
+          <img src="https://fse.ewubd.edu/storage/app/uploads/public/602/e7b/367/602e7b367acd7439961280.jpg" alt="Maheen Islam" class="w-28 h-28 rounded-full object-cover border-4 border-indigo-100 shadow mb-4 group-hover:scale-105 transition-transform duration-300">
+          <h4 class="text-lg font-bold text-gray-800 mb-1 group-hover:text-indigo-600 transition-colors">Maheen Islam</h4>
+          <p class="text-gray-600 text-sm">Associate Professor, Department of Computer Science and Engineering, East West University</p>
+        </div>
+        <!-- Repeat for each collaborator, updating image, name, and title -->
+        <div class="group bg-white/90 rounded-2xl p-6 shadow-xl border border-white/30 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 flex flex-col items-center text-center">
+          <img src="https://fse.ewubd.edu/storage/app/uploads/public/64b/517/679/64b5176796ce4173333910.jpg" alt="Mohammad Rifat Ahmmad Rashid" class="w-28 h-28 rounded-full object-cover border-4 border-indigo-100 shadow mb-4 group-hover:scale-105 transition-transform duration-300">
+          <h4 class="text-lg font-bold text-gray-800 mb-1 group-hover:text-indigo-600 transition-colors">Mohammad Rifat Ahmmad Rashid</h4>
+          <p class="text-gray-600 text-sm">Associate Professor, Department of Computer Science and Engineering, East West University</p>
+        </div>
+        <div class="group bg-white/90 rounded-2xl p-6 shadow-xl border border-white/30 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 flex flex-col items-center text-center">
+          <img src="https://fse.ewubd.edu/storage/app/uploads/public/5d0/f34/609/5d0f34609b1dd641351606.jpg" alt="Md Sawkat Ali" class="w-28 h-28 rounded-full object-cover border-4 border-indigo-100 shadow mb-4 group-hover:scale-105 transition-transform duration-300">
+          <h4 class="text-lg font-bold text-gray-800 mb-1 group-hover:text-indigo-600 transition-colors">Md Sawkat Ali</h4>
+          <p class="text-gray-600 text-sm">Associate Professor, Department of Computer Science and Engineering, East West University</p>
+        </div>
+        <div class="group bg-white/90 rounded-2xl p-6 shadow-xl border border-white/30 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 flex flex-col items-center text-center">
+          <img src="https://people.cs.umass.edu/~smsarwar/image_new.jpg" alt="Sheikh Muhammad Sarwar" class="w-28 h-28 rounded-full object-cover border-4 border-indigo-100 shadow mb-4 group-hover:scale-105 transition-transform duration-300">
+          <h4 class="text-lg font-bold text-gray-800 mb-1 group-hover:text-indigo-600 transition-colors">Sheikh Muhammad Sarwar</h4>
+          <p class="text-gray-600 text-sm">Applied Scientist, Amazon, USA</p>
+        </div>
+        <div class="group bg-white/90 rounded-2xl p-6 shadow-xl border border-white/30 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 flex flex-col items-center text-center">
+          <img src="https://fse.ewubd.edu/storage/app/uploads/public/5d3/6a3/923/5d36a3923c7fd508425994.jpg" alt="Surajit Das Barman" class="w-28 h-28 rounded-full object-cover border-4 border-indigo-100 shadow mb-4 group-hover:scale-105 transition-transform duration-300">
+          <h4 class="text-lg font-bold text-gray-800 mb-1 group-hover:text-indigo-600 transition-colors">Surajit Das Barman</h4>
+          <p class="text-gray-600 text-sm">Researcher</p>
+        </div>
+        <div class="group bg-white/90 rounded-2xl p-6 shadow-xl border border-white/30 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 flex flex-col items-center text-center">
+          <img src="https://shibbirtanvin.github.io/img/shibbir.png" alt="Shibbir Ahmed" class="w-28 h-28 rounded-full object-cover border-4 border-indigo-100 shadow mb-4 group-hover:scale-105 transition-transform duration-300">
+          <h4 class="text-lg font-bold text-gray-800 mb-1 group-hover:text-indigo-600 transition-colors">Shibbir Ahmed</h4>
+          <p class="text-gray-600 text-sm">Assistant Professor, Department of Computer Science, Texas State University</p>
+        </div>
+        <div class="group bg-white/90 rounded-2xl p-6 shadow-xl border border-white/30 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 flex flex-col items-center text-center">
+          <img src="https://www.nstu.edu.bd/assets/images/avatar/0zZGkCk4fE1593278489.jpg" alt="Falguni Roy" class="w-28 h-28 rounded-full object-cover border-4 border-indigo-100 shadow mb-4 group-hover:scale-105 transition-transform duration-300">
+          <h4 class="text-lg font-bold text-gray-800 mb-1 group-hover:text-indigo-600 transition-colors">Falguni Roy</h4>
+          <p class="text-gray-600 text-sm">Researcher</p>
+        </div>
+        <div class="group bg-white/90 rounded-2xl p-6 shadow-xl border border-white/30 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 flex flex-col items-center text-center">
+          <img src="https://fse.ewubd.edu/storage/app/uploads/public/5d0/f21/3cb/5d0f213cb74a8248072871.jpg" alt="Taskeed Jabid" class="w-28 h-28 rounded-full object-cover border-4 border-indigo-100 shadow mb-4 group-hover:scale-105 transition-transform duration-300">
+          <h4 class="text-lg font-bold text-gray-800 mb-1 group-hover:text-indigo-600 transition-colors">Taskeed Jabid</h4>
+          <p class="text-gray-600 text-sm">Professor, Department of Computer Science and Engineering, East West University</p>
+        </div>
+        <div class="group bg-white/90 rounded-2xl p-6 shadow-xl border border-white/30 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 flex flex-col items-center text-center">
+          <img src="https://scholar.googleusercontent.com/citations?view_op=medium_photo&user=pEs2w_cAAAAJ&citpid=8" alt="Sultan Ahmad" class="w-28 h-28 rounded-full object-cover border-4 border-indigo-100 shadow mb-4 group-hover:scale-105 transition-transform duration-300">
+          <h4 class="text-lg font-bold text-gray-800 mb-1 group-hover:text-indigo-600 transition-colors">Sultan Ahmad</h4>
+          <p class="text-gray-600 text-sm">Professor, College of Computer Engineering and Sciences, Prince Sattam Bin Abdulaziz University, Saudi Arabia</p>
+        </div>
+        <div class="group bg-white/90 rounded-2xl p-6 shadow-xl border border-white/30 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 flex flex-col items-center text-center">
+          <img src="https://scholar.googleusercontent.com/citations?view_op=medium_photo&user=iExWnWsAAAAJ&citpid=3" alt="Dmitry Ignatov" class="w-28 h-28 rounded-full object-cover border-4 border-indigo-100 shadow mb-4 group-hover:scale-105 transition-transform duration-300">
+          <h4 class="text-lg font-bold text-gray-800 mb-1 group-hover:text-indigo-600 transition-colors">Dmitry Ignatov</h4>
+          <p class="text-gray-600 text-sm">Associate Professor, MMCP Lab Head, Computer Science Faculty, Higher School of Economics, Russia</p>
+        </div>
+      </div>
+      <!-- Mentorship Section -->
+      <div class="mt-20" data-aos="fade-up">
+        <h3 class="text-3xl font-bold text-center mb-8 text-gray-800">Mentorship & Supervision</h3>
+        <div class="bg-white/90 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-white/30">
+          <h4 class="text-2xl font-bold text-gray-800 mb-4">Supervised B.Sc. Students</h4>
+          <p class="text-gray-700 mb-6">I have supervised more than 100 B.Sc. students in their research projects, leading to publications in reputable journals and conferences. Notable supervisees include:</p>
+          <div class="flex flex-wrap gap-2 justify-center">
+            <span class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full font-semibold text-sm shadow">Mujahidul Islam</span>
+            <span class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full font-semibold text-sm shadow">Nishat Vasker</span>
+            <span class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full font-semibold text-sm shadow">Tawsif Rahman Omi</span>
+            <span class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full font-semibold text-sm shadow">Akibul Huq</span>
+            <span class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full font-semibold text-sm shadow">Raiyan Gani</span>
+            <span class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full font-semibold text-sm shadow">Maherun Nessa Isty</span>
+            <span class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full font-semibold text-sm shadow">Raka Kamara</span>
+            <span class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full font-semibold text-sm shadow">Taslima Khan Tarin</span>
+            <span class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full font-semibold text-sm shadow">Rizvee Hassan Prito</span>
+            <span class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full font-semibold text-sm shadow">Md Ariful Islam</span>
+            <span class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full font-semibold text-sm shadow">Sagar Karmoker</span>
+            <span class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full font-semibold text-sm shadow">Md Adib Khan</span>
+            <span class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full font-semibold text-sm shadow">Nur Adnan Chowdhury Anik</span>
+            <span class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full font-semibold text-sm shadow">Md Sabbir Hossain</span>
+            <span class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full font-semibold text-sm shadow">Habibur Rahman</span>
+            <span class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full font-semibold text-sm shadow">Tasdikul Hasan</span>
+            <span class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full font-semibold text-sm shadow">Syed Nawazish Haider</span>
+            <span class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full font-semibold text-sm shadow">Krittika Roy</span>
+            <span class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full font-semibold text-sm shadow">Nowshin Tasnia</span>
+            <span class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full font-semibold text-sm shadow">Miskat Hossain</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Funding Section (Redesigned) -->
+  <section id="funding" class="py-24 bg-gradient-to-br from-purple-50/50 via-white to-indigo-50/50 relative overflow-hidden">
+    <!-- Background decoration -->
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_60%_40%,rgba(139,92,246,0.08)_0%,transparent_50%)]"></div>
+    
+    <div class="container mx-auto px-6 relative z-10">
+      <div class="text-center mb-16" data-aos="fade-up">
+        <h2 class="text-5xl md:text-6xl font-extrabold mb-6 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+          Funding Received
+        </h2>
+        <div class="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full"></div>
+        <p class="text-xl text-gray-600 mt-6 max-w-3xl mx-auto">
+          Research funding and grants received for innovative projects and academic initiatives
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="group" data-aos="fade-right" data-aos-delay="100">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <i class="fas fa-microscope"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-indigo-100 text-indigo-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Internal, 2024</span>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">Aggressive Bangla Text Detection Using Machine Learning and Deep Learning Algorithms</h3>
+                <p class="text-indigo-600 font-semibold mb-2">Role: PI, Amount: 40000.00</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-left" data-aos-delay="150">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <i class="fas fa-eye"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-purple-100 text-purple-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Internal, 2024</span>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">Real-Time PCB Flaw Detection a Vision for More Efficient and Accurate Future</h3>
+                <p class="text-indigo-600 font-semibold mb-2">Role: PI, Amount: 40000.00</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-right" data-aos-delay="200">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-red-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <i class="fas fa-fish"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-pink-100 text-pink-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Internal, 2024</span>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">Framework for Fish Freshness Detection and Rotten Fish Removal in Bangladesh using Mask R-CNN Method with Robotic Arm and Fisheye Analysis</h3>
+                <p class="text-indigo-600 font-semibold mb-2">Role: PI, Amount: 82368.00</p>
+                <p class="text-gray-600 text-sm">Publication Reward from East West University</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-left" data-aos-delay="250">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-orange-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <i class="fas fa-heartbeat"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-red-100 text-red-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Internal, 2023</span>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">Unmasking Ovary Tumors: Real-Time Detection with YOLOv5</h3>
+                <p class="text-indigo-600 font-semibold mb-2">Role: PI, Amount: 10000.00</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-right" data-aos-delay="300">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <i class="fas fa-shield-alt"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-orange-100 text-orange-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Internal, 2023</span>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">Real-Time Self-Harm Detection Ensuring Safety in Every Moment</h3>
+                <p class="text-indigo-600 font-semibold mb-2">Role: PI, Amount: 25000.00</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-left" data-aos-delay="350">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-green-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <i class="fas fa-lock"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-yellow-100 text-yellow-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Internal, 2023</span>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">Ransomware Attacks and Detection Mechanisms: A Systematic Literature Review</h3>
+                <p class="text-indigo-600 font-semibold mb-2">Role: PI, Amount: 40000.00</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-right" data-aos-delay="400">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-teal-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <i class="fas fa-network-wired"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Internal, 2023</span>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">Performance Evaluation of Intrusion Detection System using Machine Learning and Deep Learning Algorithms</h3>
+                <p class="text-indigo-600 font-semibold mb-2">Role: PI, Amount: 25000.00</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-left" data-aos-delay="450">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-teal-500 to-cyan-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <i class="fas fa-lungs"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-teal-100 text-teal-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Internal, 2023</span>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">Detecting Pneumonia from X-ray Images of Chest Using Deep Convolutional Neural Network</h3>
+                <p class="text-indigo-600 font-semibold mb-2">Role: PI, Amount: 25000.00</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-right" data-aos-delay="500">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <i class="fas fa-leaf"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-cyan-100 text-cyan-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Internal, 2023</span>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">DeepCONVSVM: A Comprehensive Model for Detecting Disease in Mango Leaves</h3>
+                <p class="text-indigo-600 font-semibold mb-2">Role: AI, Amount: 25000.00</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-left" data-aos-delay="550">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <i class="fas fa-apple-alt"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Internal, 2023</span>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">Deep Learning for Real-time Leaf Disease Detection: Revolutionizing Apple Orchard Health</h3>
+                <p class="text-indigo-600 font-semibold mb-2">Role: PI, Amount: 25000.00</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-right" data-aos-delay="600">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <i class="fas fa-cloud"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-indigo-100 text-indigo-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Internal, 2023</span>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">Data Security in Cloud Computing Using a Hybrid Algorithm Approach</h3>
+                <p class="text-indigo-600 font-semibold mb-2">Role: AI, Amount: 25000.00</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-left" data-aos-delay="650">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <i class="fas fa-bolt"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-purple-100 text-purple-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Internal, 2023</span>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">Comparison of Feasibility between Machine Learning Algorithms In Terms of Predicting Energy Consumption of Smart Grid</h3>
+                <p class="text-indigo-600 font-semibold mb-2">Role: PI, Amount: 25000.00</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-right" data-aos-delay="700">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-red-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <i class="fas fa-seedling"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-pink-100 text-pink-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Internal, 2023</span>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">Beans Disease Detection using Convolutional Neural Network</h3>
+                <p class="text-indigo-600 font-semibold mb-2">Role: PI, Amount: 25000.00</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-left" data-aos-delay="750">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-orange-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <i class="fas fa-comment"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-red-100 text-red-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Internal, 2023</span>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">An Analysis of Bangla Tweets on Social Media Platform for Polarity Detection Using Machine Learning Algorithms</h3>
+                <p class="text-indigo-600 font-semibold mb-2">Role: AI, Amount: 25000.00</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-right" data-aos-delay="800">
+          <div class="bg-white/80 backdrop-blur-lg rounded-2xl p-6 shadow-xl border border-white/20 hover:shadow-2xl hover:shadow-indigo-400/20 transition-all duration-500 hover:-translate-y-2 h-full">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                <i class="fas fa-brain"></i>
+              </div>
+              <div class="flex-1">
+                <span class="inline-block bg-orange-100 text-orange-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Internal, 2023</span>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-indigo-600 transition-colors">Using Deep Learning Systems for Imaging Methods for Recognising Brain Tumors</h3>
+                <p class="text-indigo-600 font-semibold mb-2">Role: PI, Amount: 25000.00</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section (Redesigned) -->
+  <section id="contact" class="py-24 bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-700 relative overflow-hidden">
+    <!-- Background decoration -->
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_70%,rgba(255,255,255,0.1)_0%,transparent_70%)]"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(139,92,246,0.2)_0%,transparent_70%)]"></div>
+    
+    <div class="container mx-auto px-6 relative z-10">
+      <div class="text-center mb-16" data-aos="fade-up">
+        <h2 class="text-5xl md:text-6xl font-extrabold mb-6 text-white drop-shadow-lg">
+          Get in Touch
+        </h2>
+        <div class="w-24 h-1 bg-white mx-auto rounded-full"></div>
+        <p class="text-xl text-indigo-100 mt-6 max-w-3xl mx-auto">
+          Let's connect and explore opportunities for collaboration, research, or academic discussions
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div class="group" data-aos="fade-up" data-aos-delay="200">
+          <div class="bg-white/20 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-white/30 hover:bg-white/30 transition-all duration-500 hover:-translate-y-2 text-center">
+            <div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center text-white text-2xl font-bold shadow-lg mx-auto mb-6 group-hover:scale-110 transition-transform">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-4">Primary Email</h3>
+            <a href="mailto:hasan181@umn.edu" class="text-indigo-100 hover:text-white font-semibold transition-colors text-lg">
+              hasan181@umn.edu
+            </a>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-up" data-aos-delay="300">
+          <div class="bg-white/20 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-white/30 hover:bg-white/30 transition-all duration-500 hover:-translate-y-2 text-center">
+            <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center text-white text-2xl font-bold shadow-lg mx-auto mb-6 group-hover:scale-110 transition-transform">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-4">Secondary Email</h3>
+            <a href="mailto:hasanumn@gmail.com" class="text-indigo-100 hover:text-white font-semibold transition-colors text-lg">
+              hasanumn@gmail.com
+            </a>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-up" data-aos-delay="400">
+          <div class="bg-white/20 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-white/30 hover:bg-white/30 transition-all duration-500 hover:-translate-y-2 text-center">
+            <div class="w-16 h-16 bg-gradient-to-br from-pink-500 to-red-500 rounded-2xl flex items-center justify-center text-white text-2xl font-bold shadow-lg mx-auto mb-6 group-hover:scale-110 transition-transform">
+              <i class="fas fa-globe"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-4">Website</h3>
+            <a href="http://mahamudul.net" target="_blank" rel="noopener noreferrer" class="text-indigo-100 hover:text-white font-semibold transition-colors text-lg">
+              mahamudul.net
+            </a>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-up" data-aos-delay="500">
+          <div class="bg-white/20 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-white/30 hover:bg-white/30 transition-all duration-500 hover:-translate-y-2 text-center">
+            <div class="w-16 h-16 bg-gradient-to-br from-red-500 to-orange-500 rounded-2xl flex items-center justify-center text-white text-2xl font-bold shadow-lg mx-auto mb-6 group-hover:scale-110 transition-transform">
+              <i class="fab fa-orcid"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-4">ORCID</h3>
+            <a href="https://orcid.org/0000-0002-4311-8688" target="_blank" rel="noopener noreferrer" class="text-indigo-100 hover:text-white font-semibold transition-colors text-lg">
+              0000-0002-4311-8688
+            </a>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-up" data-aos-delay="600">
+          <div class="bg-white/20 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-white/30 hover:bg-white/30 transition-all duration-500 hover:-translate-y-2 text-center">
+            <div class="w-16 h-16 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-2xl flex items-center justify-center text-white text-2xl font-bold shadow-lg mx-auto mb-6 group-hover:scale-110 transition-transform">
+              <i class="fab fa-google"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-4">Google Scholar</h3>
+            <a href="https://scholar.google.com/citations?user=_Jit0HQAAAAJ&hl=en" target="_blank" rel="noopener noreferrer" class="text-indigo-100 hover:text-white font-semibold transition-colors text-lg">
+              View Profile
+            </a>
+          </div>
+        </div>
+        
+        <div class="group" data-aos="fade-up" data-aos-delay="700">
+          <div class="bg-white/20 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-white/30 hover:bg-white/30 transition-all duration-500 hover:-translate-y-2 text-center">
+            <div class="w-16 h-16 bg-gradient-to-br from-yellow-500 to-green-500 rounded-2xl flex items-center justify-center text-white text-2xl font-bold shadow-lg mx-auto mb-6 group-hover:scale-110 transition-transform">
+              <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-4">Location</h3>
+            <p class="text-indigo-100 font-semibold text-lg">
+              University of Minnesota<br>Twin Cities, USA
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Social Media Links -->
+      <div class="text-center mt-16" data-aos="fade-up" data-aos-delay="800">
+        <h3 class="text-2xl font-bold text-white mb-8">Connect With Me</h3>
+        <div class="flex justify-center space-x-6">
+          <a href="https://scholar.google.com/citations?user=_Jit0HQAAAAJ&hl=en" target="_blank" rel="noopener noreferrer" class="w-12 h-12 bg-white/20 backdrop-blur-lg rounded-xl flex items-center justify-center text-white text-xl hover:bg-white/30 hover:scale-110 transition-all duration-300 border border-white/30">
+            <i class="fab fa-google-scholar"></i>
+          </a>
+          <a href="https://orcid.org/0000-0002-4311-8688" target="_blank" rel="noopener noreferrer" class="w-12 h-12 bg-white/20 backdrop-blur-lg rounded-xl flex items-center justify-center text-white text-xl hover:bg-white/30 hover:scale-110 transition-all duration-300 border border-white/30">
+            <i class="fab fa-orcid"></i>
+          </a>
+          <a href="http://mahamudul.net" target="_blank" rel="noopener noreferrer" class="w-12 h-12 bg-white/20 backdrop-blur-lg rounded-xl flex items-center justify-center text-white text-xl hover:bg-white/30 hover:scale-110 transition-all duration-300 border border-white/30">
+            <i class="fas fa-globe"></i>
+          </a>
+          <a href="mailto:hasan181@umn.edu" class="w-12 h-12 bg-white/20 backdrop-blur-lg rounded-xl flex items-center justify-center text-white text-xl hover:bg-white/30 hover:scale-110 transition-all duration-300 border border-white/30">
+            <i class="fas fa-envelope"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer (Redesigned) -->
+  <footer class="py-16 bg-gray-900 relative overflow-hidden border-t border-gray-800">
+    <!-- Background decoration -->
+    <div class="absolute inset-0 bg-gradient-to-br from-gray-900 via-indigo-950/50 to-gray-900"></div>
+    
+    <div class="container mx-auto px-6 relative z-10">
+      <div class="text-center">
+        <div class="mb-10" data-aos="fade-up">
+          <h3 class="text-4xl font-bold text-white mb-6 tracking-tight">Mahamudul Hasan</h3>
+          <p class="text-gray-300 text-lg max-w-2xl mx-auto leading-relaxed">
+            Research Assistant | Senior Lecturer | Recommender Systems Researcher
+          </p>
+          <p class="text-indigo-300 mt-3 text-base">
+            Department of Computer Science and Engineering<br>
+            University of Minnesota, Twin Cities, USA
+          </p>
+        </div>
+        
+        <div class="flex justify-center space-x-8 mb-10" data-aos="fade-up" data-aos-delay="200">
+          <a href="https://scholar.google.com/citations?user=_Jit0HQAAAAJ&hl=en" target="_blank" rel="noopener noreferrer" class="w-12 h-12 bg-white/10 backdrop-blur-lg rounded-xl flex items-center justify-center text-gray-300 hover:text-white hover:bg-white/20 transition-all duration-300 text-xl hover:scale-110 border border-white/10">
+            <i class="fab fa-google-scholar"></i>
+          </a>
+          <a href="https://orcid.org/0000-0002-4311-8688" target="_blank" rel="noopener noreferrer" class="w-12 h-12 bg-white/10 backdrop-blur-lg rounded-xl flex items-center justify-center text-gray-300 hover:text-white hover:bg-white/20 transition-all duration-300 text-xl hover:scale-110 border border-white/10">
+            <i class="fab fa-orcid"></i>
+          </a>
+          <a href="http://mahamudul.net" target="_blank" rel="noopener noreferrer" class="w-12 h-12 bg-white/10 backdrop-blur-lg rounded-xl flex items-center justify-center text-gray-300 hover:text-white hover:bg-white/20 transition-all duration-300 text-xl hover:scale-110 border border-white/10">
+            <i class="fas fa-globe"></i>
+          </a>
+          <a href="mailto:hasan181@umn.edu" class="w-12 h-12 bg-white/10 backdrop-blur-lg rounded-xl flex items-center justify-center text-gray-300 hover:text-white hover:bg-white/20 transition-all duration-300 text-xl hover:scale-110 border border-white/10">
+            <i class="fas fa-envelope"></i>
+          </a>
+        </div>
+        
+        <div class="border-t border-gray-700/50 pt-8" data-aos="fade-up" data-aos-delay="300">
+          <p class="text-gray-400 text-base">
+            © 2026 Mahamudul Hasan. All rights reserved. | 
+            <span class="text-indigo-400 font-medium">Crafted with passion for excellence</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 </body>
 </html>
