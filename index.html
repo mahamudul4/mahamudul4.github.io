@@ -59,7 +59,7 @@ p{margin:0 0 1em}
 .filters button:focus-visible{outline:2px solid var(--link);outline-offset:3px}
 .yr{font:600 14px var(--sans);color:var(--ink);margin:28px 0 6px}
 .pub{padding:9px 0;border-bottom:1px solid #f1f1f1;font-size:16px;line-height:1.5}
-.pub .t{color:var(--ink)}
+.pub .t{color:var(--ink)}.pub .t a{color:var(--ink);text-decoration-color:#cfcfcf}.pub .t a:hover{color:var(--link);text-decoration-color:var(--link)}
 .pub .a{display:block;color:var(--soft);font-size:15px}
 .pub .a b{color:var(--ink);font-weight:600}
 .pub .v{display:block;color:var(--mute);font-size:15px;font-style:italic}
@@ -191,7 +191,7 @@ footer a{color:var(--mute)}
   <p class="small" style="margin-top:-8px">Cited by 1,349 · h-index 20 (<a href="https://scholar.google.com/citations?user=_Jit0HQAAAAJ" target="_blank" rel="noopener">Google Scholar</a>). Recommender-systems work is listed first; the rest of the list reflects my earlier years as a lecturer, mostly collaborations with undergraduate students.</p>
 
   <div class="feat" style="margin-top:26px">
-    <h3>Teaching Recommenders to Listen: Bidirectional Natural-Language Control for Personalized News</h3>
+    <h3><a href="https://doi.org/10.1145/3773078.3831940" target="_blank" rel="noopener">Teaching Recommenders to Listen: Bidirectional Natural-Language Control for Personalized News</a></h3>
     <div class="a"><b>M. Hasan</b></div>
     <div class="v">Proc. 20th ACM Conference on Recommender Systems (RecSys ’26), Doctoral Symposium, pp. 1946–1951, 2026</div>
   </div>
@@ -374,6 +374,91 @@ const P = [
 [2017,"University ranking prediction system by analyzing influential global performance indicators","A Tabassum, M Hasan, S Ahmed, R Tasmin, DM Abdullah, T Musharrat","2017 9th Int. Conf. on Knowledge and Smart Technology (KST)","ml"],
 [2016,"Discovering knowledge regarding academic profile of students pursuing graduate studies in world's top universities","S Ahmed, ASML Hoque, M Hasan, R Tasmin, DM Abdullah, A Tabassum","2016 Int. Workshop on Computational Intelligence (IWCI), 120–125","ml"]
 ];
+const LINKS = {
+"Ecors: An ensembled clustering approach to eradicate the local and global outlier in collaborative filtering recommender system": "https://arxiv.org/abs/2410.00408",
+"Utilizing collaborative filtering in a personalized research-paper recommendation system": "https://arxiv.org/abs/2409.19267",
+"An Ensemble Weighted User-Based Collaborative Filtering Recommender System": "https://doi.org/10.1109/aibthings63359.2024.10863411",
+"An Efficient Multi-threaded Collaborative Filtering Approach in Recommendation System": "https://doi.org/10.1109/aibthings63359.2024.10863489",
+"An item–item collaborative filtering recommender system based on item reviews: An approach with deep learning": "https://doi.org/10.1142/s2196888823500124",
+"Comparative analysis of different trust metrics of user-user trust-based recommendation system": "https://doi.org/10.7494/csci.2022.23.3.4227",
+"Feature selection for learning-to-rank using simulated annealing": "https://doi.org/10.14569/ijacsa.2020.0110387",
+"An IoT based smart system to recommend suitable environment": "https://doi.org/10.1145/3449301.3449329",
+"An item–item collaborative filtering recommender system using trust and genre to address the cold-start problem": "https://doi.org/10.3390/bdcc3030039",
+"A comprehensive collaborating filtering approach using extended matrix factorization and autoencoder in recommender system": "https://doi.org/10.14569/ijacsa.2019.0100666",
+"A comprehensive collaborative filtering approach using autoencoder in recommender system": "https://doi.org/10.1145/3330482.3330518",
+"An automated advisor system to suggest response after analyzing user writings in social network": "https://doi.org/10.1109/icriis.2017.8002502",
+"A comprehensive approach towards user-based collaborative filtering recommender system": "https://doi.org/10.1109/iwci.2016.7860358",
+"User interaction analysis to recommend suitable jobs in career-oriented social networking sites": "https://doi.org/10.1109/icodse.2016.7936143",
+"Annotation-efficient weed detection using DINOv3-distilled YOLOv12": "https://doi.org/10.1038/s41598-026-60555-1",
+"DeepBiGRULSTM: Advanced deep learning architecture for precise air quality forecasting and monitoring": "https://doi.org/10.7494/csci.2026.27.1.6073",
+"Attention guided convolutional neural network with explainable AI for papaya leaf disease detection in edge and drone agricultural systems": "https://doi.org/10.1038/s41598-025-25374-w",
+"Smartphone-based multi-criteria vegetable object detection dataset from Bangladesh": "https://doi.org/10.1016/j.dib.2025.112281",
+"A comprehensive coin dataset highlighting the numismatic heritage of Bangladesh": "https://doi.org/10.1016/j.dib.2025.112212",
+"BERT-KAN: Enhancing bilingual sentiment analysis in Bangladeshi e-commerce through fine-tuned large language models": "https://doi.org/10.1016/j.nlp.2025.100190",
+"Efficient location prediction in MANETs using machine learning-based node mobility forecasting": "https://doi.org/10.1201/9781032659770-27",
+"Revival of Muslin by Phuti Karpas plant identification with convolution neural network": "https://doi.org/10.1016/j.array.2025.100428",
+"RiceKernelEngine: benchmarking transfer learning models for microscopic images of rice kernel": "https://doi.org/10.1016/j.array.2025.100429",
+"Exploring deep learning approaches for image captioning to mimic human understanding": "https://doi.org/10.11591/eei.v14i4.8885",
+"An ensemble learning framework with explainable AI for interpretable leaf disease detection": "https://doi.org/10.1016/j.array.2025.100386",
+"Enhancing land management policy in Bangladesh: A blockchain-based framework for transparent and efficient land management": "https://doi.org/10.1016/j.landusepol.2024.107436",
+"Smartphone image dataset for radish plant leaf disease classification from Bangladesh": "https://doi.org/10.1016/j.dib.2024.111263",
+"BananaImageBD: A comprehensive banana image dataset for classification of banana varieties and detection of ripeness stages in Bangladesh": "https://doi.org/10.1016/j.dib.2024.111239",
+"Comprehensive smartphone image dataset for bean and cowpea plant leaf disease detection and freshness assessment from Bangladesh vegetable fields": "https://doi.org/10.1016/j.dib.2024.111023",
+"Real-time sorting of broiler chicken meat with robotic arm: XAI-enhanced deep learning and LIME framework for freshness detection": "https://doi.org/10.1016/j.jafr.2024.101372",
+"Heart disease classification with XAI and Kernel SHAP": "https://doi.org/10.1109/raaicon64172.2024.10928523",
+"Transforming agri-food value chains in Bangladesh: A practical application of blockchain for traceability and fair pricing": "https://doi.org/10.1016/j.heliyon.2024.e40091",
+"Passchain: A blockchain-based decentralized password manager": "https://doi.org/10.1109/icbds61829.2024.10837098",
+"ImportChainBD: Blockchain solutions for transparent and accountable imported cosmetic products": "https://doi.org/10.1109/icbds61829.2024.10837434",
+"Decentralized e-KYC system for secure identity verification in Bangladesh": "https://doi.org/10.1109/icbds61829.2024.10837368",
+"Comprehensive smart smartphone image dataset for plant leaf disease detection and freshness assessment from Bangladesh vegetable fields": "https://doi.org/10.1016/j.dib.2024.110775",
+"Analyzing A/B testing results in digital marketing": "https://doi.org/10.1109/aibthings63359.2024.10863285",
+"A comprehensive dataset and deep learning approach for misinformation detection on social media in Bangladesh": "https://doi.org/10.12785/ijcds/1571057398",
+"Smartphone image dataset to distinguish healthy and unhealthy leaves in papaya orchards in Bangladesh": "https://doi.org/10.1016/j.dib.2024.110599",
+"Real-time PCB flaw detection: a vision for more efficient and accurate future": "https://doi.org/10.1109/icspcre62303.2024.10674952",
+"One day international cricket match score prediction using machine learning approaches": "https://doi.org/10.1109/icspcre62303.2024.10674897",
+"Energy aware planning approach considering cost of electrical energy for sustainable development": "https://doi.org/10.1109/icspcre62303.2024.10675084",
+"Framework for fish freshness detection and rotten fish removal in Bangladesh using Mask R-CNN method with robotic arm and fisheye analysis": "https://doi.org/10.1016/j.jafr.2024.101139",
+"A comparative analysis on transfer learning models to classify banana diseases: Fusarium wilt and Black Sigatoka": "https://doi.org/10.1109/incacct61598.2024.10551036",
+"IoT-based smart home automation system: Ensuring safety for the elderly": "https://doi.org/10.1109/incacct61598.2024.10551092",
+"DecentraLend: A blockchain-based monetization for decentralized lending system": "https://doi.org/10.12785/ijcds/1501118",
+"A comprehensive dataset for sentiment and emotion classification from Bangladesh e-commerce reviews": "https://doi.org/10.1016/j.dib.2024.110052",
+"Impact of AI in healthcare services: Analysis using medical synthetic data": "https://doi.org/10.1109/icaccess61735.2024.10499613",
+"Design of a real-time crime monitoring system using deep learning techniques": "https://doi.org/10.2139/ssrn.4465759",
+"ArsenicSkinImageBD: A comprehensive image dataset to classify affected and healthy skin of arsenic-affected people": "https://doi.org/10.1016/j.dib.2023.110016",
+"Aggressive Bangla text detection using machine learning and deep learning algorithms": "https://doi.org/10.1007/978-3-031-71481-8_14",
+"Broken authentication and its significance in protecting online applications: An overview paper": "https://doi.org/10.1007/978-981-97-3594-5_5",
+"The study of the effectiveness and sensitivity of stochastic divergence in foreign exchange market": "https://doi.org/10.1007/978-981-97-3594-5_22",
+"Analyzing MACD divergence: Challenges in Forex and commodity trading": "https://doi.org/10.1007/978-981-97-3594-5_12",
+"A comparative analysis of deep learning approaches in Bangla document categorization": "https://doi.org/10.1109/iccit60459.2023.10441548",
+"Real-time classification of bone fractures utilizing different convolutional neural network approaches": "https://doi.org/10.1109/iccit60459.2023.10441387",
+"An application of decentralized product authentication system for supply chain management using blockchain technology": "https://doi.org/10.1109/iccit60459.2023.10441094",
+"Comprehensive dataset of annotated rice panicle image from Bangladesh": "https://doi.org/10.1016/j.dib.2023.109772",
+"Detecting pneumonia from X-ray images of chest using deep convolutional neural network": "https://doi.org/10.1109/ibdap58581.2023.10271996",
+"Unmasking ovary tumors: Real-time detection with YOLOv5": "https://doi.org/10.1109/ibdap58581.2023.10271954",
+"Performance evaluation of intrusion detection system using machine learning and deep learning algorithms": "https://doi.org/10.1109/ibdap58581.2023.10271964",
+"A machine learning and deep learning integrated model to detect criminal activities": "https://doi.org/10.1109/ibdap58581.2023.10272002",
+"Image recognition of different tea quality based on convolutional neural network": "https://doi.org/10.1109/ibdap58581.2023.10271963",
+"Real-time self-harm detection ensuring safety in every moment": "https://doi.org/10.1109/ibdap58581.2023.10272005",
+"DeepTestDroid: a platform for automated application testing using deep learning": "https://doi.org/10.1109/ibdap58581.2023.10271935",
+"Beans disease detection using convolutional neural network": "https://doi.org/10.1109/ibdap58581.2023.10271983",
+"Using deep learning systems for imaging methods for recognising brain tumors": "https://doi.org/10.1109/ibdap58581.2023.10271958",
+"Deep learning for real-time leaf disease detection: Revolutionizing apple orchard health": "https://doi.org/10.1109/ibdap58581.2023.10271987",
+"DeepCONVSVM: A comprehensive model for detecting disease in mango leaves": "https://doi.org/10.1109/ibdap58581.2023.10272007",
+"Deep learning-assisted fracture diagnosis: Real-time femur fracture diagnosis and categorization": "https://doi.org/10.1109/ibdap58581.2023.10271972",
+"Comparison of feasibility between machine learning algorithms in terms of predicting energy consumption of smart grid": "https://doi.org/10.1109/ibdap58581.2023.10272003",
+"Solving Hamiltonian path problem using DNA computing": "https://doi.org/10.1049/icp.2023.1789",
+"Classification of acute myeloid leukemia using convolutional neural network": "https://doi.org/10.1049/icp.2023.1788",
+"Applying a privacy policy for e-waste management in Bangladesh": "https://doi.org/10.1007/978-981-99-7711-6_26",
+"An intelligent road accident reduction system using device-to-device communication": "https://doi.org/10.11591/ijeecs.v30.i3.pp1729-1739",
+"PSO-ANN in preventing traffic collisions: a comparative study": "https://doi.org/10.11591/ijeecs.v24.i3.pp1796-1803",
+"Facial expression recognition using local composition pattern": "https://doi.org/10.1145/3348445.3351307",
+"University ranking prediction system by analyzing influential global performance indicators": "https://doi.org/10.1109/kst.2017.7886119",
+"Discovering knowledge regarding academic profile of students pursuing graduate studies in world's top universities": "https://doi.org/10.1109/iwci.2016.7860351",
+"Advancing cucumber disease detection in agriculture through machine vision and drone technology": "https://doi.org/10.1007/978-981-97-7603-0_40",
+"Skin cancer detection using convolutional neural network": "https://doi.org/10.1145/3330482.3330525",
+"ACIRS: A comprehensive item based clustering approach to recommend appropriate items in recommender system": "https://doi.org/10.1145/3330482.3330526",
+"Heart disease prediction using machine learning algorithms": "https://doi.org/10.1109/ibdap58581.2023.10271997"
+};
 const root=document.getElementById('pubs');
 const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function render(f){
@@ -381,7 +466,7 @@ function render(f){
   let out='',y=null;
   for(const [yr,t,a,v,,note] of rows){
     if(yr!==y){out+='<div class="yr">'+yr+'</div>';y=yr}
-    out+='<div class="pub"><span class="t">'+esc(t)+'</span>'+(note?'<span class="note">'+esc(note)+'</span>':'')+
+    out+='<div class="pub"><span class="t">'+(LINKS[t]?'<a href="'+esc(LINKS[t])+'" target="_blank" rel="noopener">'+esc(t)+'</a>':esc(t))+'</span>'+(note?'<span class="note">'+esc(note)+'</span>':'')+
       '<span class="a">'+esc(a).replace(/\bM Hasan\b/g,'<b>M Hasan</b>')+'</span><span class="v">'+esc(v)+'</span></div>';
   }
   root.innerHTML=out;
