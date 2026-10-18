@@ -14,31 +14,31 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#1a1a1a;--soft:#4a4a4a;--mute:#767676;--rule:#e6e6e6;--link:#8a1c2b;--serif:'Newsreader',Georgia,serif;--sans:'Inter',system-ui,sans-serif}
+:root{--ink:#1a1a1a;--soft:#4a4a4a;--mute:#767676;--rule:#e6e6e6;--link:#8a1c2b;--tint:#f8eeef;--warm:#faf7f5;--serif:'Newsreader',Georgia,serif;--sans:'Inter',system-ui,sans-serif}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;background:#fff;color:var(--ink);font:17px/1.65 var(--serif)}
 a{color:var(--link);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;text-decoration-color:#d9b3b8}
-a:hover{text-decoration-color:var(--link)}
+a:hover{text-decoration-color:var(--link);background:var(--tint)}
 a:focus-visible{outline:2px solid var(--link);outline-offset:3px}
 .skip{position:absolute;left:-9999px}.skip:focus{left:12px;top:12px;background:#fff;padding:8px;z-index:9}
 
 .page{max-width:1020px;margin:0 auto;padding:0 28px;display:grid;grid-template-columns:230px 1fr;gap:72px}
 aside{position:sticky;top:0;align-self:start;padding:64px 0 40px;height:100vh;display:flex;flex-direction:column}
-aside img{width:150px;height:150px;border-radius:50%;object-fit:cover;object-position:50% 25%;display:block;margin-bottom:22px}
+aside img{width:150px;height:150px;border-radius:50%;object-fit:cover;object-position:50% 25%;display:block;margin-bottom:22px;box-shadow:0 0 0 4px #fff,0 0 0 6px var(--link)}
 aside h1{font:600 26px/1.2 var(--serif);margin:0 0 6px;letter-spacing:-.01em}
 aside .role{font:14px/1.5 var(--sans);color:var(--soft);margin:0 0 20px}
 nav{font:14px/1 var(--sans);display:flex;flex-direction:column;gap:11px;margin-bottom:26px}
 nav a{color:var(--mute);text-decoration:none}
-nav a:hover,nav a.on{color:var(--ink)}
-nav a.on:before{content:"– ";color:var(--link)}
+nav a:hover{background:none}nav a:hover,nav a.on{color:var(--ink)}
+nav a.on{color:var(--link);font-weight:600}nav a.on:before{content:"– "}
 .contact{font:13px/1.9 var(--sans);margin-top:auto}
 .contact a{color:var(--soft);text-decoration:none;display:block}
-.contact a:hover{color:var(--link)}
+.contact a:hover{color:var(--link);background:none}
 
 main{padding:64px 0 40px;min-width:0}
 section{padding-bottom:56px;scroll-margin-top:36px}
-h2{font:600 13px/1 var(--sans);letter-spacing:.09em;text-transform:uppercase;color:var(--mute);margin:0 0 22px;padding-bottom:12px;border-bottom:1px solid var(--rule)}
+h2{font:600 13px/1 var(--sans);letter-spacing:.09em;text-transform:uppercase;color:var(--ink);margin:0 0 22px;padding-bottom:12px;border-bottom:1px solid var(--rule);position:relative}h2:before{content:'';position:absolute;left:0;bottom:-1px;width:36px;height:2px;background:var(--link)}
 p{margin:0 0 1em}
 .lede{font-size:22px;line-height:1.5;letter-spacing:-.005em}
 .lede em{font-style:italic}
@@ -51,19 +51,19 @@ p{margin:0 0 1em}
 .item p{margin:0 0 .6em;color:var(--soft);font-size:16.5px}
 .item ul{margin:.4em 0 0;padding-left:1.1em;color:var(--soft);font-size:16px}
 .item li{margin-bottom:.35em}
-.num{font-variant-numeric:tabular-nums}
+.num{font-variant-numeric:tabular-nums;color:var(--link);font-weight:600}.tag{display:inline-block;font:600 11px/1 var(--sans);letter-spacing:.04em;text-transform:uppercase;color:var(--link);background:var(--tint);padding:4px 8px;border-radius:3px;margin-left:8px;vertical-align:2px}.item h3 .tag{font-size:10px}
 
 .filters{font:13px var(--sans);margin-bottom:6px;display:flex;gap:18px;flex-wrap:wrap}
 .filters button{font:inherit;background:none;border:0;padding:2px 0;color:var(--mute);cursor:pointer;border-bottom:1px solid transparent}
-.filters button[aria-pressed=true]{color:var(--ink);border-bottom-color:var(--link)}
+.filters button[aria-pressed=true]{color:var(--link);border-bottom-color:var(--link)}
 .filters button:focus-visible{outline:2px solid var(--link);outline-offset:3px}
-.yr{font:600 14px var(--sans);color:var(--ink);margin:28px 0 6px}
+.yr{font:600 14px var(--sans);color:var(--link);margin:28px 0 6px}
 .pub{padding:9px 0;border-bottom:1px solid #f1f1f1;font-size:16px;line-height:1.5}
 .pub .t{color:var(--ink)}.pub .t a{color:var(--ink);text-decoration-color:#cfcfcf}.pub .t a:hover{color:var(--link);text-decoration-color:var(--link)}
 .pub .a{display:block;color:var(--soft);font-size:15px}
 .pub .a b{color:var(--ink);font-weight:600}
 .pub .v{display:block;color:var(--mute);font-size:15px;font-style:italic}
-.pub .note{font:12px var(--sans);color:var(--link);margin-left:6px;font-style:normal}
+.pub .note{font:600 10px var(--sans);letter-spacing:.04em;text-transform:uppercase;color:var(--link);background:var(--tint);padding:3px 7px;border-radius:3px;margin-left:8px;font-style:normal;vertical-align:1px}
 .feat{margin-bottom:30px}
 .feat h3{font:500 20px/1.35 var(--serif);margin:0 0 4px}
 .feat .a{font-size:15px;color:var(--soft)}
@@ -77,6 +77,8 @@ p{margin:0 0 1em}
 footer{max-width:1020px;margin:0 auto;padding:22px 28px 44px;font:13px var(--sans);color:var(--mute);border-top:1px solid var(--rule);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 footer a{color:var(--mute)}
 
+@media(min-width:861px){body{--edge:294px;background:linear-gradient(90deg,var(--warm) var(--edge),var(--rule) var(--edge),var(--rule) calc(var(--edge) + 1px),#fff calc(var(--edge) + 1px))}}
+@media(min-width:1020px){body{--edge:calc(50% - 216px)}}
 @media(max-width:860px){
  .page{grid-template-columns:1fr;gap:0}
  aside{position:static;height:auto;padding:40px 0 8px}
@@ -131,9 +133,9 @@ footer a{color:var(--mute)}
   <h2>Research &amp; projects</h2>
 
   <div class="item">
-    <div class="when">2026<br>ongoing</div>
+    <div class="when">2026</div>
     <div>
-      <h3>Teaching Recommenders to Listen</h3>
+      <h3>Teaching Recommenders to Listen<span class="tag">Ongoing</span></h3>
       <div class="where">Dissertation · RecSys 2026 Doctoral Symposium</div>
       <p>Bidirectional natural-language control for personalized news. Readers steer the balance and mix of their whole newsletter in plain language, and the system both acts on the request and reports back on what it did and what it couldn’t do.</p>
       <ul>
@@ -147,7 +149,7 @@ footer a{color:var(--mute)}
   <div class="item">
     <div class="when">2025–26</div>
     <div>
-      <h3>PIXU: personalized news image selection</h3>
+      <h3>PIXU: personalized news image selection<span class="tag">Completed</span></h3>
       <div class="where">Hasan, Kluver, Knijnenburg, Konstan · RecSys 2026 BEYOND Workshop</div>
       <p>A CLIP-based post-ranker that learns a reader’s visual preferences from click history and picks one image per article, without touching the ranking. On MIND-Large it reaches <span class="num">68.1%</span> accuracy (AUC <span class="num">0.783</span>) against <span class="num">35.7%</span> for popularity and <span class="num">63.0%</span> for the best classical baseline.</p>
       <p>Deployed on POPROX for five weeks (<span class="num">163</span> users, <span class="num">5,567</span> deliveries) with no ranking or stability problems. Clicks did not change significantly, and a small experience survey (n=11) showed positive but non-significant trends in satisfaction, trust and perceived relevance.</p>
@@ -155,9 +157,9 @@ footer a{color:var(--mute)}
   </div>
 
   <div class="item">
-    <div class="when">2026<br>ongoing</div>
+    <div class="when">2026</div>
     <div>
-      <h3>Entity-aware newsletter personalization</h3>
+      <h3>Entity-aware newsletter personalization<span class="tag">Ongoing</span></h3>
       <div class="where">POPROX · preparing a five-week user-level RCT</div>
       <p>A four-signal recommender that fuses NRMS click similarity, topic ratings, article feedback and explicit entity preferences with reliability-weighted Reciprocal Rank Fusion, producing 5 sections of 15 unique articles.</p>
     </div>
