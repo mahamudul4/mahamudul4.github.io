@@ -974,6 +974,71 @@
 		});
 	}
 
+	// ---- Companies & Importance Header Strip ----
+	if (cfg.kind === 'problem' && cfg.companies && cfg.companies.length > 0) {
+		try {
+			var compBox = document.createElement('div');
+			compBox.className = 'sh-company-box';
+
+			var compHead = document.createElement('div');
+			compHead.className = 'sh-company-head';
+			var isEn = cfg.view === 'en';
+			var totalC = cfg.totalCompanies || cfg.companies.length;
+			var titleSpan = document.createElement('span');
+			titleSpan.className = 'sh-company-title';
+			titleSpan.textContent = isEn
+				? ('🏢 Asked by ' + totalC + (totalC === 1 ? ' Company' : ' Companies'))
+				: ('🏢 ' + totalC + 'টি কোম্পানিতে এসেছে (গুরুত্বসহ)');
+			compHead.appendChild(titleSpan);
+
+			var allBtn = document.createElement('button');
+			allBtn.type = 'button';
+			allBtn.className = 'sh-company-all-btn';
+			allBtn.textContent = isEn ? 'View all →' : 'সব দেখুন →';
+			allBtn.addEventListener('click', function () {
+				post({ t: 'showCompanies' });
+			});
+			compHead.appendChild(allBtn);
+			compBox.appendChild(compHead);
+
+			var pills = document.createElement('div');
+			pills.className = 'sh-company-pills';
+			cfg.companies.forEach(function (c) {
+				var btn = document.createElement('button');
+				btn.type = 'button';
+				btn.className = 'sh-company-pill sh-imp-' + (c.imp || 1);
+				btn.title = c.name + ' · ' + c.stars + (c.freq ? (' · ' + c.freq + '%') : '') + (c.recent ? (' · ' + c.recent) : '');
+				var label = '<span class="sh-comp-name">' + c.name + '</span>' +
+					'<span class="sh-comp-stars">' + (c.stars || '★') + '</span>' +
+					(c.freq ? '<span class="sh-comp-freq">' + c.freq + '%</span>' : '') +
+					(c.recent ? '<span class="sh-comp-recent">' + c.recent + '</span>' : '');
+				btn.innerHTML = label;
+				btn.addEventListener('click', function () {
+					post({ t: 'company', id: c.id });
+				});
+				pills.appendChild(btn);
+			});
+			if (totalC > cfg.companies.length) {
+				var moreBtn = document.createElement('button');
+				moreBtn.type = 'button';
+				moreBtn.className = 'sh-company-pill sh-company-more';
+				moreBtn.textContent = '+' + (totalC - cfg.companies.length) + (isEn ? ' more' : ' আরও');
+				moreBtn.addEventListener('click', function () {
+					post({ t: 'showCompanies' });
+				});
+				pills.appendChild(moreBtn);
+			}
+			compBox.appendChild(pills);
+
+			var anchorEl = document.querySelector('.sh-page-head') || document.querySelector('.sh-eyebrow') || document.querySelector('h1');
+			if (anchorEl && anchorEl.parentNode) {
+				anchorEl.parentNode.insertBefore(compBox, anchorEl.nextSibling);
+			} else if (document.body.firstChild) {
+				document.body.insertBefore(compBox, document.body.firstChild);
+			}
+		} catch (e) { /* ignore company bar errors */ }
+	}
+
 	// ---- Related Problems Learning Ladder Footer ----
 	if (cfg.kind === 'problem' && cfg.related && cfg.related.length > 0) {
 		try {

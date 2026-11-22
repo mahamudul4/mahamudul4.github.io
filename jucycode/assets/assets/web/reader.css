@@ -601,6 +601,84 @@ body[data-view='bn'] .sh-translation-en { display: none; }
 .sh-invariant { padding: 1rem; background: var(--soft); border-inline-start: 3px solid var(--accent); border-radius: 0 12px 12px 0; margin: 1rem 0; }
 .sh-invariant p { margin-bottom: 0; }
 .sh-reference-note { border: 1px solid var(--line); border-radius: 12px; padding: 1rem; color: var(--muted); font-size: .85rem; }
+
+/* ---- Companies & Importance Bar ---- */
+.sh-company-box {
+	margin: 0.7rem 0 1.15rem;
+	padding: 0.7rem 0.85rem;
+	border-radius: 12px;
+	border: 1px solid var(--line);
+	background: var(--soft);
+}
+.sh-company-head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.5rem;
+	margin-bottom: 0.55rem;
+}
+.sh-company-title {
+	font-size: 0.8rem;
+	font-weight: 700;
+	color: var(--fg);
+}
+.sh-company-all-btn {
+	border: none;
+	background: transparent;
+	color: var(--accent);
+	font: inherit;
+	font-size: 0.76rem;
+	font-weight: 700;
+	cursor: pointer;
+	padding: 0.15rem 0.35rem;
+	border-radius: 6px;
+}
+.sh-company-pills {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.4rem;
+}
+.sh-company-pill {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.32rem;
+	padding: 0.28rem 0.58rem;
+	border-radius: 8px;
+	border: 1px solid var(--line);
+	background: var(--bg);
+	color: var(--fg);
+	font: inherit;
+	font-size: 0.76rem;
+	cursor: pointer;
+	line-height: 1.25;
+}
+.sh-company-pill.sh-imp-3 {
+	border-color: rgba(245, 158, 11, 0.45);
+	background: rgba(245, 158, 11, 0.11);
+}
+.sh-company-pill.sh-imp-2 {
+	border-color: rgba(56, 189, 248, 0.38);
+	background: rgba(56, 189, 248, 0.09);
+}
+.sh-comp-name { font-weight: 700; }
+.sh-company-pill.sh-imp-3 .sh-comp-stars { color: #f59e0b; font-size: 0.68rem; }
+.sh-company-pill.sh-imp-2 .sh-comp-stars { color: #38bdf8; font-size: 0.68rem; }
+.sh-company-pill.sh-imp-1 .sh-comp-stars { color: var(--muted); font-size: 0.68rem; }
+.sh-comp-freq { font-size: 0.7rem; color: var(--muted); font-family: ui-monospace, monospace; }
+.sh-comp-recent {
+	font-size: 0.66rem;
+	font-weight: 700;
+	color: #10b981;
+	background: rgba(16, 185, 129, 0.14);
+	padding: 0.05rem 0.32rem;
+	border-radius: 4px;
+}
+.sh-company-more {
+	color: var(--accent);
+	font-weight: 700;
+	border-style: dashed;
+}
+
 button:focus-visible, a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 body { max-width: 920px; margin-inline: auto; padding: 1.25rem 1.25rem 5rem; }
 html[lang='bn'] body { line-height: 1.78; letter-spacing: 0.005em; }
