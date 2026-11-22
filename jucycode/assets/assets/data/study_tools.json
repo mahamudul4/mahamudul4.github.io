@@ -1,0 +1,697 @@
+{
+  "hints": {
+    "1": [
+      "For each value, ask which other value would complete the target sum.",
+      "A hash map can remember earlier values and their indices.",
+      "Check whether target - value was seen before inserting the current value. This prevents reusing one element."
+    ],
+    "3": [
+      "A repeated character makes the current substring invalid.",
+      "Maintain a sliding window containing only distinct characters.",
+      "Move the left boundary until the incoming character is absent, then extend right and update the longest length."
+    ],
+    "20": [
+      "The most recently opened bracket must be the first one closed.",
+      "Use a stack of opening brackets.",
+      "On a closing bracket, check that a matching opener exists at the top. At the end the stack must be empty."
+    ],
+    "42": [
+      "Water above a bar depends on boundaries on both sides, not just its neighbours.",
+      "Two inward pointers can resolve the side with the smaller current boundary.",
+      "Track each side's maximum. Resolve the smaller boundary, add its nonnegative trapped water and advance that pointer."
+    ],
+    "56": [
+      "Once intervals are ordered by start, only the last merged interval can overlap the next one.",
+      "Sort by start and maintain a merged output.",
+      "Start with the first interval. If the next start is at most the last end, extend that end; otherwise append a new interval."
+    ],
+    "70": [
+      "The last move reaches step n from either n-1 or n-2.",
+      "Use dynamic programming with the previous two counts.",
+      "Set the counts for zero and one step to 1. Repeatedly replace the pair with current and previous + current."
+    ],
+    "76": [
+      "You need every required character with its required multiplicity.",
+      "A sliding window can grow until all requirements are met, then shrink while valid.",
+      "Build target frequencies. Track how many requirements are satisfied, and save a smaller valid window before removing its left character."
+    ],
+    "121": [
+      "A sale can only use a purchase from an earlier day.",
+      "Track the lowest price encountered so far and the best profit.",
+      "For each price, update the minimum and compare price - minimum with the best profit. Keep zero when no profit exists."
+    ],
+    "125": [
+      "Only alphanumeric characters participate, and case does not matter.",
+      "Compare characters using two pointers moving inward.",
+      "Skip non-alphanumeric characters at either end, compare lowercase values, then advance both pointers."
+    ],
+    "150": [
+      "An operator uses the two most recent unresolved operands.",
+      "Evaluate the expression with an operand stack.",
+      "Pop the right operand first, then the left. Push the result; integer division must truncate toward zero."
+    ],
+    "167": [
+      "The input is already sorted, so the sum changes predictably when a pointer moves.",
+      "Place one pointer at each end.",
+      "If the sum is too small, increase the left pointer; if too large, decrease the right. Return the required one-based indices."
+    ],
+    "200": [
+      "Each connected land component contributes one island.",
+      "Use a flood fill with DFS or BFS and a visited set.",
+      "Scan the grid. On unvisited land, increment the count and mark every reachable land cell visited before continuing the scan."
+    ],
+    "206": [
+      "Changing a next reference can make the remaining chain unreachable.",
+      "Use previous, current and a saved next reference.",
+      "Save current.next first, point current.next backward, then advance previous and current using the saved reference."
+    ],
+    "215": [
+      "Duplicates count as separate positions in the sorted order.",
+      "A min heap of size k can retain the largest k values.",
+      "Push values and remove the minimum whenever the size exceeds k. At the end the root is the kth largest."
+    ],
+    "217": [
+      "A duplicate exists when the number of distinct values is smaller than the input size.",
+      "A set supports average constant-time membership checks.",
+      "Scan the array: return true when a value is already in the set; otherwise insert it and continue."
+    ],
+    "218": [
+      "The skyline can change only at a building start or end coordinate.",
+      "Sweep distinct endpoints and maintain a max heap of candidate buildings.",
+      "At each x, insert all starts, lazily remove heap leaders with right <= x, then emit the active maximum only if its height changed."
+    ],
+    "238": [
+      "For each index, separate the product strictly to its left from the product strictly to its right.",
+      "Combine prefix and suffix products without division.",
+      "Store each left product before multiplying the current value. Walk backward with a running right product and multiply it into the output."
+    ],
+    "242": [
+      "Anagrams must have identical counts for every character.",
+      "Compare character-frequency maps.",
+      "Reject different lengths early, count each string, and check whether all character counts agree."
+    ],
+    "560": [
+      "A subarray sum is the difference between two prefix sums.",
+      "Count how often each earlier prefix sum has occurred.",
+      "Initialize the empty prefix count to 1. For each running total, add the count of total - k before recording the new total."
+    ],
+    "704": [
+      "The sorted input lets you discard half of the remaining candidates.",
+      "Use binary search with an inclusive left and right boundary.",
+      "While left <= right, compare the midpoint. Move beyond it on the appropriate side; return -1 if the interval becomes empty."
+    ]
+  },
+  "hints_bn": {
+    "1": [
+      "প্রতিটি মানের জন্য ভাবুন—target যোগফল পূর্ণ করতে আর কোন মানটি দরকার।",
+      "আগের মানগুলো এবং তাদের ইন্ডেক্স মনে রাখার জন্য একটি hash map ব্যবহার করতে পারেন।",
+      "বর্তমান মানটি map-এ যোগ করার আগেই target - value আগে দেখা গেছে কি না পরীক্ষা করুন। এতে একই উপাদান দুবার ব্যবহার হওয়া ঠেকানো যায়।"
+    ],
+    "3": [
+      "একই অক্ষর দুবার এলেই বর্তমান substring-টি অবৈধ হয়ে যায়।",
+      "এমন একটি sliding window বজায় রাখুন যেখানে কেবল অনন্য (distinct) অক্ষর থাকবে।",
+      "নতুন আসা অক্ষরটি window থেকে না সরা পর্যন্ত বাম প্রান্ত এগিয়ে নিন, তারপর ডান প্রান্ত বাড়িয়ে সর্বোচ্চ দৈর্ঘ্য আপডেট করুন।"
+    ],
+    "20": [
+      "সবচেয়ে শেষে খোলা ব্র্যাকেটটিই সবার আগে বন্ধ হতে হবে।",
+      "opening bracket-গুলো রাখার জন্য একটি stack ব্যবহার করুন।",
+      "closing bracket এলে stack-এর শীর্ষে মানানসই opening bracket আছে কি না পরীক্ষা করুন। শেষে stack পুরোপুরি খালি থাকতে হবে।"
+    ],
+    "42": [
+      "একটি বারের ওপরে কতটুকু পানি জমবে তা কেবল পাশের দুটি বার নয়, দুই পাশের সর্বোচ্চ সীমানার ওপর নির্ভর করে।",
+      "ভেতরের দিকে এগোনো দুটি pointer দিয়ে যে পাশের বর্তমান সীমানা ছোট, সেই পাশের হিসাব নিষ্পত্তি করা যায়।",
+      "দুই পাশের সর্বোচ্চ উচ্চতা ট্র্যাক করুন। ছোট সীমানার দিকটি নিষ্পত্তি করে অ-ঋণাত্মক (nonnegative) জমা পানি যোগ করুন এবং ওই pointer এগিয়ে নিন।"
+    ],
+    "56": [
+      "interval-গুলো শুরু (start) অনুযায়ী সাজানো থাকলে কেবল সর্বশেষ merged interval-টিই পরেরটির সাথে ওভারল্যাপ করতে পারে।",
+      "start অনুযায়ী sort করুন এবং একটি merged ফলাফল তালিকা বজায় রাখুন।",
+      "প্রথম interval দিয়ে শুরু করুন। পরেরটির start যদি সর্বশেষ end-এর সমান বা ছোট হয়, তবে সেই end বাড়িয়ে দিন; নইলে নতুন interval হিসেবে যোগ করুন।"
+    ],
+    "70": [
+      "শেষ ধাপে n-তম সিঁড়িতে পৌঁছানো যায় কেবল n-1 অথবা n-2 থেকে।",
+      "আগের দুটি ধাপের গণনা ব্যবহার করে dynamic programming প্রয়োগ করুন।",
+      "0 এবং 1 ধাপের জন্য গণনা 1 নির্ধারণ করুন। এরপর বারবার জোড়াটিকে (current, previous + current) দিয়ে প্রতিস্থাপন করুন।"
+    ],
+    "76": [
+      "প্রয়োজনীয় প্রতিটি অক্ষর তার নির্দিষ্ট সংখ্যকবার (multiplicity) থাকতে হবে।",
+      "সব শর্ত পূরণ না হওয়া পর্যন্ত sliding window বাড়ান, আর বৈধ অবস্থায় থাকাকালীন যতটা সম্ভব ছোট করুন।",
+      "লক্ষ্য অক্ষরগুলোর frequency তৈরি করুন। কয়টি শর্ত পূরণ হয়েছে তা ট্র্যাক করুন এবং বাম প্রান্তের অক্ষর সরানোর আগেই আরও ছোট বৈধ window পাওয়া গেলে তা সংরক্ষণ করুন।"
+    ],
+    "121": [
+      "বিক্রি করার জন্য অবশ্যই তার আগের কোনো দিনের কেনা দাম ব্যবহার করতে হবে।",
+      "এখন পর্যন্ত পাওয়া সর্বনিম্ন দাম এবং সর্বোচ্চ লাভ (profit) ট্র্যাক করুন।",
+      "প্রতিটি দামের জন্য সর্বনিম্ন দাম আপডেট করুন এবং price - minimum-এর সাথে সেরা লাভের তুলনা করুন। কোনো লাভ না হলে শূন্য রাখুন।"
+    ],
+    "125": [
+      "কেবল alphanumeric অক্ষরগুলোই গণ্য হবে, আর বড় বা ছোট হাতের অক্ষরে কোনো পার্থক্য নেই।",
+      "ভেতরের দিকে এগোনো দুটি pointer দিয়ে অক্ষরগুলো তুলনা করুন।",
+      "দুই প্রান্তে non-alphanumeric অক্ষরগুলো এড়িয়ে যান, lowercase মান তুলনা করুন এবং তারপর দুটি pointer-ই এগিয়ে নিন।"
+    ],
+    "150": [
+      "একটি operator তার ঠিক আগের দুটি অমীমাংসিত operand-এর ওপর কাজ করে।",
+      "expression-টি মূল্যায়ন করতে একটি operand stack ব্যবহার করুন।",
+      "আগে ডান operand এবং পরে বাম operand pop করুন। ফলাফল আবার push করুন; integer division-এর ক্ষেত্রে শূন্যের দিকে truncate করতে হবে।"
+    ],
+    "167": [
+      "ইনপুটটি আগে থেকেই sorted, তাই একটি pointer সরালে যোগফল কীভাবে বদলাবে তা সহজেই অনুমান করা যায়।",
+      "দুই প্রান্তে দুটি pointer বসান।",
+      "যোগফল খুব ছোট হলে বাম pointer বাড়ান; খুব বড় হলে ডান pointer কমান। শেষে চাহিদামতো 1-based ইন্ডেক্স রিটার্ন করুন।"
+    ],
+    "200": [
+      "প্রতিটি সংযুক্ত স্থলভাগ (connected land component) একেকটি দ্বীপ হিসেবে গণ্য হয়।",
+      "একটি visited set নিয়ে DFS অথবা BFS দিয়ে flood fill চালান।",
+      "পুরো grid স্ক্যান করুন। অদেখা স্থলভাগ পেলে দ্বীপের সংখ্যা 1 বাড়ান এবং সেখান থেকে পৌঁছানো যায় এমন সব স্থলঘর visited চিহ্নিত করে স্ক্যান চালিয়ে যান।"
+    ],
+    "206": [
+      "কোনো node-এর next রেফারেন্স বদলে ফেললে বাকি চেইনটিতে পৌঁছানোর পথ হারিয়ে যেতে পারে।",
+      "previous, current এবং সংরক্ষিত একটি next রেফারেন্স ব্যবহার করুন।",
+      "আগে current.next সংরক্ষণ করুন, তারপর current.next-কে উল্টোদিকে ঘুরিয়ে দিন এবং সংরক্ষিত রেফারেন্স ধরে previous ও current এগিয়ে নিন।"
+    ],
+    "215": [
+      "sorted ক্রমে পুনরাবৃত্ত মানগুলোও আলাদা অবস্থান হিসেবে গণ্য হয়।",
+      "k আকারের একটি min heap সবচেয়ে বড় k-টি মান ধরে রাখতে পারে।",
+      "মানগুলো push করুন এবং আকার k-এর বেশি হলেই সবচেয়ে ছোট মানটি সরিয়ে দিন। শেষে heap-এর root-ই হবে kth largest।"
+    ],
+    "217": [
+      "অনন্য (distinct) মানের সংখ্যা ইনপুটের মোট আকারের চেয়ে কম হলেই বোঝা যাবে ডুপ্লিকেট আছে।",
+      "একটি set গড়ে O(1) সময়ে membership পরীক্ষা করতে পারে।",
+      "অ্যারেটি স্ক্যান করুন: কোনো মান আগে থেকেই set-এ থাকলে True রিটার্ন করুন; নইলে সেটি যোগ করে এগিয়ে যান।"
+    ],
+    "218": [
+      "skyline-এর উচ্চতা কেবল কোনো building-এর শুরু বা শেষ স্থানাঙ্কেই (coordinate) বদলাতে পারে।",
+      "সব অনন্য প্রান্তবিন্দু sweep করুন এবং সম্ভাব্য building-গুলোর জন্য একটি max heap বজায় রাখুন।",
+      "প্রতিটি x-এ শুরু হওয়া সব building যোগ করুন, যেসব শীর্ষ building-এর right <= x সেগুলো lazily সরিয়ে দিন এবং কেবল সক্রিয় সর্বোচ্চ উচ্চতা বদলালেই পয়েন্ট emit করুন।"
+    ],
+    "238": [
+      "প্রতিটি ইন্ডেক্সের জন্য তার পুরোপুরি বামের গুণফল এবং পুরোপুরি ডানের গুণফল আলাদাভাবে ভাবুন।",
+      "ভাগ (division) ছাড়াই prefix ও suffix গুণফল একত্র করুন।",
+      "বর্তমান মান দিয়ে গুণ করার আগে বামের গুণফল সংরক্ষণ করুন। এরপর পেছন দিক থেকে চলমান ডান গুণফল নিয়ে আউটপুটে গুণ করে দিন।"
+    ],
+    "242": [
+      "anagram হতে হলে প্রতিটি অক্ষরের গণনা হুবহু সমান হতে হবে।",
+      "অক্ষরগুলোর frequency map তুলনা করুন।",
+      "দৈর্ঘ্য ভিন্ন হলেই শুরুতে বাতিল করুন, দুটি স্ট্রিংয়ের অক্ষর গুনুন এবং সব অক্ষরের গণনা মেলে কি না দেখুন।"
+    ],
+    "560": [
+      "একটি subarray-এর যোগফল আসলে দুটি prefix sum-এর পার্থক্য।",
+      "আগের প্রতিটি prefix sum কতবার এসেছে তা গুনে রাখুন।",
+      "খালি prefix-এর গণনা 1 দিয়ে শুরু করুন। প্রতিটি চলমান যোগফলের (total) জন্য নতুন total সংরক্ষণ করার আগেই total - k কতবার এসেছে তা উত্তরে যোগ করুন।"
+    ],
+    "704": [
+      "sorted ইনপুট আপনাকে প্রতি ধাপে বাকি অর্ধেক সম্ভাবনা বাদ দেওয়ার সুযোগ দেয়।",
+      "inclusive বাম ও ডান সীমানা নিয়ে binary search ব্যবহার করুন।",
+      "যতক্ষণ left <= right, মধ্যবিন্দু তুলনা করুন। প্রয়োজনমতো সীমানা মধ্যবিন্দু পেরিয়ে সরান; interval খালি হয়ে গেলে -1 রিটার্ন করুন।"
+    ]
+  },
+  "general_hints": [
+    "Restate the required output and constraints. Trace the smallest valid input and one boundary case.",
+    "Write down a direct solution mentally. Identify which repeated work makes it slow before choosing a data structure.",
+    "Describe the state you must preserve after each step. Trace one example against that invariant before opening a solution."
+  ],
+  "general_hints_bn": [
+    "কাঙ্ক্ষিত আউটপুট ও শর্তগুলো নিজের ভাষায় আবার বলুন। সবচেয়ে ছোট বৈধ ইনপুট এবং একটি boundary case হাতে ট্রেস করুন।",
+    "মনে মনে একটি সরাসরি সমাধান দাঁড় করান। ডেটা স্ট্রাকচার বেছে নেওয়ার আগে বুঝে নিন কোন পুনরাবৃত্ত কাজটি সমাধানকে ধীর করছে।",
+    "প্রতিটি ধাপের পর কোন state বজায় থাকতে হবে (invariant) তা স্থির করুন। সমাধান দেখার আগে সেই invariant ধরে অন্তত একটি উদাহরণ ট্রেস করুন।"
+  ],
+  "edges": [
+    {
+      "id": "edge-binary-singleton",
+      "kind": "bug",
+      "topic": "Binary search",
+      "prompt": "Find a target in a sorted array of distinct integers; return its index or -1.\nWhich input breaks this function? Each choice shows the required result.",
+      "code": "def solve(nums, target):\n    left, right = 0, len(nums) - 1\n    while left < right:\n        mid = (left + right) // 2\n        if nums[mid] == target:\n            return mid\n        if nums[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1",
+      "corrected": "def solve(nums, target):\n    left, right = 0, len(nums) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if nums[mid] == target:\n            return mid\n        if nums[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1",
+      "choices": [
+        "solve([1, 3, 5], 3) → 1",
+        "solve([3], 3) → 0",
+        "solve([2, 4], 2) → 0"
+      ],
+      "answer": 1,
+      "explanation": "A one-element interval is still a valid search interval. left < right skips it entirely; inclusive bounds require left <= right.",
+      "lesson": "704",
+      "prompt_bn": "ভিন্ন ভিন্ন পূর্ণসংখ্যার একটি sorted অ্যারেতে target খুঁজে তার ইন্ডেক্স রিটার্ন করুন, না পেলে -1।\nকোন ইনপুটটি এই ফাংশনকে ভুল ফলাফল দিতে বাধ্য করবে? প্রতিটি অপশনে কাঙ্ক্ষিত ফলাফল দেখানো হয়েছে।",
+      "explanation_bn": "এক উপাদানের interval-ও একটি বৈধ search interval। left < right সেটিকে পুরোপুরি এড়িয়ে যায়; inclusive সীমানার জন্য left <= right প্রয়োজন।"
+    },
+    {
+      "id": "edge-two-sum-self",
+      "kind": "bug",
+      "topic": "Hashing",
+      "prompt": "Return the two distinct indices whose values sum to target. Each input has one valid pair.\nWhich input breaks this function? Each choice shows the required result.",
+      "code": "def solve(nums, target):\n    seen = {}\n    for i, value in enumerate(nums):\n        seen[value] = i\n        if target - value in seen:\n            return [seen[target - value], i]",
+      "corrected": "def solve(nums, target):\n    seen = {}\n    for i, value in enumerate(nums):\n        if target - value in seen:\n            return [seen[target - value], i]\n        seen[value] = i",
+      "choices": [
+        "solve([2, 7, 11], 9) → [0, 1]",
+        "solve([1, 4, 6], 10) → [1, 2]",
+        "solve([3, 3], 6) → [0, 1]"
+      ],
+      "answer": 2,
+      "explanation": "The inputs each have one valid pair of distinct indices. Inserting 3 before checking its complement lets the function reuse index 0. Check first, insert second.",
+      "lesson": "1",
+      "prompt_bn": "এমন দুটি ভিন্ন ইন্ডেক্স রিটার্ন করুন যাদের মানের যোগফল target। প্রতিটি ইনপুটে ঠিক একটি বৈধ জোড়া আছে।\nকোন ইনপুটটি এই ফাংশনকে ভুল ফলাফল দিতে বাধ্য করবে? প্রতিটি অপশনে কাঙ্ক্ষিত ফলাফল দেখানো হয়েছে।",
+      "explanation_bn": "প্রতিটি ইনপুটে ভিন্ন ইন্ডেক্সের একটি বৈধ জোড়া আছে। complement পরীক্ষা করার আগেই 3 যোগ করলে ফাংশনটি index 0 দুবার ব্যবহার করে ফেলে। আগে পরীক্ষা করুন, পরে যোগ করুন।"
+    },
+    {
+      "id": "edge-all-negative",
+      "kind": "bug",
+      "topic": "Dynamic programming",
+      "prompt": "Return the maximum sum of a nonempty contiguous subarray. The input is nonempty.\nWhich input breaks this function? Each choice shows the required result.",
+      "code": "def solve(nums):\n    current = best = 0\n    for x in nums:\n        current = max(x, current + x)\n        best = max(best, current)\n    return best",
+      "corrected": "def solve(nums):\n    current = best = nums[0]\n    for x in nums[1:]:\n        current = max(x, current + x)\n        best = max(best, current)\n    return best",
+      "choices": [
+        "solve([-4, -2, -7]) → -2",
+        "solve([1, -2, 3]) → 3",
+        "solve([0, -1]) → 0"
+      ],
+      "answer": 0,
+      "explanation": "The subarray must be nonempty. Initializing best to zero invents an empty answer for an all-negative input. Initialize from the first value.",
+      "lesson": "53",
+      "prompt_bn": "একটি অ-খালি (nonempty) পাশাপাশি subarray-এর সর্বোচ্চ যোগফল রিটার্ন করুন। ইনপুটটি অ-খালি।\nকোন ইনপুটটি এই ফাংশনকে ভুল ফলাফল দিতে বাধ্য করবে? প্রতিটি অপশনে কাঙ্ক্ষিত ফলাফল দেখানো হয়েছে।",
+      "explanation_bn": "subarray-টি অবশ্যই অ-খালি হতে হবে। সব সংখ্যা ঋণাত্মক হলে best-কে শূন্য দিয়ে শুরু করলে তা ভুলভাবে একটি খালি উত্তর তৈরি করে। প্রথম মানটি দিয়ে শুরু করুন।"
+    },
+    {
+      "id": "edge-negative-window",
+      "kind": "bug",
+      "topic": "Sliding window",
+      "prompt": "Return the largest sum of exactly k consecutive values, where 1 <= k <= len(nums).\nWhich input breaks this function? Each choice shows the required result.",
+      "code": "def solve(nums, k):\n    best = 0\n    for left in range(len(nums) - k + 1):\n        best = max(best, sum(nums[left:left + k]))\n    return best",
+      "corrected": "def solve(nums, k):\n    window = best = sum(nums[:k])\n    for right in range(k, len(nums)):\n        window += nums[right] - nums[right - k]\n        best = max(best, window)\n    return best",
+      "choices": [
+        "solve([1, 2, 3], 2) → 5",
+        "solve([-4, -2], 2) → -6",
+        "solve([0, 1], 1) → 1"
+      ],
+      "answer": 1,
+      "explanation": "Here 1 <= k <= len(nums), and a window must contain exactly k values. Zero is not a valid result when every window is negative. Initialize from the first window; the correction also avoids repeated summing.",
+      "lesson": null,
+      "prompt_bn": "ঠিক k-টি পাশাপাশি মানের সর্বোচ্চ যোগফল রিটার্ন করুন, যেখানে 1 <= k <= len(nums)।\nকোন ইনপুটটি এই ফাংশনকে ভুল ফলাফল দিতে বাধ্য করবে? প্রতিটি অপশনে কাঙ্ক্ষিত ফলাফল দেখানো হয়েছে।",
+      "explanation_bn": "এখানে 1 <= k <= len(nums), এবং প্রতিটি window-তে ঠিক k-টি মান থাকতেই হবে। সব window ঋণাত্মক হলে 0 কোনো বৈধ উত্তর নয়। প্রথম window-এর যোগফল দিয়ে শুরু করুন; সঠিক কোডটি বারবার sum করার খরচও বাঁচায়।"
+    },
+    {
+      "id": "edge-repeat-shrink",
+      "kind": "bug",
+      "topic": "Sliding window",
+      "prompt": "Return the length of the longest substring with no repeated characters.\nWhich input breaks this function? Each choice shows the required result.",
+      "code": "def solve(text):\n    seen = set()\n    left = best = 0\n    for right, ch in enumerate(text):\n        if ch in seen:\n            seen.remove(text[left])\n            left += 1\n        seen.add(ch)\n        best = max(best, right - left + 1)\n    return best",
+      "corrected": "def solve(text):\n    seen = set()\n    left = best = 0\n    for right, ch in enumerate(text):\n        while ch in seen:\n            seen.remove(text[left])\n            left += 1\n        seen.add(ch)\n        best = max(best, right - left + 1)\n    return best",
+      "choices": [
+        "solve('abc') → 3",
+        "solve('abca') → 3",
+        "solve('abba') → 2"
+      ],
+      "answer": 2,
+      "explanation": "For abba, removing a once does not remove the repeated b. Shrink in a loop until the incoming character is no longer present.",
+      "lesson": "3",
+      "prompt_bn": "কোনো পুনরাবৃত্ত অক্ষর ছাড়া সবচেয়ে বড় substring-এর দৈর্ঘ্য রিটার্ন করুন।\nকোন ইনপুটটি এই ফাংশনকে ভুল ফলাফল দিতে বাধ্য করবে? প্রতিটি অপশনে কাঙ্ক্ষিত ফলাফল দেখানো হয়েছে।",
+      "explanation_bn": "abba-র ক্ষেত্রে একবার a সরালেই পুনরাবৃত্ত b সরে যায় না। নতুন আসা অক্ষরটি পুরোপুরি না সরা পর্যন্ত loop চালিয়ে window ছোট করুন।"
+    },
+    {
+      "id": "edge-empty-prefix",
+      "kind": "bug",
+      "topic": "Prefix sums",
+      "prompt": "Count all nonempty contiguous subarrays whose sum equals k.\nWhich input breaks this function? Each choice shows the required result.",
+      "code": "def solve(nums, k):\n    counts = {}\n    total = answer = 0\n    for x in nums:\n        total += x\n        answer += counts.get(total - k, 0)\n        counts[total] = counts.get(total, 0) + 1\n    return answer",
+      "corrected": "def solve(nums, k):\n    counts = {0: 1}\n    total = answer = 0\n    for x in nums:\n        total += x\n        answer += counts.get(total - k, 0)\n        counts[total] = counts.get(total, 0) + 1\n    return answer",
+      "choices": [
+        "solve([3], 3) → 1",
+        "solve([1, 2, 1], 2) → 1",
+        "solve([2, 1], 1) → 1"
+      ],
+      "answer": 0,
+      "explanation": "A matching subarray can start at index zero. The earlier empty prefix has sum zero and must be counted once.",
+      "lesson": "560",
+      "prompt_bn": "যাদের যোগফল k, এমন সব অ-খালি পাশাপাশি subarray-এর সংখ্যা গুনুন।\nকোন ইনপুটটি এই ফাংশনকে ভুল ফলাফল দিতে বাধ্য করবে? প্রতিটি অপশনে কাঙ্ক্ষিত ফলাফল দেখানো হয়েছে।",
+      "explanation_bn": "মিলে যাওয়া subarray-টি index 0 থেকেও শুরু হতে পারে। এর আগের খালি prefix-টির যোগফল শূন্য এবং সেটিকে একবার গুনে রাখতে হবে।"
+    },
+    {
+      "id": "edge-touching-intervals",
+      "kind": "bug",
+      "topic": "Intervals",
+      "prompt": "Merge overlapping closed intervals, including intervals that share an endpoint.\nWhich input breaks this function? Each choice shows the required result.",
+      "code": "def solve(intervals):\n    merged = []\n    for start, end in sorted(intervals):\n        if merged and start < merged[-1][1]:\n            merged[-1][1] = max(end, merged[-1][1])\n        else:\n            merged.append([start, end])\n    return merged",
+      "corrected": "def solve(intervals):\n    merged = []\n    for start, end in sorted(intervals):\n        if merged and start <= merged[-1][1]:\n            merged[-1][1] = max(end, merged[-1][1])\n        else:\n            merged.append([start, end])\n    return merged",
+      "choices": [
+        "solve([[1, 3], [2, 4]]) → [[1, 4]]",
+        "solve([[1, 2], [2, 3]]) → [[1, 3]]",
+        "solve([[1, 2], [4, 5]]) → [[1, 2], [4, 5]]"
+      ],
+      "answer": 1,
+      "explanation": "These are closed intervals. Sharing an endpoint counts as overlap, so the comparison must include equality. Half-open intervals would use a different rule.",
+      "lesson": "56",
+      "prompt_bn": "ওভারল্যাপ করা closed interval-গুলো একত্র (merge) করুন; প্রান্তবিন্দু স্পর্শ করলেও তা ওভারল্যাপ হিসেবে গণ্য হবে।\nকোন ইনপুটটি এই ফাংশনকে ভুল ফলাফল দিতে বাধ্য করবে? প্রতিটি অপশনে কাঙ্ক্ষিত ফলাফল দেখানো হয়েছে।",
+      "explanation_bn": "এগুলো closed interval। প্রান্তবিন্দু এক হলেই ওভারল্যাপ হয়, তাই তুলনায় সমান চিহ্ন (<=) থাকতে হবে। half-open interval-এর ক্ষেত্রে নিয়ম ভিন্ন হতো।"
+    },
+    {
+      "id": "edge-equal-not-greater",
+      "kind": "bug",
+      "topic": "Monotonic stack",
+      "prompt": "For each position, return the next strictly greater value to its right, or -1 if none exists.\nWhich input breaks this function? Each choice shows the required result.",
+      "code": "def solve(nums):\n    answer = [-1] * len(nums)\n    stack = []\n    for i, x in enumerate(nums):\n        while stack and nums[stack[-1]] <= x:\n            answer[stack.pop()] = x\n        stack.append(i)\n    return answer",
+      "corrected": "def solve(nums):\n    answer = [-1] * len(nums)\n    stack = []\n    for i, x in enumerate(nums):\n        while stack and nums[stack[-1]] < x:\n            answer[stack.pop()] = x\n        stack.append(i)\n    return answer",
+      "choices": [
+        "solve([1, 3]) → [3, -1]",
+        "solve([3, 1]) → [-1, -1]",
+        "solve([2, 2]) → [-1, -1]"
+      ],
+      "answer": 2,
+      "explanation": "The required next value must be strictly greater. Equality must stay unresolved; <= incorrectly treats a duplicate as a larger value.",
+      "lesson": "496",
+      "prompt_bn": "প্রতিটি অবস্থানের জন্য তার ডানদিকে থাকা পরবর্তী কঠোরভাবে বড় মানটি রিটার্ন করুন, না থাকলে -1।\nকোন ইনপুটটি এই ফাংশনকে ভুল ফলাফল দিতে বাধ্য করবে? প্রতিটি অপশনে কাঙ্ক্ষিত ফলাফল দেখানো হয়েছে।",
+      "explanation_bn": "পরবর্তী মানটি অবশ্যই কঠোরভাবে বড় (strictly greater) হতে হবে। সমান মান অমীমাংসিত থাকাই উচিত; <= ভুলভাবে ডুপ্লিকেট মানকেও বড় মান হিসেবে ধরে নেয়।"
+    },
+    {
+      "id": "edge-insertion-end",
+      "kind": "bug",
+      "topic": "Binary search",
+      "prompt": "Return whether target occurs in an already sorted array.\nWhich input breaks this function? Each choice shows the required result.",
+      "code": "from bisect import bisect_left\ndef solve(nums, target):\n    index = bisect_left(nums, target)\n    return nums[index] == target",
+      "corrected": "from bisect import bisect_left\ndef solve(nums, target):\n    index = bisect_left(nums, target)\n    return index < len(nums) and nums[index] == target",
+      "choices": [
+        "solve([1, 3], 4) → False",
+        "solve([1, 3], 1) → True",
+        "solve([1, 3], 3) → True"
+      ],
+      "answer": 0,
+      "explanation": "bisect_left can return len(nums). That is a valid insertion position but not a valid list index. Check the bound before indexing.",
+      "lesson": null,
+      "prompt_bn": "আগে থেকে sorted একটি অ্যারেতে target আছে কি না রিটার্ন করুন।\nকোন ইনপুটটি এই ফাংশনকে ভুল ফলাফল দিতে বাধ্য করবে? প্রতিটি অপশনে কাঙ্ক্ষিত ফলাফল দেখানো হয়েছে।",
+      "explanation_bn": "bisect_left অনেক সময় len(nums) রিটার্ন করতে পারে। সেটি ইনসার্ট করার জন্য বৈধ অবস্থান হলেও লিস্টের বৈধ ইন্ডেক্স নয়। ইন্ডেক্স করার আগে সীমা (bound) পরীক্ষা করুন।"
+    },
+    {
+      "id": "edge-disconnected",
+      "kind": "bug",
+      "topic": "Graphs",
+      "prompt": "Count connected components of an undirected graph whose nodes are 0 through n-1.\nWhich input breaks this function? Each choice shows the required result.",
+      "code": "def solve(graph):\n    if not graph:\n        return 0\n    seen, stack = set(), [0]\n    while stack:\n        node = stack.pop()\n        if node not in seen:\n            seen.add(node)\n            stack.extend(graph[node])\n    return 1",
+      "corrected": "def solve(graph):\n    seen = set()\n    count = 0\n    for start in range(len(graph)):\n        if start in seen:\n            continue\n        count += 1\n        stack = [start]\n        while stack:\n            node = stack.pop()\n            if node not in seen:\n                seen.add(node)\n                stack.extend(graph[node])\n    return count",
+      "choices": [
+        "solve([[1], [0]]) → 1",
+        "solve([[1], [0], []]) → 2",
+        "solve([[1], [0, 2], [1]]) → 1"
+      ],
+      "answer": 1,
+      "explanation": "The input is an undirected adjacency list with nodes 0 through n-1. A traversal from node zero misses disconnected components. Start another traversal from every still-unvisited node.",
+      "lesson": null,
+      "prompt_bn": "0 থেকে n-1 পর্যন্ত node নিয়ে গঠিত একটি undirected graph-এর connected component সংখ্যা গুনুন।\nকোন ইনপুটটি এই ফাংশনকে ভুল ফলাফল দিতে বাধ্য করবে? প্রতিটি অপশনে কাঙ্ক্ষিত ফলাফল দেখানো হয়েছে।",
+      "explanation_bn": "ইনপুটটি 0 থেকে n-1 node-এর একটি undirected adjacency list। কেবল node 0 থেকে traversal চালালে বিচ্ছিন্ন component-গুলো বাদ পড়ে যাবে। প্রতিটি অদেখা (unvisited) node থেকে নতুন traversal শুরু করুন।"
+    },
+    {
+      "id": "edge-sort-duplicates",
+      "kind": "bug",
+      "topic": "Sorting & greedy",
+      "prompt": "Return all input values in sorted order, preserving duplicate occurrences.\nWhich input breaks this function? Each choice shows the required result.",
+      "code": "def solve(nums):\n    return sorted(set(nums))",
+      "corrected": "def solve(nums):\n    return sorted(nums)",
+      "choices": [
+        "solve([3, 1, 2]) → [1, 2, 3]",
+        "solve([]) → []",
+        "solve([2, 1, 2]) → [1, 2, 2]"
+      ],
+      "answer": 2,
+      "explanation": "Sorting must preserve every occurrence. Converting to a set removes duplicates before sorting.",
+      "lesson": null,
+      "prompt_bn": "ডুপ্লিকেট মানগুলো অক্ষুণ্ণ রেখে ইনপুটের সব মান sorted ক্রমে রিটার্ন করুন।\nকোন ইনপুটটি এই ফাংশনকে ভুল ফলাফল দিতে বাধ্য করবে? প্রতিটি অপশনে কাঙ্ক্ষিত ফলাফল দেখানো হয়েছে।",
+      "explanation_bn": "sorting-এ প্রতিটি পুনরাবৃত্তি ধরে রাখতে হবে। set-এ রূপান্তর করলে sort হওয়ার আগেই ডুপ্লিকেট মানগুলো মুছে যায়।"
+    },
+    {
+      "id": "edge-greedy-coins",
+      "kind": "bug",
+      "topic": "Dynamic programming",
+      "prompt": "Return the minimum number of unlimited positive coins needed for amount. Each input includes coin 1.\nWhich input breaks this function? Each choice shows the required result.",
+      "code": "def solve(coins, amount):\n    count = 0\n    for coin in sorted(coins, reverse=True):\n        count += amount // coin\n        amount %= coin\n    return count",
+      "corrected": "def solve(coins, amount):\n    dp = [0] + [amount + 1] * amount\n    for value in range(1, amount + 1):\n        for coin in coins:\n            if coin <= value:\n                dp[value] = min(dp[value], dp[value - coin] + 1)\n    return dp[amount] if dp[amount] <= amount else -1",
+      "choices": [
+        "solve([1, 3, 4], 6) → 2",
+        "solve([1, 2, 5], 11) → 3",
+        "solve([1, 5], 10) → 2"
+      ],
+      "answer": 0,
+      "explanation": "Always taking the largest coin is not optimal for arbitrary denominations. For amount 6, greedy takes 4 + 1 + 1; the optimum is 3 + 3.",
+      "lesson": "322",
+      "prompt_bn": "অসীম সংখ্যক ধনাত্মক কয়েন ব্যবহার করে amount বানাতে সর্বনিম্ন কতটি কয়েন লাগবে তা রিটার্ন করুন। প্রতিটি ইনপুটে 1 মানের কয়েন আছে।\nকোন ইনপুটটি এই ফাংশনকে ভুল ফলাফল দিতে বাধ্য করবে? প্রতিটি অপশনে কাঙ্ক্ষিত ফলাফল দেখানো হয়েছে।",
+      "explanation_bn": "সব ধরনের কয়েনের মানের জন্য সবসময় বড় কয়েন নেওয়া সেরা সমাধান দেয় না। amount 6-এর জন্য greedy নেয় 4 + 1 + 1; অথচ সেরা উত্তর হলো 3 + 3।"
+    }
+  ],
+  "recipes": [
+    {
+      "id": "counter",
+      "title": "Counter · count occurrences",
+      "category": "Containers",
+      "use": "Use a frequency map for anagrams, repeated values and character requirements.",
+      "code": "from collections import Counter\ncounts = Counter('banana')\nprint(counts['a'], counts['z'])",
+      "output": "3 0",
+      "complexity": "Building counts: O(n) expected time, O(u) space for u unique values.",
+      "mistake": "A missing key reads as zero. Subtracting counts may create zero or negative values; decide whether those should remain.",
+      "stage": "collections",
+      "number": "242",
+      "source": "https://docs.python.org/3/library/collections.html#collections.Counter",
+      "title_bn": "Counter · পুনরাবৃত্তি গণনা",
+      "use_bn": "anagram, পুনরাবৃত্ত মান এবং অক্ষরের সংখ্যাজনিত শর্তের জন্য frequency map হিসেবে ব্যবহার করুন।",
+      "mistake_bn": "অনুপস্থিত key পড়লে শূন্য পাওয়া যায়। গণনা বিয়োগ করলে শূন্য বা ঋণাত্মক মান তৈরি হতে পারে; সেগুলো রাখা উচিত কি না আগেই ঠিক করুন।"
+    },
+    {
+      "id": "defaultdict",
+      "title": "defaultdict · build groups",
+      "category": "Containers",
+      "use": "Group indices or adjacency lists without repeatedly creating missing containers.",
+      "code": "from collections import defaultdict\ngroups = defaultdict(list)\nfor i, ch in enumerate('aba'):\n    groups[ch].append(i)\nprint(dict(groups))",
+      "output": "{'a': [0, 2], 'b': [1]}",
+      "complexity": "Grouping n values: O(n) expected time and O(n) stored items.",
+      "mistake": "Reading a missing key with brackets creates it. get() does not call the default factory.",
+      "stage": "collections",
+      "number": "49",
+      "source": "https://docs.python.org/3/library/collections.html#collections.defaultdict",
+      "title_bn": "defaultdict · দল তৈরি করুন",
+      "use_bn": "বারবার খালি কনটেইনার তৈরি না করেই ইন্ডেক্স বা adjacency list দলে দলে সাজান।",
+      "mistake_bn": "ব্র্যাকেট দিয়ে অনুপস্থিত key পড়লেই সেটি নতুন করে তৈরি হয়ে যায়। কিন্তু get() ব্যবহার করলে default factory কল হয় না।"
+    },
+    {
+      "id": "deque",
+      "title": "deque · FIFO queue",
+      "category": "Containers",
+      "use": "Process BFS discoveries in arrival order with fast operations at both ends.",
+      "code": "from collections import deque\nqueue = deque([0])\nqueue.append(1)\nqueue.append(2)\nprint(queue.popleft(), list(queue))",
+      "output": "0 [1, 2]",
+      "complexity": "Endpoint append/pop: O(1). Middle indexing is O(n).",
+      "mistake": "list.pop(0) shifts the remaining elements. For BFS, mark a node discovered when enqueuing it, not when removing it.",
+      "stage": "linear",
+      "number": "200",
+      "source": "https://docs.python.org/3/library/collections.html#collections.deque",
+      "title_bn": "deque · FIFO queue",
+      "use_bn": "দুই প্রান্তে দ্রুত অপারেশন চালিয়ে BFS-এ আবিষ্কৃত node-গুলো আসার ক্রম অনুযায়ী প্রসেস করুন।",
+      "mistake_bn": "list.pop(0) বাকি সব উপাদানকে বামে সরায়। BFS-এ কোনো node সরিয়ে নেওয়ার সময় নয়, বরং queue-তে যোগ করার সময়ই সেটিকে discovered চিহ্নিত করুন।"
+    },
+    {
+      "id": "heapq",
+      "title": "heapq · smallest-first priority",
+      "category": "Ordering",
+      "use": "Extract minima, schedule events or maintain a bounded heap for the largest k values.",
+      "code": "import heapq\nheap = [7, 2, 5]\nheapq.heapify(heap)\nsmallest = heapq.heappop(heap)\nheapq.heappush(heap, 3)\nprint(smallest, heap[0])",
+      "output": "2 3",
+      "complexity": "heapify: O(n). Push/pop: O(log n). Root lookup: O(1).",
+      "mistake": "The list is a heap, not fully sorted. The portable min-heap API puts the smallest value at index zero; negate priorities for a max heap on older Python versions.",
+      "stage": "linear",
+      "number": "215",
+      "source": "https://docs.python.org/3/library/heapq.html",
+      "title_bn": "heapq · ক্ষুদ্রতম-আগে priority",
+      "use_bn": "সবচেয়ে ছোট মান বের করতে, ইভেন্ট শিডিউল করতে কিংবা সবচেয়ে বড় k-টি মান ধরে রাখার সীমিত heap চালাতে ব্যবহার করুন।",
+      "mistake_bn": "লিস্টটি একটি heap, পুরোপুরি sorted নয়। পোর্টেবল min-heap API সবচেয়ে ছোট মানকে index 0-এ রাখে; পুরোনো Python সংস্করণে max heap বানাতে মানগুলোকে ঋণাত্মক করে নিন।"
+    },
+    {
+      "id": "bisect",
+      "title": "bisect · sorted boundaries",
+      "category": "Ordering",
+      "use": "Locate an insertion point or the equal range without scanning a sorted array.",
+      "code": "from bisect import bisect_left, bisect_right\nnums = [1, 3, 3, 7]\nprint(bisect_left(nums, 3), bisect_right(nums, 3))",
+      "output": "1 3",
+      "complexity": "Boundary search: O(log n). Inserting into a Python list still costs O(n).",
+      "mistake": "The array must already be sorted. A returned position may equal len(nums), so check bounds before indexing.",
+      "stage": "search",
+      "number": "35",
+      "source": "https://docs.python.org/3/library/bisect.html",
+      "title_bn": "bisect · sorted সীমানা",
+      "use_bn": "sorted অ্যারে পুরোটা স্ক্যান না করেই ইনসার্ট করার অবস্থান বা সমান মানগুলোর পরিসর খুঁজে বের করুন।",
+      "mistake_bn": "অ্যারেটি অবশ্যই আগে থেকে sorted হতে হবে। রিটার্ন করা অবস্থান len(nums)-এর সমান হতে পারে, তাই ইন্ডেক্স করার আগে সীমা পরীক্ষা করুন।"
+    },
+    {
+      "id": "sort-key",
+      "title": "sorted · choose an ordering",
+      "category": "Ordering",
+      "use": "Order intervals or records by a chosen key while preserving equal-key order.",
+      "code": "records = [('a', 2), ('b', 1), ('c', 2)]\nprint(sorted(records, key=lambda row: row[1]))",
+      "output": "[('b', 1), ('a', 2), ('c', 2)]",
+      "complexity": "Sorting: O(n log n) worst-case time, up to O(n) auxiliary space.",
+      "mistake": "sorted returns a new list. list.sort changes the original list and returns None. Python sorts are stable.",
+      "stage": "search",
+      "number": "56",
+      "source": "https://docs.python.org/3/howto/sorting.html",
+      "title_bn": "sorted · নিজস্ব ক্রম নির্ধারণ",
+      "use_bn": "সমান key-এর আপেক্ষিক ক্রম বজায় রেখে নির্দিষ্ট key অনুযায়ী interval বা রেকর্ড সাজান।",
+      "mistake_bn": "sorted নতুন একটি লিস্ট রিটার্ন করে। list.sort মূল লিস্টটিকেই পরিবর্তন করে এবং None রিটার্ন করে। Python-এর sort স্থিতিশীল (stable)।"
+    },
+    {
+      "id": "enumerate",
+      "title": "enumerate · indices with values",
+      "category": "Iteration",
+      "use": "Track positions without a manually incremented counter.",
+      "code": "items = ['x', 'y']\nprint(list(enumerate(items, start=1)))",
+      "output": "[(1, 'x'), (2, 'y')]",
+      "complexity": "Full traversal: O(n). The enumerate iterator itself keeps O(1) state.",
+      "mistake": "start changes the emitted counter, not which input element is visited first. Materializing a list uses O(n) space.",
+      "stage": "basics",
+      "number": "1",
+      "source": "https://docs.python.org/3/library/functions.html#enumerate",
+      "title_bn": "enumerate · মানের সাথে ইন্ডেক্স",
+      "use_bn": "আলাদা করে কাউন্টার বাড়ানোর ঝামেলা ছাড়াই উপাদানের অবস্থান ট্র্যাক করুন।",
+      "mistake_bn": "start কেবল দেখানো কাউন্টারের শুরুর মান বদলায়, ইনপুটের কোন উপাদান আগে ভিজিট হবে তা বদলায় না। একে লিস্টে রূপান্তর করলে O(n) মেমরি লাগে।"
+    },
+    {
+      "id": "zip",
+      "title": "zip · pair sequences",
+      "category": "Iteration",
+      "use": "Walk matching positions of two iterables without indexing both.",
+      "code": "pairs = zip([1, 2, 3], ['a', 'b'])\nprint(list(pairs))",
+      "output": "[(1, 'a'), (2, 'b')]",
+      "complexity": "Traversal: O(min(n, m)) for two inputs; the iterator keeps O(1) state.",
+      "mistake": "Ordinary zip silently stops at the shorter input. Use strict=True on Python 3.10+ when unequal lengths indicate a bug.",
+      "stage": "basics",
+      "number": "242",
+      "source": "https://docs.python.org/3/library/functions.html#zip",
+      "title_bn": "zip · সিকোয়েন্সের জোড়া বাঁধুন",
+      "use_bn": "আলাদা করে ইন্ডেক্সিং না করেই দুটি iterable-এর সমান্তরাল অবস্থান ধরে এগোন।",
+      "mistake_bn": "সাধারণ zip অপেক্ষাকৃত ছোট ইনপুট শেষ হলেই নীরবে থেমে যায়। অসমান দৈর্ঘ্য বাগ নির্দেশ করলে Python 3.10+-এ strict=True ব্যবহার করুন।"
+    },
+    {
+      "id": "accumulate",
+      "title": "accumulate · prefix totals",
+      "category": "Iteration",
+      "use": "Turn a sequence into running sums for constant-time range-sum queries.",
+      "code": "from itertools import accumulate\nnums = [2, -1, 4]\nprefix = list(accumulate(nums, initial=0))\nprint(prefix, prefix[3] - prefix[1])",
+      "output": "[0, 2, 1, 5] 3",
+      "complexity": "Build all prefix totals: O(n) time and O(n) storage when materialized.",
+      "mistake": "For a half-open range [left, right), subtract prefix[left] from prefix[right]. The leading zero represents the empty prefix.",
+      "stage": "arrays",
+      "number": "560",
+      "source": "https://docs.python.org/3/library/itertools.html#itertools.accumulate",
+      "title_bn": "accumulate · prefix যোগফল",
+      "use_bn": "O(1) সময়ে range-sum query করার জন্য একটি সিকোয়েন্সকে চলমান যোগফলে রূপান্তর করুন।",
+      "mistake_bn": "half-open পরিসর [left, right)-এর জন্য prefix[right] থেকে prefix[left] বিয়োগ করুন। শুরুর শূন্যটি খালি prefix নির্দেশ করে।"
+    },
+    {
+      "id": "cache",
+      "title": "cache · reuse subproblems",
+      "category": "Recursion",
+      "use": "Memoize a pure function when the same states recur.",
+      "code": "from functools import cache\n@cache\ndef ways(n):\n    if n <= 1:\n        return 1\n    return ways(n - 1) + ways(n - 2)\nprint(ways(5))",
+      "output": "8",
+      "complexity": "This recurrence: O(n) cached states and O(n) call-stack depth.",
+      "mistake": "Arguments must be hashable. Cached results assume the same arguments mean the same result; mutable external state breaks that assumption. Recursion depth still matters.",
+      "stage": "graphs",
+      "number": "70",
+      "source": "https://docs.python.org/3/library/functools.html#functools.cache",
+      "title_bn": "cache · subproblem পুনর্ব্যবহার",
+      "use_bn": "একই state বারবার এলে একটি pure ফাংশনকে memoize করুন।",
+      "mistake_bn": "আর্গুমেন্টগুলো অবশ্যই hashable হতে হবে। cache ধরে নেয় একই আর্গুমেন্টে সবসময় একই ফলাফল আসবে; পরিবর্তনশীল বাহ্যিক state থাকলে এই শর্ত ভেঙে যায়। recursion depth-এর সীমাও মাথায় রাখুন।"
+    }
+  ],
+  "comparisons": [
+    {
+      "number": "218",
+      "approaches": [
+        {
+          "id": "heap-sweep",
+          "title": "Max Heap + Sweep Line",
+          "time": "O(n log n)",
+          "space": "O(n)",
+          "explanation": "Sweep all distinct endpoints. Insert every building that starts at or before x, then lazily remove heap leaders whose right endpoint is at or before x. Emit a point only when the maximum active height changes.",
+          "invariant": "The heap leader is the tallest active building. Expired entries below the leader are harmless until they reach the top. Processing each x once avoids duplicate-coordinate output.",
+          "choose": "Choose when you want an explicit active-building model and event-by-event inspection.",
+          "caution": "Store right endpoints, remove expired leaders lazily, and process all events at the same x together.",
+          "explanation_bn": "সব অনন্য প্রান্তবিন্দু sweep করুন। x বা তার আগে শুরু হওয়া সব building যোগ করুন, এরপর যেসব শীর্ষ building-এর ডান প্রান্ত x বা তার আগে শেষ হয়ে গেছে সেগুলো lazily সরিয়ে দিন। কেবল সক্রিয় সর্বোচ্চ উচ্চতা বদলালেই একটি পয়েন্ট emit করুন।",
+          "invariant_bn": "heap-এর শীর্ষে সবসময় সবচেয়ে উঁচু সক্রিয় building থাকে। শীর্ষের নিচে মেয়াদোত্তীর্ণ এন্ট্রি থাকলেও শীর্ষে না ওঠা পর্যন্ত সেগুলো ক্ষতি করে না। প্রতিটি x একবার প্রসেস করায় একই স্থানাঙ্কে ডুপ্লিকেট আউটপুট তৈরি হয় না।",
+          "choose_bn": "সক্রিয় building-গুলোর স্পষ্ট মডেল এবং প্রতিটি ইভেন্ট আলাদাভাবে পর্যবেক্ষণ করতে চাইলে এটি বেছে নিন।",
+          "caution_bn": "ডান প্রান্তবিন্দু সংরক্ষণ করুন, মেয়াদোত্তীর্ণ শীর্ষ উপাদান lazily সরান এবং একই x-এর সব ইভেন্ট একসাথে প্রসেস করুন।"
+        },
+        {
+          "id": "divide-conquer",
+          "title": "Divide & Conquer + Skyline Merge",
+          "time": "O(n log n)",
+          "space": "O(n)",
+          "explanation": "Recursively compute two skylines and merge them while tracking each side’s current height. Consume all changes at the same x together and emit their maximum only when it changes.",
+          "invariant": "Each merge is linear in its input skylines. The recurrence is T(n) = 2T(n/2) + O(n). Peak skyline buffers use O(n) space; recursion depth is O(log n).",
+          "choose": "Choose when recursive decomposition and merging are easier to reason about.",
+          "caution": "Merging must consume shared coordinates together; temporary skyline buffers count toward O(n) space.",
+          "explanation_bn": "recursively দুটি skyline নির্ণয় করুন এবং উভয় পাশের বর্তমান উচ্চতা ট্র্যাক রেখে সেগুলো merge করুন। একই x-এ সব পরিবর্তন একসাথে গ্রহণ করুন এবং কেবল সর্বোচ্চ উচ্চতা বদলালেই emit করুন।",
+          "invariant_bn": "প্রতিটি merge তার ইনপুট skyline-এর দৈর্ঘ্যের সাথে রৈখিক (linear)। এর recurrence হলো T(n) = 2T(n/2) + O(n)। সর্বোচ্চ skyline বাফারে O(n) মেমরি লাগে; recursion-এর গভীরতা O(log n)।",
+          "choose_bn": "যখন recursive বিভাজন ও merge করে চিন্তা করা আপনার কাছে বেশি সহজ মনে হয়, তখন এটি বেছে নিন।",
+          "caution_bn": "merge করার সময় অভিন্ন স্থানাঙ্কগুলো একসাথে প্রসেস করতে হবে; অস্থায়ী skyline বাফারগুলোও O(n) মেমরির অংশ হিসেবে গণ্য হয়।"
+        }
+      ]
+    },
+    {
+      "number": "42",
+      "approaches": [
+        {
+          "id": "two-pointers",
+          "title": "Two Pointers",
+          "time": "O(n)",
+          "space": "O(1)",
+          "explanation": "Move inward from both ends, resolving the smaller current boundary with its running maximum. This finds each position’s water contribution without modifying the input.",
+          "invariant": "The opposite side supplies a sufficiently tall boundary for the side being resolved. Both pointers move only inward, so every position is processed once.",
+          "choose": "Choose for a single total with constant extra memory.",
+          "caution": "The invariant decides which side can be resolved safely. Comparing only neighbouring heights is insufficient.",
+          "explanation_bn": "দুই প্রান্ত থেকে ভেতরের দিকে এগোন এবং চলমান সর্বোচ্চ মান ব্যবহার করে অপেক্ষাকৃত ছোট সীমানার দিকটি নিষ্পত্তি করুন। এতে ইনপুট না বদলেই প্রতিটি অবস্থানে জমা পানির পরিমাণ বের হয়।",
+          "invariant_bn": "যে পাশটি নিষ্পত্তি করা হচ্ছে তার জন্য বিপরীত পাশে যথেষ্ট উঁচু সীমানা বিদ্যমান থাকে। দুটি pointer কেবল ভেতরের দিকেই সরে, তাই প্রতিটি অবস্থান ঠিক একবারই প্রসেস হয়।",
+          "choose_bn": "অতিরিক্ত ধ্রুবক O(1) মেমরিতে মোট পানির পরিমাণ বের করতে চাইলে এটি বেছে নিন।",
+          "caution_bn": "কোন পাশটি নিরাপদে নিষ্পত্তি করা যাবে তা invariant ঠিক করে। কেবল পাশের দুটি উচ্চতা তুলনা করা যথেষ্ট নয়।"
+        },
+        {
+          "id": "monotonic-stack",
+          "title": "Monotonic Stack",
+          "time": "O(n)",
+          "space": "O(n)",
+          "explanation": "Keep indices in decreasing height order. A taller bar closes a basin: pop its bottom and compute a water layer using the remaining left boundary and the current right boundary.",
+          "invariant": "Each index is pushed and popped at most once. Layer width times bounded height counts each layer once. This alternative uses linear additional memory.",
+          "choose": "Choose to reason about the layers of a basin as its right boundary arrives.",
+          "caution": "Store indices for widths. Each index is pushed and popped at most once, but the stack can use O(n) memory.",
+          "explanation_bn": "উচ্চতার নিম্নক্রমে (decreasing order) ইন্ডেক্সগুলো stack-এ রাখুন। বেশি উঁচু বার এলে একটি গর্ত (basin) বন্ধ হয়: তার তলদেশ pop করে বাকি থাকা বাম সীমানা ও বর্তমান ডান সীমানা দিয়ে একটি পানির স্তরের হিসাব করুন।",
+          "invariant_bn": "প্রতিটি ইন্ডেক্স সর্বোচ্চ একবার push এবং একবার pop হয়। স্তরের প্রস্থ ও সীমাবদ্ধ উচ্চতার গুণফল প্রতিটি স্তরকে ঠিক একবারই হিসাব করে। এই বিকল্প পদ্ধতিতে O(n) অতিরিক্ত মেমরি লাগে।",
+          "choose_bn": "ডান সীমানা আসার সাথে সাথে একটি গর্তের আনুভূমিক স্তরগুলো হিসেবে চিন্তা করতে চাইলে এটি বেছে নিন।",
+          "caution_bn": "প্রস্থ বের করার জন্য ইন্ডেক্স সংরক্ষণ করুন। প্রতিটি ইন্ডেক্স সর্বোচ্চ একবার push ও pop হলেও stack-এ O(n) মেমরি লাগতে পারে।"
+        }
+      ]
+    },
+    {
+      "number": "215",
+      "approaches": [
+        {
+          "id": "bounded-heap",
+          "title": "Size-k Min Heap",
+          "time": "O(n log k)",
+          "space": "O(k)",
+          "explanation": "Retain the largest k values in a min heap. Replace its minimum only when a larger incoming value appears. The final heap minimum is the kth largest value.",
+          "invariant": "After every prefix, the heap contains that prefix’s largest min(k, prefix length) values. This works with streaming input and does not modify the array.",
+          "choose": "Choose for streaming input, an unchanged array, or when k is relatively small.",
+          "caution": "The root is the kth largest only after retaining the largest k values. For k = 1, processing is linear.",
+          "explanation_bn": "একটি min heap-এ সবচেয়ে বড় k-টি মান ধরে রাখুন। কেবল নতুন আসা মানটি heap-এর সর্বনিম্ন মানের চেয়ে বড় হলেই সেটিকে প্রতিস্থাপন করুন। শেষে heap-এর সর্বনিম্ন মানটিই হবে kth largest।",
+          "invariant_bn": "প্রতিটি prefix শেষে heap-এ ওই prefix-এর সবচেয়ে বড় min(k, prefix-এর দৈর্ঘ্য)-টি মান থাকে। এটি streaming ইনপুটে কাজ করে এবং মূল অ্যারে পরিবর্তন করে না।",
+          "choose_bn": "streaming ইনপুট থাকলে, অ্যারে অপরিবর্তিত রাখতে চাইলে কিংবা k তুলনামূলক ছোট হলে এটি বেছে নিন।",
+          "caution_bn": "সবচেয়ে বড় k-টি মান ধরে রাখার পরই কেবল root-এ kth largest পাওয়া যায়। k = 1 হলে প্রসেসিং সময় হয় রৈখিক O(n)।"
+        },
+        {
+          "id": "quickselect",
+          "title": "Randomized Three-way Quickselect",
+          "time": "Expected O(n); worst O(n²)",
+          "space": "O(1)",
+          "explanation": "Randomly choose a pivot and partition in place into smaller, equal, and larger regions. Continue only in the region containing ascending index n-k.",
+          "invariant": "Three-way partitioning handles duplicates efficiently. The iterative form uses O(1) auxiliary space and mutates the array. Expected time is O(n), but worst-case time is O(n²); preserving input with a copy costs O(n) space.",
+          "choose": "Choose for expected linear selection when mutating the array is acceptable.",
+          "caution": "Randomized three-way partitioning handles duplicates. Worst-case time is quadratic; copying to preserve input adds O(n) space.",
+          "explanation_bn": "দৈবচয়নে (randomly) একটি pivot বেছে নিন এবং মূল অ্যারেতেই ছোট, সমান ও বড়—এই তিন ভাগে partition করুন। কেবল যে অংশে উর্ধ্বক্রম ইন্ডেক্স n-k পড়েছে, সেখানেই খোঁজ চালিয়ে যান।",
+          "invariant_bn": "three-way partitioning ডুপ্লিকেট মানগুলো দক্ষতার সাথে সামলায়। iterative রূপে O(1) অতিরিক্ত মেমরি লাগে এবং অ্যারেটি পরিবর্তিত হয়। expected সময় O(n), কিন্তু worst-case O(n²); ইনপুট অক্ষুণ্ণ রাখতে কপি করলে O(n) মেমরি লাগে।",
+          "choose_bn": "অ্যারে পরিবর্তন করা গ্রহণযোগ্য হলে এবং গড়ে O(n) সময়ে নির্বাচন করতে চাইলে এটি বেছে নিন।",
+          "caution_bn": "randomized three-way partitioning ডুপ্লিকেট সামলায়। worst-case সময় quadratic; ইনপুট সংরক্ষণ করতে কপি করলে অতিরিক্ত O(n) মেমরি খরচ হয়।"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,498 @@
+[
+  {
+    "id": "pattern-unique-window",
+    "kind": "pattern",
+    "topic": "Sliding window",
+    "prompt": "Find the longest contiguous substring with no repeated character. Which pattern avoids checking every substring?",
+    "choices": [
+      "Sliding window with a frequency map",
+      "Binary search on characters",
+      "Union-Find"
+    ],
+    "answer": 0,
+    "explanation": "Contiguous input and a condition maintained while the ends move suggest a sliding window. Shrink until the duplicate is removed.",
+    "lesson": "3",
+    "prompt_bn": "কোনো অক্ষরের পুনরাবৃত্তি ছাড়া সবচেয়ে বড় পাশাপাশি (contiguous) substring খুঁজে বের করতে হবে। কোন প্যাটার্ন ব্যবহার করলে প্রতিটি substring আলাদাভাবে পরীক্ষা না করেই সমাধান করা যাবে?",
+    "choices_bn": [
+      "frequency map সহ sliding window",
+      "অক্ষরের ওপর binary search",
+      "Union-Find"
+    ],
+    "explanation_bn": "পাশাপাশি (contiguous) ইনপুট এবং দুই প্রান্ত সরাতে সরাতে একটি শর্ত বজায় রাখার প্রয়োজন হলে সেটি sliding window প্যাটার্নের ইঙ্গিত দেয়। পুনরাবৃত্ত অক্ষরটি না সরা পর্যন্ত উইন্ডো ছোট করুন।"
+  },
+  {
+    "id": "pattern-stream-kth",
+    "kind": "pattern",
+    "topic": "Heaps",
+    "prompt": "Numbers arrive one at a time. After every arrival, report the kth largest number using O(k) storage.",
+    "choices": [
+      "Re-sort the entire stream",
+      "A min heap holding the largest k numbers",
+      "A stack holding every number"
+    ],
+    "answer": 1,
+    "explanation": "Keep only the largest k values. The heap root is the smallest retained value: the kth largest seen so far.",
+    "lesson": "703",
+    "prompt_bn": "একটি করে সংখ্যা স্ট্রিমে আসছে। প্রতিটি নতুন সংখ্যা আসার পর O(k) মেমরি ব্যবহার করে kth largest সংখ্যাটি জানাতে হবে। কোন পদ্ধতি উপযুক্ত?",
+    "choices_bn": [
+      "পুরো স্ট্রিমটি বারবার নতুন করে sort করা",
+      "সবচেয়ে বড় k-টি সংখ্যা ধরে রাখা একটি min heap",
+      "সব সংখ্যা জমিয়ে রাখার জন্য একটি stack"
+    ],
+    "explanation_bn": "কেবল সবচেয়ে বড় k-টি মান ধরে রাখুন। min heap-এর root-এ থাকা সবচেয়ে ছোট মানটিই হবে এখন পর্যন্ত দেখা kth largest সংখ্যা।"
+  },
+  {
+    "id": "pattern-min-capacity",
+    "kind": "pattern",
+    "topic": "Binary search",
+    "prompt": "Find the smallest shipping capacity that meets a deadline. If capacity C works, every larger capacity also works. What pattern fits?",
+    "choices": [
+      "DFS over all capacities",
+      "A monotonic stack",
+      "Binary search on the answer"
+    ],
+    "answer": 2,
+    "explanation": "Feasibility changes monotonically from false to true. Binary search locates the first feasible capacity.",
+    "lesson": "1011",
+    "prompt_bn": "নির্দিষ্ট সময়ের মধ্যে পণ্য পাঠাতে প্রয়োজনীয় সর্বনিম্ন shipping capacity বের করতে হবে। যদি C capacity দিয়ে কাজ হয়, তবে এর চেয়ে বড় যেকোনো capacity দিয়েও কাজ হবে। এখানে কোন প্যাটার্ন মানানসই?",
+    "choices_bn": [
+      "সব capacity-র ওপর DFS চালানো",
+      "একটি monotonic stack",
+      "উত্তরের ওপর binary search (binary search on the answer)"
+    ],
+    "explanation_bn": "সমাধানের সম্ভাব্যতা (feasibility) একমুখীভাবে (monotonically) false থেকে true-তে বদলায়। তাই binary search দিয়ে প্রথম কার্যকর capacity-টি সহজেই খুঁজে বের করা যায়।"
+  },
+  {
+    "id": "pattern-shortest-unweighted",
+    "kind": "pattern",
+    "topic": "Graphs",
+    "prompt": "Every edge costs one move. Find the fewest moves from a start node to a target.",
+    "choices": [
+      "Breadth-first search",
+      "Depth-first search stopping at the first target",
+      "Sort nodes by their labels"
+    ],
+    "answer": 0,
+    "explanation": "BFS explores increasing distance layers. The first discovery of a node gives its shortest unweighted distance.",
+    "lesson": "1971",
+    "prompt_bn": "প্রতিটি edge অতিক্রম করতে ঠিক এক ধাপ লাগে। শুরুর node থেকে লক্ষ্য (target) node-এ পৌঁছাতে সর্বনিম্ন কত ধাপ লাগবে তা বের করতে হবে।",
+    "choices_bn": [
+      "Breadth-first search (BFS)",
+      "প্রথমবার target পেলেই থেমে যাওয়া Depth-first search (DFS)",
+      "node-গুলোকে তাদের লেবেল অনুযায়ী sort করা"
+    ],
+    "explanation_bn": "BFS ক্রমবর্ধমান দূরত্বের স্তর অনুযায়ী অনুসন্ধান চালায়। তাই কোনো node প্রথমবার আবিষ্কৃত হলেই তার সবচেয়ে ছোট unweighted দূরত্ব পাওয়া যায়।"
+  },
+  {
+    "id": "pattern-sum-negative",
+    "kind": "pattern",
+    "topic": "Prefix sums",
+    "prompt": "Count contiguous subarrays whose sum is k. The array can include negative values. Which approach handles this reliably in expected O(n)?",
+    "choices": [
+      "Shrink a window whenever the sum exceeds k",
+      "Prefix sums and a frequency map",
+      "Sort the array before counting"
+    ],
+    "answer": 1,
+    "explanation": "If current prefix sum is s, every earlier prefix equal to s-k starts a valid subarray. Negative values break the usual positive-only sliding-window rule.",
+    "lesson": "560",
+    "prompt_bn": "যেকোনো পাশাপাশি subarray-এর যোগফল k হলে তা গুনতে হবে। অ্যারেতে ঋণাত্মক (negative) সংখ্যাও থাকতে পারে। কোন পদ্ধতি expected O(n) সময়ে নির্ভরযোগ্যভাবে এটি সমাধান করে?",
+    "choices_bn": [
+      "যোগফল k-এর বেশি হলেই window ছোট করা",
+      "prefix sums এবং একটি frequency map",
+      "গণনা করার আগে অ্যারেটি sort করা"
+    ],
+    "explanation_bn": "বর্তমান prefix sum যদি s হয়, তবে আগে যতবার s-k মানের prefix এসেছে, তাদের প্রতিটি থেকেই একটি বৈধ subarray শুরু হয়। ঋণাত্মক মান থাকলে কেবল ধনাত্মক সংখ্যার জন্য প্রযোজ্য sliding window নিয়মটি ভেঙে যায়।"
+  },
+  {
+    "id": "pattern-nonadjacent",
+    "kind": "pattern",
+    "topic": "Dynamic programming",
+    "prompt": "Choose values from a row to maximize the sum, but never choose adjacent positions. Which reusable state is useful?",
+    "choices": [
+      "Always take the locally largest value",
+      "A heap of all values without their indices",
+      "The best total for the previous one and two positions"
+    ],
+    "answer": 2,
+    "explanation": "For each position, compare skipping it with taking it plus the best total two positions back. This is dynamic programming.",
+    "lesson": "198",
+    "prompt_bn": "একটি সারি থেকে এমনভাবে মান বেছে নিতে হবে যেন যোগফল সর্বোচ্চ হয়, কিন্তু কখনোই পাশাপাশি দুটি অবস্থান নেওয়া যাবে না। এখানে কোন পুনর্ব্যবহারযোগ্য state সবচেয়ে কার্যকর?",
+    "choices_bn": [
+      "সবসময় তাৎক্ষণিকভাবে সবচেয়ে বড় মানটি নেওয়া",
+      "ইন্ডেক্স ছাড়া সব মানের একটি heap",
+      "আগের এক ধাপ এবং দুই ধাপ পেছনের অবস্থানের সর্বোচ্চ যোগফল"
+    ],
+    "explanation_bn": "প্রতিটি অবস্থানের জন্য তুলনা করুন—অবস্থানটি বাদ দিলে ভালো, নাকি এটি নিয়ে দুই ধাপ পেছনের সর্বোচ্চ যোগফলের সাথে যোগ করলে ভালো। এটিই dynamic programming।"
+  },
+  {
+    "id": "pattern-next-greater",
+    "kind": "pattern",
+    "topic": "Stacks & queues",
+    "prompt": "For every array position, find the next strictly greater value to its right. Which structure avoids repeated rightward scans?",
+    "choices": [
+      "A monotonic stack of unresolved indices",
+      "A set with no ordering or positions",
+      "A queue sorted by arrival time only"
+    ],
+    "answer": 0,
+    "explanation": "A larger incoming value resolves smaller values at the top. Each index is pushed and popped at most once.",
+    "lesson": "496",
+    "prompt_bn": "অ্যারের প্রতিটি অবস্থানের জন্য তার ডানদিকে থাকা পরবর্তী কঠোরভাবে বড় (strictly greater) মানটি বের করতে হবে। বারবার ডানদিকে স্ক্যান করা এড়াতে কোন ডেটা স্ট্রাকচার ব্যবহার করবেন?",
+    "choices_bn": [
+      "অমীমাংসিত ইন্ডেক্সগুলো রাখার জন্য একটি monotonic stack",
+      "কোনো ক্রম বা অবস্থান ছাড়া একটি set",
+      "কেবল আসার ক্রম অনুযায়ী সাজানো একটি queue"
+    ],
+    "explanation_bn": "বড় কোনো নতুন মান এলে stack-এর শীর্ষে থাকা ছোট মানগুলোর উত্তর নিশ্চিত হয়ে যায়। প্রতিটি ইন্ডেক্স সর্বোচ্চ একবার push এবং একবার pop হয়।"
+  },
+  {
+    "id": "pattern-connectivity",
+    "kind": "pattern",
+    "topic": "Graphs",
+    "prompt": "Undirected edges are added over time, and you repeatedly ask whether two nodes belong to the same component.",
+    "choices": [
+      "Run sorting after every query",
+      "Disjoint-set Union-Find",
+      "Use a stack and ignore edges"
+    ],
+    "answer": 1,
+    "explanation": "Union-Find merges connected components and answers component membership efficiently with path compression and union by size or rank.",
+    "lesson": "684",
+    "prompt_bn": "সময়ের সাথে সাথে undirected edge যোগ হচ্ছে, আর আপনাকে বারবার জিজ্ঞাসা করা হচ্ছে দুটি node একই component-এ আছে কি না।",
+    "choices_bn": [
+      "প্রতিটি query-র পর sorting চালানো",
+      "Disjoint-set Union-Find",
+      "edge-গুলো উপেক্ষা করে একটি stack ব্যবহার করা"
+    ],
+    "explanation_bn": "Union-Find সংযুক্ত component-গুলোকে একত্রিত করে এবং path compression ও union by size/rank-এর মাধ্যমে দক্ষতার সাথে একই component-এ আছে কি না তা জানিয়ে দেয়।"
+  },
+  {
+    "id": "bug-search-single",
+    "kind": "bug",
+    "topic": "Binary search",
+    "prompt": "The target in [7] is 7, but this returns False. Which line needs changing?",
+    "choices": [
+      "Line 2: start left at 1",
+      "Line 3: use left <= right",
+      "Line 4: always choose mid = right"
+    ],
+    "answer": 1,
+    "explanation": "The search interval is inclusive. When left == right, one candidate still needs checking. Use <= so a one-element interval is inspected.",
+    "code": "def contains(nums, target):\n    left, right = 0, len(nums) - 1\n    while left < right:\n        mid = (left + right) // 2\n        if nums[mid] == target:\n            return True\n        if nums[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return False",
+    "corrected": "def contains(nums, target):\n    left, right = 0, len(nums) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if nums[mid] == target:\n            return True\n        if nums[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return False",
+    "lesson": "704",
+    "prompt_bn": "[7] অ্যারেতে target হলো 7, কিন্তু এই কোডটি False রিটার্ন করে। কোন লাইনটি পরিবর্তন করতে হবে?",
+    "choices_bn": [
+      "লাইন 2: left-কে 1 থেকে শুরু করুন",
+      "লাইন 3: left <= right ব্যবহার করুন",
+      "লাইন 4: সবসময় mid = right ধরুন"
+    ],
+    "explanation_bn": "এই search interval-টি inclusive (দুই প্রান্তই অন্তর্ভুক্ত)। যখন left == right হয়, তখনও একটি সম্ভাব্য উপাদান পরীক্ষা করা বাকি থাকে। তাই এক উপাদানের interval পরীক্ষা করতে <= ব্যবহার করুন।"
+  },
+  {
+    "id": "bug-self-match",
+    "kind": "bug",
+    "topic": "Hashing",
+    "prompt": "For nums=[3] and target=6, this incorrectly reuses index 0. What fixes it?",
+    "choices": [
+      "Check the complement before inserting the current value",
+      "Sort seen after insertion",
+      "Change enumerate to start at 1"
+    ],
+    "answer": 0,
+    "explanation": "The map must contain only earlier indices when checking a complement. Inserting first allows the current element to match itself.",
+    "code": "def two_sum(nums, target):\n    seen = {}\n    for i, value in enumerate(nums):\n        seen[value] = i\n        if target - value in seen:\n            return [seen[target - value], i]\n    return None",
+    "corrected": "def two_sum(nums, target):\n    seen = {}\n    for i, value in enumerate(nums):\n        if target - value in seen:\n            return [seen[target - value], i]\n        seen[value] = i\n    return None",
+    "lesson": "1",
+    "prompt_bn": "nums=[3] এবং target=6 হলে এই কোডটি ভুলবশত index 0 দুবার ব্যবহার করে ফেলে। কী করলে এটি ঠিক হবে?",
+    "choices_bn": [
+      "বর্তমান মানটি map-এ যোগ করার আগেই complement পরীক্ষা করুন",
+      "মান যোগ করার পর seen-কে sort করুন",
+      "enumerate-কে 1 থেকে শুরু করুন"
+    ],
+    "explanation_bn": "complement খোঁজার সময় map-এ কেবল আগের ইন্ডেক্সগুলোই থাকা উচিত। আগেই বর্তমান মান যোগ করে দিলে সেটি নিজের সাথেই মিলে যেতে পারে।"
+  },
+  {
+    "id": "bug-window-shrink",
+    "kind": "bug",
+    "topic": "Sliding window",
+    "prompt": "This reports 3 for \"abba\", whose answer is 2. Which change restores the window invariant?",
+    "choices": [
+      "Remove seen entirely",
+      "Update best before shrinking",
+      "Line 4: keep shrinking with while, not if"
+    ],
+    "answer": 2,
+    "explanation": "Removing one character may leave the duplicate inside the window. Keep shrinking until the current character is absent.",
+    "code": "def longest_unique(text):\n    left, best, seen = 0, 0, set()\n    for right, char in enumerate(text):\n        if char in seen:\n            seen.remove(text[left])\n            left += 1\n        seen.add(char)\n        best = max(best, right - left + 1)\n    return best",
+    "corrected": "def longest_unique(text):\n    left, best, seen = 0, 0, set()\n    for right, char in enumerate(text):\n        while char in seen:\n            seen.remove(text[left])\n            left += 1\n        seen.add(char)\n        best = max(best, right - left + 1)\n    return best",
+    "lesson": "3",
+    "prompt_bn": "এই কোডটি \"abba\"-র জন্য উত্তর দেয় 3, যেখানে সঠিক উত্তর 2। কোন পরিবর্তনটি window invariant-কে সঠিক রাখবে?",
+    "choices_bn": [
+      "seen পুরোপুরি বাদ দিন",
+      "window ছোট করার আগেই best আপডেট করুন",
+      "লাইন 4: if-এর বদলে while দিয়ে ক্রমাগত ছোট করুন"
+    ],
+    "explanation_bn": "মাত্র একটি অক্ষর সরালে পুনরাবৃত্ত অক্ষরটি তখনও window-র ভেতরে থেকে যেতে পারে। বর্তমান অক্ষরটি না সরা পর্যন্ত loop চালিয়ে window ছোট করতে থাকুন।"
+  },
+  {
+    "id": "bug-empty-prefix",
+    "kind": "bug",
+    "topic": "Prefix sums",
+    "prompt": "For nums=[3] and k=3, this returns 0. What initial state is missing?",
+    "choices": [
+      "Start prefix at k",
+      "Line 2: frequencies = {0: 1}",
+      "Start answer at 1 for every input"
+    ],
+    "answer": 1,
+    "explanation": "The empty prefix has sum zero and occurs once before the array. It lets subarrays starting at index 0 be counted.",
+    "code": "def count_subarrays(nums, k):\n    frequencies = {}\n    prefix = answer = 0\n    for value in nums:\n        prefix += value\n        answer += frequencies.get(prefix - k, 0)\n        frequencies[prefix] = frequencies.get(prefix, 0) + 1\n    return answer",
+    "corrected": "def count_subarrays(nums, k):\n    frequencies = {0: 1}\n    prefix = answer = 0\n    for value in nums:\n        prefix += value\n        answer += frequencies.get(prefix - k, 0)\n        frequencies[prefix] = frequencies.get(prefix, 0) + 1\n    return answer",
+    "lesson": "560",
+    "prompt_bn": "nums=[3] এবং k=3 হলে এই কোডটি 0 রিটার্ন করে। শুরুর কোন state-টি এখানে বাদ পড়েছে?",
+    "choices_bn": [
+      "prefix-কে k থেকে শুরু করুন",
+      "লাইন 2: frequencies = {0: 1}",
+      "সব ইনপুটের জন্য answer-কে 1 থেকে শুরু করুন"
+    ],
+    "explanation_bn": "খালি prefix-এর যোগফল শূন্য এবং অ্যারে শুরুর আগে এটি একবার ঘটেছে বলে ধরা হয়। এর ফলেই index 0 থেকে শুরু হওয়া subarray-গুলো সঠিকভাবে গোনা যায়।"
+  },
+  {
+    "id": "bug-equal-greater",
+    "kind": "bug",
+    "topic": "Stacks & queues",
+    "prompt": "For [2, 2], the next strictly greater values should be [-1, -1]. Which comparison is wrong?",
+    "choices": [
+      "Line 4: use < rather than <=",
+      "Line 2: initialize answer with zeros",
+      "Line 6: push the value instead of the index"
+    ],
+    "answer": 0,
+    "explanation": "An equal value is not strictly greater. Leave equal unresolved values on the stack until a larger value arrives.",
+    "code": "def next_greater(nums):\n    answer, stack = [-1] * len(nums), []\n    for i, value in enumerate(nums):\n        while stack and nums[stack[-1]] <= value:\n            answer[stack.pop()] = value\n        stack.append(i)\n    return answer",
+    "corrected": "def next_greater(nums):\n    answer, stack = [-1] * len(nums), []\n    for i, value in enumerate(nums):\n        while stack and nums[stack[-1]] < value:\n            answer[stack.pop()] = value\n        stack.append(i)\n    return answer",
+    "lesson": "496",
+    "prompt_bn": "[2, 2]-এর জন্য পরবর্তী কঠোরভাবে বড় (strictly greater) মান হওয়া উচিত [-1, -1]। এখানে কোন তুলনাটি ভুল?",
+    "choices_bn": [
+      "লাইন 4: <=-এর পরিবর্তে < ব্যবহার করুন",
+      "লাইন 2: answer-কে শূন্য দিয়ে শুরু করুন",
+      "লাইন 6: ইন্ডেক্সের বদলে মানটি push করুন"
+    ],
+    "explanation_bn": "সমান মান কঠোরভাবে বড় (strictly greater) নয়। তাই সত্যিকারের বড় কোনো মান না আসা পর্যন্ত সমান মানগুলোকে অমীমাংসিত অবস্থায় stack-এ রেখে দিন।"
+  },
+  {
+    "id": "bug-heap-capacity",
+    "kind": "bug",
+    "topic": "Heaps",
+    "prompt": "For [3, 1, 5] and k=2, this returns 5 instead of 3. What is the off-by-one error?",
+    "choices": [
+      "Line 5 should use a max heap",
+      "The heap should keep every input",
+      "Line 6: remove only when len(heap) > k"
+    ],
+    "answer": 2,
+    "explanation": "The heap must retain k values, not k-1. Pop only after its size exceeds k; its root is then the kth largest.",
+    "code": "def kth_largest(nums, k):\n    import heapq\n    heap = []\n    for value in nums:\n        heapq.heappush(heap, value)\n        if len(heap) >= k:\n            heapq.heappop(heap)\n    return heap[0]",
+    "corrected": "def kth_largest(nums, k):\n    import heapq\n    heap = []\n    for value in nums:\n        heapq.heappush(heap, value)\n        if len(heap) > k:\n            heapq.heappop(heap)\n    return heap[0]",
+    "lesson": "215",
+    "prompt_bn": "[3, 1, 5] এবং k=2 হলে এটি 3-এর বদলে 5 রিটার্ন করে। এখানে off-by-one ভুলটি কোথায়?",
+    "choices_bn": [
+      "লাইন 5-এ max heap ব্যবহার করা উচিত",
+      "heap-এ প্রতিটি ইনপুট ধরে রাখা উচিত",
+      "লাইন 6: কেবল len(heap) > k হলেই উপাদান সরান"
+    ],
+    "explanation_bn": "heap-এ k-1 নয়, ঠিক k-টি মান ধরে রাখতে হবে। আকার k অতিক্রম করলেই কেবল pop করুন; তখন root-এ থাকা মানটিই হবে kth largest।"
+  },
+  {
+    "id": "bug-bfs-discovery",
+    "kind": "bug",
+    "topic": "Graphs",
+    "prompt": "On a diamond graph, this visits the shared child twice. When should a node be marked seen?",
+    "choices": [
+      "Only after all its neighbors are processed",
+      "When it is enqueued, including the start node",
+      "Only when the queue becomes empty"
+    ],
+    "answer": 1,
+    "explanation": "Marking at enqueue time prevents another parent from adding the same node while it is already waiting in the queue.",
+    "code": "def bfs(graph, start):\n    from collections import deque\n    queue, seen, order = deque([start]), set(), []\n    while queue:\n        node = queue.popleft()\n        seen.add(node)\n        order.append(node)\n        for neighbor in graph[node]:\n            if neighbor not in seen:\n                queue.append(neighbor)\n    return order",
+    "corrected": "def bfs(graph, start):\n    from collections import deque\n    queue, seen, order = deque([start]), {start}, []\n    while queue:\n        node = queue.popleft()\n        order.append(node)\n        for neighbor in graph[node]:\n            if neighbor not in seen:\n                seen.add(neighbor)\n                queue.append(neighbor)\n    return order",
+    "lesson": "1971",
+    "prompt_bn": "একটি diamond graph-এ এই কোডটি শেয়ার করা child node-টি দুবার ভিজিট করে। একটি node-কে কখন seen হিসেবে চিহ্নিত করা উচিত?",
+    "choices_bn": [
+      "তার সব neighbor প্রসেস হয়ে যাওয়ার পর",
+      "queue-তে যোগ (enqueue) করার সময়ই, শুরুর node-টিসহ",
+      "কেবল queue খালি হয়ে গেলে"
+    ],
+    "explanation_bn": "queue-তে যোগ করার সময়ই seen চিহ্নিত করলে অন্য কোনো parent অপেক্ষমাণ ওই একই node-কে দ্বিতীয়বার queue-তে ঢোকাতে পারে না।"
+  },
+  {
+    "id": "bug-pointer-pair",
+    "kind": "bug",
+    "topic": "Two pointers",
+    "prompt": "This does not reverse [1, 2, 3] correctly. Which pointer update is missing?",
+    "choices": [
+      "Move right one step left after each swap",
+      "Reset left to zero after each swap",
+      "Move right one step right"
+    ],
+    "answer": 0,
+    "explanation": "Both ends move inward after a swap. Leaving right fixed makes later iterations swap with the same final slot again.",
+    "code": "def reverse_values(nums):\n    nums = nums[:]\n    left, right = 0, len(nums) - 1\n    while left < right:\n        nums[left], nums[right] = nums[right], nums[left]\n        left += 1\n    return nums",
+    "corrected": "def reverse_values(nums):\n    nums = nums[:]\n    left, right = 0, len(nums) - 1\n    while left < right:\n        nums[left], nums[right] = nums[right], nums[left]\n        left += 1\n        right -= 1\n    return nums",
+    "lesson": "344",
+    "prompt_bn": "এই কোডটি [1, 2, 3]-কে সঠিকভাবে উল্টাতে (reverse) পারে না। কোন pointer আপডেটটি বাদ পড়েছে?",
+    "choices_bn": [
+      "প্রতিটি swap-এর পর right-কে এক ধাপ বামে সরান",
+      "প্রতিটি swap-এর পর left-কে শূন্যে রিসেট করুন",
+      "right-কে এক ধাপ ডানে সরান"
+    ],
+    "explanation_bn": "প্রতিটি swap-এর পর দুই প্রান্তকেই ভেতরের দিকে সরাতে হয়। right স্থির থাকলে পরের ধাপগুলোতে বারবার সেই শেষ অবস্থানের সাথেই swap হতে থাকে।"
+  },
+  {
+    "id": "predict-skyline-enter",
+    "kind": "prediction",
+    "topic": "Heaps",
+    "prompt": "At the initial state, what will processing the first sweep coordinate do?",
+    "choices": [
+      "Add building 0 and emit [2, 10]",
+      "Emit [2, 0] and discard every building",
+      "Move the sweep to 24 immediately"
+    ],
+    "answer": 0,
+    "explanation": "The first building starts at x=2 with height 10. Insert it, then emit a height change from zero to 10.",
+    "trace": "skyline",
+    "preset": 0,
+    "step": 0,
+    "lesson": "218",
+    "prompt_bn": "শুরুর অবস্থায় প্রথম sweep coordinate প্রসেস করলে কী ঘটবে?",
+    "choices_bn": [
+      "building 0 যোগ হবে এবং [2, 10] আউটপুট (emit) হবে",
+      "[2, 0] আউটপুট হবে এবং সব building বাদ পড়ে যাবে",
+      "sweep সরাসরি 24-এ চলে যাবে"
+    ],
+    "explanation_bn": "প্রথম building-টি x=2 অবস্থানে 10 উচ্চতা নিয়ে শুরু হয়। এটি যোগ করার পর উচ্চতা শূন্য থেকে 10-এ পরিবর্তিত হওয়ায় [2, 10] পয়েন্টটি emit হয়।"
+  },
+  {
+    "id": "predict-skyline-tallest",
+    "kind": "prediction",
+    "topic": "Heaps",
+    "prompt": "The next start is x=3. Which skyline point will be emitted?",
+    "choices": [
+      "[3, 12]",
+      "[3, 15]",
+      "[3, 0]"
+    ],
+    "answer": 1,
+    "explanation": "The building starting at 3 has height 15, taller than the height-10 building already active.",
+    "trace": "skyline",
+    "preset": 0,
+    "step": 1,
+    "lesson": "218",
+    "prompt_bn": "পরবর্তী শুরু হচ্ছে x=3 অবস্থানে। এবার কোন skyline পয়েন্টটি emit হবে?",
+    "choices_bn": [
+      "[3, 12]",
+      "[3, 15]",
+      "[3, 0]"
+    ],
+    "explanation_bn": "x=3 থেকে শুরু হওয়া building-টির উচ্চতা 15, যা আগে থেকে সক্রিয় 10 উচ্চতার building-টির চেয়ে বেশি।"
+  },
+  {
+    "id": "predict-water-left",
+    "kind": "prediction",
+    "topic": "Two pointers",
+    "prompt": "Which side will be resolved first for this elevation map?",
+    "choices": [
+      "Right: because 5 is larger",
+      "Both ends are discarded without checking",
+      "Left: height 4 is no greater than the right height 5"
+    ],
+    "answer": 2,
+    "explanation": "The lower boundary can be resolved safely. The left maximum becomes 4 and this first boundary traps zero water.",
+    "trace": "rainwater",
+    "preset": 0,
+    "step": 0,
+    "lesson": "42",
+    "prompt_bn": "এই elevation map-টির ক্ষেত্রে কোন দিকের হিসাব আগে নিষ্পত্তি (resolve) করা হবে?",
+    "choices_bn": [
+      "ডান দিক: কারণ 5 বড়",
+      "কোনো পরীক্ষা ছাড়াই দুই প্রান্ত বাদ দেওয়া হবে",
+      "বাম দিক: উচ্চতা 4 ডান দিকের উচ্চতা 5-এর চেয়ে বড় নয়"
+    ],
+    "explanation_bn": "অপেক্ষাকৃত নিচু প্রান্তটি নিরাপদে নিষ্পত্তি করা যায়। এতে বাম দিকের সর্বোচ্চ উচ্চতা হয় 4 এবং এই প্রথম প্রান্তে কোনো পানি জমে না (0 একক)।"
+  },
+  {
+    "id": "predict-water-fill",
+    "kind": "prediction",
+    "topic": "Two pointers",
+    "prompt": "After resolving index 0, how much water will be recorded at index 1?",
+    "choices": [
+      "2 units",
+      "4 units",
+      "0 units"
+    ],
+    "answer": 0,
+    "explanation": "The left maximum is 4 and height[1] is 2. The opposite boundary is high enough, so 4-2 = 2 units are safe to count.",
+    "trace": "rainwater",
+    "preset": 0,
+    "step": 1,
+    "lesson": "42",
+    "prompt_bn": "index 0 নিষ্পত্তি করার পর index 1-এ কতটুকু পানি জমা হিসেবে হিসাব হবে?",
+    "choices_bn": [
+      "2 একক",
+      "4 একক",
+      "0 একক"
+    ],
+    "explanation_bn": "বাম দিকের সর্বোচ্চ উচ্চতা 4 এবং height[1]-এর মান 2। বিপরীত পাশের সীমানা যথেষ্ট উঁচু হওয়ায় এখানে 4 - 2 = 2 একক পানি নিশ্চিতভাবে জমা হবে।"
+  },
+  {
+    "id": "predict-bfs-first",
+    "kind": "prediction",
+    "topic": "Graphs",
+    "prompt": "After expanding node 0, which queue will BFS have?",
+    "choices": [
+      "[3, 4]",
+      "[1, 2]",
+      "[0, 1, 2]"
+    ],
+    "answer": 1,
+    "explanation": "Remove 0, then discover its neighbors 1 and 2 in adjacency order. Mark them seen when enqueuing.",
+    "trace": "bfs",
+    "preset": 0,
+    "step": 0,
+    "lesson": "1971",
+    "prompt_bn": "node 0 এক্সপ্যান্ড করার পর BFS-এর queue-তে কী থাকবে?",
+    "choices_bn": [
+      "[3, 4]",
+      "[1, 2]",
+      "[0, 1, 2]"
+    ],
+    "explanation_bn": "0 সরিয়ে তার adjacency ক্রম অনুযায়ী neighbor 1 এবং 2-কে আবিষ্কার করা হয়। queue-তে যোগ করার সময়ই এদের seen হিসেবে চিহ্নিত করুন।"
+  },
+  {
+    "id": "predict-bfs-diamond",
+    "kind": "prediction",
+    "topic": "Graphs",
+    "prompt": "Node 3 is already queued after expanding node 1. What happens when node 2 also encounters node 3?",
+    "choices": [
+      "Node 3 is enqueued a second time",
+      "Node 3 is removed from the queue",
+      "Node 3 is skipped because it was already discovered"
+    ],
+    "answer": 2,
+    "explanation": "The discovered set includes queued nodes. This keeps shared children from being enqueued more than once.",
+    "trace": "bfs",
+    "preset": 0,
+    "step": 2,
+    "lesson": "1971",
+    "prompt_bn": "node 1 এক্সপ্যান্ড করার পর node 3 ইতিমধ্যেই queue-তে আছে। এখন node 2-ও যখন node 3-কে পাবে, তখন কী হবে?",
+    "choices_bn": [
+      "node 3 দ্বিতীয়বার queue-তে যোগ হবে",
+      "node 3-কে queue থেকে সরিয়ে দেওয়া হবে",
+      "node 3 আগেই আবিষ্কৃত হওয়ায় এটিকে এড়িয়ে যাওয়া হবে"
+    ],
+    "explanation_bn": "discovered set-এ queue-তে থাকা node-গুলোও অন্তর্ভুক্ত থাকে। এতে শেয়ার করা child node একাধিকবার queue-তে ঢোকা থেকে রক্ষা পায়।"
+  }
+]

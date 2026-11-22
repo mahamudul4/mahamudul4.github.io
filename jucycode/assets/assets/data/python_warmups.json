@@ -1,0 +1,2068 @@
+[
+  {
+    "id": "slice-step",
+    "topic": "Slicing",
+    "code": "nums = [2, 4, 6, 8]\nprint(nums[1::2])",
+    "options": [
+      "[4, 8]",
+      "[2, 6]",
+      "[4, 6, 8]"
+    ],
+    "answer": 0,
+    "why": [
+      "Start at index 1, then move two positions at a time: 4, then 8.",
+      "That would start at index 0. This slice starts at index 1.",
+      "That is a step of 1. The final 2 in the slice skips alternate elements."
+    ],
+    "stage": "basics",
+    "title": "Slice step",
+    "level": "Starter",
+    "title_bn": "স্লাইসের ধাপ (Slice step)",
+    "why_bn": [
+      "index 1 থেকে শুরু করে প্রতিবার ২ ঘর করে এগোন: প্রথমে 4, এরপর 8।",
+      "সেটি index 0 থেকে শুরু হলে হতো। এই স্লাইসটি index 1 থেকে শুরু হয়েছে।",
+      "সেটি step 1 হলে হতো। স্লাইসের শেষের 2 একটি করে উপাদান বাদ দিয়ে এগোয়।"
+    ]
+  },
+  {
+    "id": "dict-default",
+    "topic": "Hash maps",
+    "code": "counts = {'a': 2}\nprint(counts.get('b', 0))",
+    "options": [
+      "None",
+      "0",
+      "KeyError"
+    ],
+    "answer": 1,
+    "why": [
+      "None is the default only when no second argument is supplied.",
+      "get returns the supplied default, 0, when the key is absent. The dictionary is unchanged.",
+      "Indexing with counts['b'] raises KeyError; get provides a safe fallback."
+    ],
+    "stage": "collections",
+    "title": "Dict default",
+    "level": "Starter",
+    "title_bn": "dict-এর ডিফল্ট মান",
+    "why_bn": [
+      "দ্বিতীয় আর্গুমেন্ট না দিলেই কেবল ডিফল্ট হিসেবে None পাওয়া যায়।",
+      "key অনুপস্থিত থাকলে get আপনার দেওয়া ডিফল্ট মান 0 রিটার্ন করে। এতে dict অপরিবর্তিত থাকে।",
+      "counts['b'] দিয়ে সরাসরি ইন্ডেক্স করলে KeyError হয়; get একটি নিরাপদ বিকল্প দেয়।"
+    ]
+  },
+  {
+    "id": "comprehension",
+    "topic": "Filtering",
+    "code": "nums = [1, 2, 3, 4]\nprint([x * x for x in nums if x % 2 == 0])",
+    "options": [
+      "[1, 9]",
+      "[1, 4, 9, 16]",
+      "[4, 16]"
+    ],
+    "answer": 2,
+    "why": [
+      "The condition keeps even numbers, not odd numbers.",
+      "The condition filters the input before producing each squared value.",
+      "Keep 2 and 4, then square them. Comprehensions can combine filtering and mapping in one pass."
+    ],
+    "stage": "basics",
+    "title": "Comprehension",
+    "level": "Starter",
+    "title_bn": "লিস্ট comprehension",
+    "why_bn": [
+      "শর্তটি বিজোড় নয়, বরং জোড় সংখ্যাগুলোকে রাখে।",
+      "বর্গ করার আগে শর্তটি ইনপুট থেকে উপাদানগুলো ছেঁকে (filter) নেয়।",
+      "2 এবং 4 রেখে সেগুলোকে বর্গ করুন। comprehension এক পাসে filtering ও mapping একসাথে করতে পারে।"
+    ]
+  },
+  {
+    "id": "heap-root",
+    "topic": "Heaps",
+    "code": "import heapq\nheap = [7, 2, 5]\nheapq.heapify(heap)\nprint(heap[0])",
+    "options": [
+      "2",
+      "7",
+      "5"
+    ],
+    "answer": 0,
+    "why": [
+      "Python heapq is a min heap: its root is the smallest element. The whole list is not necessarily sorted.",
+      "heapify rearranges the list; the original first element need not remain at the root.",
+      "The root is the minimum value, not the median."
+    ],
+    "stage": "linear",
+    "title": "Heap root",
+    "level": "DSA",
+    "title_bn": "heap-এর root",
+    "why_bn": [
+      "Python-এর heapq হলো একটি min heap: এর root-এ সবচেয়ে ছোট উপাদান থাকে। পুরো লিস্ট sorted থাকা জরুরি নয়।",
+      "heapify লিস্টটিকে নতুন করে সাজায়; শুরুর প্রথম উপাদানটি root-এ নাও থাকতে পারে।",
+      "root-এ সবসময় সর্বনিম্ন মান থাকে, মধ্যমা (median) নয়।"
+    ]
+  },
+  {
+    "id": "zip-shortest",
+    "topic": "Iteration",
+    "code": "pairs = zip([1, 2, 3], ['a', 'b'])\nprint(len(list(pairs)))",
+    "options": [
+      "3",
+      "2",
+      "ValueError"
+    ],
+    "answer": 1,
+    "why": [
+      "Ordinary zip stops when the shortest input ends.",
+      "zip produces only (1, 'a') and (2, 'b'). The unmatched 3 is not included.",
+      "Different lengths are allowed by default. strict=True would check them."
+    ],
+    "stage": "basics",
+    "title": "Zip shortest",
+    "level": "Starter",
+    "title_bn": "সবচেয়ে ছোট ইনপুটে zip থামা",
+    "why_bn": [
+      "সাধারণ zip সবচেয়ে ছোট ইনপুট শেষ হলেই থেমে যায়।",
+      "zip কেবল (1, 'a') এবং (2, 'b') তৈরি করে। জোড়াবিহীন 3 বাদ পড়ে যায়।",
+      "ডিফল্টভাবে ভিন্ন দৈর্ঘ্য অনুমোদিত। strict=True দিলে তা পরীক্ষা করা হয়।"
+    ]
+  },
+  {
+    "id": "deque-left",
+    "topic": "Queues",
+    "code": "from collections import deque\nq = deque([3, 5, 7])\nprint(q.popleft())",
+    "options": [
+      "7",
+      "[5, 7]",
+      "3"
+    ],
+    "answer": 2,
+    "why": [
+      "pop removes from the right; popleft removes from the left.",
+      "The remaining queue contains 5 and 7, but popleft returns the removed item.",
+      "popleft removes and returns the leftmost item in O(1) time, making deque useful for BFS."
+    ],
+    "stage": "linear",
+    "title": "Deque left",
+    "level": "DSA",
+    "title_bn": "deque-এর বাম প্রান্ত থেকে সরানো",
+    "why_bn": [
+      "pop ডান প্রান্ত থেকে সরায়; popleft বাম প্রান্ত থেকে সরায়।",
+      "বাকি queue-তে 5 এবং 7 থাকে, কিন্তু popleft সরিয়ে নেওয়া উপাদানটিই রিটার্ন করে।",
+      "popleft O(1) সময়ে বাম প্রান্তের উপাদান সরিয়ে রিটার্ন করে, যা BFS-এর জন্য deque-কে উপযোগী করে।"
+    ]
+  },
+  {
+    "id": "shallow-copy",
+    "topic": "Lists",
+    "code": "a = [1, 2]\nb = a[:]\nb.append(3)\nprint(a)",
+    "options": [
+      "[1, 2]",
+      "[1, 2, 3]",
+      "[3]"
+    ],
+    "answer": 0,
+    "why": [
+      "a[:] creates a new outer list. Appending to b does not append to a. Nested elements would still be shared.",
+      "That would happen with b = a, which aliases the same list.",
+      "append adds an element; it does not replace an existing list."
+    ],
+    "stage": "collections",
+    "title": "Shallow copy",
+    "level": "Starter",
+    "title_bn": "Shallow copy",
+    "why_bn": [
+      "a[:] নতুন একটি বাইরের লিস্ট তৈরি করে। b-তে append করলে a বদলায় না। তবে ভেতরে nested উপাদান থাকলে তা শেয়ারড থাকত।",
+      "b = a লিখলে এমন হতো, কারণ তখন দুটি নামই একই লিস্ট নির্দেশ করত।",
+      "append নতুন উপাদান যোগ করে; বিদ্যমান লিস্টটি মুছে প্রতিস্থাপন করে না।"
+    ]
+  },
+  {
+    "id": "bisect-left",
+    "topic": "Binary search",
+    "code": "from bisect import bisect_left\nprint(bisect_left([1, 3, 3, 7], 3))",
+    "options": [
+      "2",
+      "1",
+      "3"
+    ],
+    "answer": 1,
+    "why": [
+      "bisect_left finds the first valid insertion point, before all equal values.",
+      "The first 3 is at index 1. Inserting there keeps the list sorted and puts the new value before equal values.",
+      "Index 3 is the right insertion boundary for 3, returned by bisect_right."
+    ],
+    "stage": "search",
+    "title": "Bisect left",
+    "level": "DSA",
+    "title_bn": "Bisect left",
+    "why_bn": [
+      "bisect_left সব সমান মানের আগে প্রথম বৈধ ইনসার্ট করার অবস্থানটি খুঁজে বের করে।",
+      "প্রথম 3 আছে index 1-এ। সেখানে ইনসার্ট করলে লিস্ট sorted থাকে এবং নতুন মানটি সমান মানগুলোর আগে বসে।",
+      "index 3 হলো 3-এর ডান ইনসার্ট সীমানা, যা bisect_right রিটার্ন করে।"
+    ]
+  },
+  {
+    "id": "enumerate-start",
+    "topic": "Indices",
+    "code": "items = ['a', 'b']\nprint(list(enumerate(items, start=1)))",
+    "options": [
+      "[(0, 'a'), (1, 'b')]",
+      "['a', 'b']",
+      "[(1, 'a'), (2, 'b')]"
+    ],
+    "answer": 2,
+    "why": [
+      "That is enumerate's default start. Here start=1 changes the counter.",
+      "enumerate yields a counter alongside each value, not just the values.",
+      "start changes the counter's initial value. It does not skip an input element."
+    ],
+    "stage": "basics",
+    "title": "Enumerate start",
+    "level": "Starter",
+    "title_bn": "enumerate-এর শুরুর মান",
+    "why_bn": [
+      "সেটি enumerate-এর ডিফল্ট শুরু। এখানে start=1 কাউন্টারের শুরু বদলে দিয়েছে।",
+      "enumerate কেবল মান নয়, প্রতিটি মানের সাথে একটি কাউন্টারও দেয়।",
+      "start কেবল কাউন্টারের প্রাথমিক মান বদলায়। এটি ইনপুটের কোনো উপাদান বাদ দেয় না।"
+    ]
+  },
+  {
+    "id": "sum-booleans",
+    "topic": "Counting",
+    "code": "nums = [1, 4, 6, 9]\nprint(sum(x % 2 == 0 for x in nums))",
+    "options": [
+      "2",
+      "10",
+      "True"
+    ],
+    "answer": 0,
+    "why": [
+      "True contributes 1 and False contributes 0, so sum counts the two even elements.",
+      "The generator yields booleans, not the even values themselves.",
+      "sum adds the booleans as integers; it does not return a boolean."
+    ],
+    "stage": "basics",
+    "title": "Sum booleans",
+    "level": "Starter",
+    "title_bn": "Boolean মানের যোগফল",
+    "why_bn": [
+      "True মানে 1 এবং False মানে 0, তাই sum এখানে দুটি জোড় উপাদানের সংখ্যা গুনে দেয়।",
+      "generator-টি জোড় সংখ্যাগুলো নয়, বরং boolean মান উৎপন্ন করে।",
+      "sum boolean-গুলোকে পূর্ণসংখ্যা হিসেবে যোগ করে; এটি কোনো boolean রিটার্ন করে না।"
+    ]
+  },
+  {
+    "id": "sort-key",
+    "topic": "Sorting",
+    "code": "pairs = [(1, 5), (2, 3), (0, 4)]\nprint(sorted(pairs, key=lambda p: p[1])[0])",
+    "options": [
+      "(0, 4)",
+      "(2, 3)",
+      "(1, 5)"
+    ],
+    "answer": 1,
+    "why": [
+      "That is the smallest pair under default tuple ordering, but this sort uses the second item.",
+      "The second values are 5, 3 and 4. The smallest is 3, belonging to (2, 3). sorted returns a new list.",
+      "The key uses p[1], and 5 is the largest second value."
+    ],
+    "stage": "search",
+    "title": "Sort key",
+    "level": "DSA",
+    "title_bn": "key অনুযায়ী sorting",
+    "why_bn": [
+      "ডিফল্ট tuple ক্রম অনুযায়ী সেটি সবচেয়ে ছোট জোড়া হতো, কিন্তু এই sort দ্বিতীয় উপাদান ব্যবহার করছে।",
+      "দ্বিতীয় মানগুলো হলো 5, 3 এবং 4। সবচেয়ে ছোট 3 আছে (2, 3)-এ। sorted নতুন একটি লিস্ট রিটার্ন করে।",
+      "key হিসেবে p[1] ব্যবহার হয়েছে, আর 5 হলো সবচেয়ে বড় দ্বিতীয় মান।"
+    ]
+  },
+  {
+    "id": "set-membership",
+    "topic": "Sets",
+    "code": "seen = {1, 2, 2, 3}\nprint(len(seen))",
+    "options": [
+      "4",
+      "2",
+      "3"
+    ],
+    "answer": 2,
+    "why": [
+      "A set stores each distinct value once, so the duplicate 2 does not add an element.",
+      "There are three distinct values: 1, 2 and 3.",
+      "Duplicate values collapse into one element. Sets are useful for visited states and membership checks."
+    ],
+    "stage": "collections",
+    "title": "Set membership",
+    "level": "Starter",
+    "title_bn": "set-এ অনন্য উপাদান",
+    "why_bn": [
+      "set প্রতিটি অনন্য (distinct) মান একবারই রাখে, তাই দ্বিতীয় 2 নতুন উপাদান যোগ করে না।",
+      "এখানে তিনটি অনন্য মান আছে: 1, 2 এবং 3।",
+      "পুনরাবৃত্ত মানগুলো মিলে একটি উপাদান হয়ে যায়। visited state ও membership পরীক্ষার জন্য set খুবই কার্যকর।"
+    ]
+  },
+  {
+    "id": "reverse-slice",
+    "topic": "Two pointers",
+    "code": "text = 'level'\nprint(text == text[::-1])",
+    "options": [
+      "True",
+      "False",
+      "None"
+    ],
+    "answer": 0,
+    "why": [
+      "A step of -1 reverses the string. 'level' equals its reverse, so this is a palindrome check.",
+      "'level' reads the same forwards and backwards.",
+      "Equality returns a boolean, never None."
+    ],
+    "stage": "arrays",
+    "title": "Reverse slice",
+    "level": "DSA",
+    "title_bn": "রিভার্স স্লাইস",
+    "why_bn": [
+      "step -1 দিলে স্ট্রিংটি উল্টে যায়। 'level' তার উল্টো রূপের সমান, তাই এটি একটি palindrome পরীক্ষা।",
+      "'level' সামনে ও পেছন—দুই দিক থেকেই একইভাবে পড়া যায়।",
+      "সমানতা (==) পরীক্ষা সবসময় boolean রিটার্ন করে, কখনোই None নয়।"
+    ]
+  },
+  {
+    "id": "list-alias",
+    "topic": "Mutability",
+    "code": "a = [1, 2]\nb = a\nb.append(3)\nprint(len(a))",
+    "options": [
+      "2",
+      "3",
+      "1"
+    ],
+    "answer": 1,
+    "why": [
+      "b = a does not copy the list. Both names refer to the same object.",
+      "Both names refer to the same list, so appending through b also changes what a refers to.",
+      "append adds one element; it does not reduce the list."
+    ],
+    "stage": "collections",
+    "title": "List alias",
+    "level": "Starter",
+    "title_bn": "লিস্টের alias রেফারেন্স",
+    "why_bn": [
+      "b = a লিস্টটি কপি করে না। দুটি নামই একই অবজেক্ট নির্দেশ করে।",
+      "দুটি নামই একই লিস্ট নির্দেশ করে, তাই b-এর মাধ্যমে append করলে a-এর লিস্টও বদলে যায়।",
+      "append একটি উপাদান যোগ করে; এটি লিস্ট ছোট করে না।"
+    ]
+  },
+  {
+    "id": "floor-remainder",
+    "stage": "basics",
+    "topic": "Operators",
+    "title": "Split a quantity",
+    "code": "print(17 // 5, 17 % 5)",
+    "options": [
+      "3.4 2",
+      "2 3",
+      "3 2"
+    ],
+    "answer": 2,
+    "why": [
+      "Trace it again. Floor division gives 3 whole groups; the remainder is 2. The invariant is 17 = 5 * 3 + 2.",
+      "Trace it again. Floor division gives 3 whole groups; the remainder is 2. The invariant is 17 = 5 * 3 + 2.",
+      "Floor division gives 3 whole groups; the remainder is 2. The invariant is 17 = 5 * 3 + 2."
+    ],
+    "level": "Starter",
+    "number": null,
+    "title_bn": "একটি পরিমাণ ভাগ করা",
+    "why_bn": [
+      "আবার ট্রেস করুন। floor division 3টি পূর্ণ দল দেয় এবং ভাগশেষ থাকে 2। এখানে সম্পর্কটি হলো 17 = 5 * 3 + 2।",
+      "আবার ট্রেস করুন। floor division 3টি পূর্ণ দল দেয় এবং ভাগশেষ থাকে 2। এখানে সম্পর্কটি হলো 17 = 5 * 3 + 2।",
+      "floor division 3টি পূর্ণ দল দেয় এবং ভাগশেষ থাকে 2। এখানে সম্পর্কটি হলো 17 = 5 * 3 + 2।"
+    ]
+  },
+  {
+    "id": "range-exclusive",
+    "stage": "basics",
+    "topic": "Iteration",
+    "title": "Understand the stop boundary",
+    "code": "print(list(range(2, 8, 2)))",
+    "options": [
+      "[2, 4, 6]",
+      "[2, 4, 6, 8]",
+      "[0, 2, 4, 6]"
+    ],
+    "answer": 0,
+    "why": [
+      "range starts at 2, advances by 2 and excludes the stop value 8.",
+      "Trace it again. range starts at 2, advances by 2 and excludes the stop value 8.",
+      "Trace it again. range starts at 2, advances by 2 and excludes the stop value 8."
+    ],
+    "level": "Starter",
+    "number": null,
+    "title_bn": "range-এর শেষ সীমানা বোঝা",
+    "why_bn": [
+      "range 2 থেকে শুরু করে 2 করে এগোয় এবং শেষ মান 8-কে বাদ দেয়।",
+      "আবার ট্রেস করুন। range 2 থেকে শুরু করে 2 করে এগোয় এবং শেষ মান 8-কে বাদ দেয়।",
+      "আবার ট্রেস করুন। range 2 থেকে শুরু করে 2 করে এগোয় এবং শেষ মান 8-কে বাদ দেয়।"
+    ]
+  },
+  {
+    "id": "string-clean",
+    "stage": "basics",
+    "topic": "Strings",
+    "title": "Normalize text",
+    "code": "text = '  PyThOn  '\nprint(text.strip().lower())",
+    "options": [
+      "  python  ",
+      "python",
+      "PyThOn"
+    ],
+    "answer": 1,
+    "why": [
+      "Trace it again. strip returns a string without outer whitespace; lower returns a lowercase string. Strings are immutable.",
+      "strip returns a string without outer whitespace; lower returns a lowercase string. Strings are immutable.",
+      "Trace it again. strip returns a string without outer whitespace; lower returns a lowercase string. Strings are immutable."
+    ],
+    "level": "Starter",
+    "number": null,
+    "title_bn": "টেক্সট পরিষ্কার ও স্বাভাবিক করা",
+    "why_bn": [
+      "আবার ট্রেস করুন। strip দুই প্রান্তের whitespace ছাড়া নতুন স্ট্রিং দেয়; lower ছোট হাতের অক্ষরে রূপান্তর করে। স্ট্রিং immutable।",
+      "strip দুই প্রান্তের whitespace ছাড়া নতুন স্ট্রিং দেয়; lower ছোট হাতের অক্ষরে রূপান্তর করে। স্ট্রিং immutable।",
+      "আবার ট্রেস করুন। strip দুই প্রান্তের whitespace ছাড়া নতুন স্ট্রিং দেয়; lower ছোট হাতের অক্ষরে রূপান্তর করে। স্ট্রিং immutable।"
+    ]
+  },
+  {
+    "id": "function-return",
+    "stage": "basics",
+    "topic": "Functions",
+    "title": "Follow a return value",
+    "code": "def twice(x):\n    return 2 * x\nprint(twice(3) + 1)",
+    "options": [
+      "6",
+      "None",
+      "7"
+    ],
+    "answer": 2,
+    "why": [
+      "Trace it again. The call returns 6, then the caller adds 1. Returning a value lets another expression use it.",
+      "Trace it again. The call returns 6, then the caller adds 1. Returning a value lets another expression use it.",
+      "The call returns 6, then the caller adds 1. Returning a value lets another expression use it."
+    ],
+    "level": "Starter",
+    "number": null,
+    "title_bn": "return মান অনুসরণ করা",
+    "why_bn": [
+      "আবার ট্রেস করুন। ফাংশন কলটি 6 রিটার্ন করে, এরপর caller তার সাথে 1 যোগ করে। মান রিটার্ন করলে অন্য এক্সপ্রেশন সেটি ব্যবহার করতে পারে।",
+      "আবার ট্রেস করুন। ফাংশন কলটি 6 রিটার্ন করে, এরপর caller তার সাথে 1 যোগ করে। মান রিটার্ন করলে অন্য এক্সপ্রেশন সেটি ব্যবহার করতে পারে।",
+      "ফাংশন কলটি 6 রিটার্ন করে, এরপর caller তার সাথে 1 যোগ করে। মান রিটার্ন করলে অন্য এক্সপ্রেশন সেটি ব্যবহার করতে পারে।"
+    ]
+  },
+  {
+    "id": "short-circuit",
+    "stage": "basics",
+    "topic": "Booleans",
+    "title": "Guard an empty list",
+    "code": "nums = []\nprint(bool(nums and nums[0] > 0))",
+    "options": [
+      "False",
+      "True",
+      "IndexError"
+    ],
+    "answer": 0,
+    "why": [
+      "An empty list is falsy, so and never evaluates nums[0]. bool converts the empty-list result to False.",
+      "Trace it again. An empty list is falsy, so and never evaluates nums[0]. bool converts the empty-list result to False.",
+      "Trace it again. An empty list is falsy, so and never evaluates nums[0]. bool converts the empty-list result to False."
+    ],
+    "level": "Starter",
+    "number": null,
+    "title_bn": "খালি লিস্ট সুরক্ষিত রাখা",
+    "why_bn": [
+      "খালি লিস্ট falsy, তাই and কখনোই nums[0] মূল্যায়ন করে না। bool খালি লিস্টের ফলাফলকে False-এ রূপান্তর করে।",
+      "আবার ট্রেস করুন। খালি লিস্ট falsy, তাই and কখনোই nums[0] মূল্যায়ন করে না। bool খালি লিস্টের ফলাফলকে False-এ রূপান্তর করে।",
+      "আবার ট্রেস করুন। খালি লিস্ট falsy, তাই and কখনোই nums[0] মূল্যায়ন করে না। bool খালি লিস্টের ফলাফলকে False-এ রূপান্তর করে।"
+    ]
+  },
+  {
+    "id": "loop-continue",
+    "stage": "basics",
+    "topic": "Iteration",
+    "title": "Skip selected elements",
+    "code": "total = 0\nfor x in [1, 2, 3, 4]:\n    if x % 2 == 0:\n        continue\n    total += x\nprint(total)",
+    "options": [
+      "10",
+      "4",
+      "6"
+    ],
+    "answer": 1,
+    "why": [
+      "Trace it again. continue skips the rest of the current iteration. Only the odd values 1 and 3 are added.",
+      "continue skips the rest of the current iteration. Only the odd values 1 and 3 are added.",
+      "Trace it again. continue skips the rest of the current iteration. Only the odd values 1 and 3 are added."
+    ],
+    "level": "Starter",
+    "number": null,
+    "title_bn": "নির্বাচিত উপাদান এড়িয়ে যাওয়া",
+    "why_bn": [
+      "আবার ট্রেস করুন। continue বর্তমান ধাপের বাকি অংশ বাদ দিয়ে পরের ধাপে চলে যায়। তাই কেবল বিজোড় মান 1 এবং 3 যোগ হয়।",
+      "continue বর্তমান ধাপের বাকি অংশ বাদ দিয়ে পরের ধাপে চলে যায়। তাই কেবল বিজোড় মান 1 এবং 3 যোগ হয়।",
+      "আবার ট্রেস করুন। continue বর্তমান ধাপের বাকি অংশ বাদ দিয়ে পরের ধাপে চলে যায়। তাই কেবল বিজোড় মান 1 এবং 3 যোগ হয়।"
+    ]
+  },
+  {
+    "id": "loop-break",
+    "stage": "basics",
+    "topic": "Iteration",
+    "title": "Stop at the first match",
+    "code": "for x in [2, 5, 8]:\n    if x > 3:\n        break\nprint(x)",
+    "options": [
+      "8",
+      "2",
+      "5"
+    ],
+    "answer": 2,
+    "why": [
+      "Trace it again. The first value greater than 3 is 5. break ends the loop immediately; it does not continue to 8.",
+      "Trace it again. The first value greater than 3 is 5. break ends the loop immediately; it does not continue to 8.",
+      "The first value greater than 3 is 5. break ends the loop immediately; it does not continue to 8."
+    ],
+    "level": "Starter",
+    "number": null,
+    "title_bn": "প্রথম মিল পাওয়ামাত্র থামা",
+    "why_bn": [
+      "আবার ট্রেস করুন। 3-এর চেয়ে বড় প্রথম মানটি হলো 5। break সঙ্গে সঙ্গে লুপ থামিয়ে দেয়; এটি 8 পর্যন্ত এগোয় না।",
+      "আবার ট্রেস করুন। 3-এর চেয়ে বড় প্রথম মানটি হলো 5। break সঙ্গে সঙ্গে লুপ থামিয়ে দেয়; এটি 8 পর্যন্ত এগোয় না।",
+      "3-এর চেয়ে বড় প্রথম মানটি হলো 5। break সঙ্গে সঙ্গে লুপ থামিয়ে দেয়; এটি 8 পর্যন্ত এগোয় না।"
+    ]
+  },
+  {
+    "id": "unpack-swap",
+    "stage": "basics",
+    "topic": "Variables",
+    "title": "Swap without a temporary name",
+    "code": "a, b = 2, 7\na, b = b, a + b\nprint(a, b)",
+    "options": [
+      "7 9",
+      "7 14",
+      "2 9"
+    ],
+    "answer": 0,
+    "why": [
+      "The entire right side uses the old values before assignment: b is 7 and a + b is 9.",
+      "Trace it again. The entire right side uses the old values before assignment: b is 7 and a + b is 9.",
+      "Trace it again. The entire right side uses the old values before assignment: b is 7 and a + b is 9."
+    ],
+    "level": "Starter",
+    "number": null,
+    "title_bn": "অতিরিক্ত ভ্যারিয়েবল ছাড়া swap",
+    "why_bn": [
+      "অ্যাসাইনমেন্টের আগে ডান পাশের পুরো অংশটি পুরোনো মান দিয়ে হিসাব হয়: b হলো 7 এবং a + b হলো 9।",
+      "আবার ট্রেস করুন। অ্যাসাইনমেন্টের আগে ডান পাশের পুরো অংশটি পুরোনো মান দিয়ে হিসাব হয়: b হলো 7 এবং a + b হলো 9।",
+      "আবার ট্রেস করুন। অ্যাসাইনমেন্টের আগে ডান পাশের পুরো অংশটি পুরোনো মান দিয়ে হিসাব হয়: b হলো 7 এবং a + b হলো 9।"
+    ]
+  },
+  {
+    "id": "negative-index",
+    "stage": "basics",
+    "topic": "Indices",
+    "title": "Count from the end",
+    "code": "nums = [10, 20, 30, 40]\nprint(nums[-2])",
+    "options": [
+      "20",
+      "30",
+      "40"
+    ],
+    "answer": 1,
+    "why": [
+      "Trace it again. Index -1 is the last element, so -2 is the second-last element: 30.",
+      "Index -1 is the last element, so -2 is the second-last element: 30.",
+      "Trace it again. Index -1 is the last element, so -2 is the second-last element: 30."
+    ],
+    "level": "Starter",
+    "number": null,
+    "title_bn": "শেষ দিক থেকে গোনা",
+    "why_bn": [
+      "আবার ট্রেস করুন। index -1 হলো শেষ উপাদান, তাই -2 হলো শেষের আগের উপাদান: 30।",
+      "index -1 হলো শেষ উপাদান, তাই -2 হলো শেষের আগের উপাদান: 30।",
+      "আবার ট্রেস করুন। index -1 হলো শেষ উপাদান, তাই -2 হলো শেষের আগের উপাদান: 30।"
+    ]
+  },
+  {
+    "id": "none-return",
+    "stage": "basics",
+    "topic": "Functions",
+    "title": "Distinguish mutation and return",
+    "code": "nums = [3, 1, 2]\nresult = nums.sort()\nprint(result, nums)",
+    "options": [
+      "[1, 2, 3] [3, 1, 2]",
+      "[1, 2, 3] [1, 2, 3]",
+      "None [1, 2, 3]"
+    ],
+    "answer": 2,
+    "why": [
+      "Trace it again. list.sort mutates the list in place and returns None. sorted(nums) would return a new list.",
+      "Trace it again. list.sort mutates the list in place and returns None. sorted(nums) would return a new list.",
+      "list.sort mutates the list in place and returns None. sorted(nums) would return a new list."
+    ],
+    "level": "Starter",
+    "number": null,
+    "title_bn": "পরিবর্তন (mutation) ও return-এর পার্থক্য",
+    "why_bn": [
+      "আবার ট্রেস করুন। list.sort লিস্টটিকে জায়গাতেই (in place) পরিবর্তন করে এবং None রিটার্ন করে। sorted(nums) নতুন লিস্ট রিটার্ন করত।",
+      "আবার ট্রেস করুন। list.sort লিস্টটিকে জায়গাতেই (in place) পরিবর্তন করে এবং None রিটার্ন করে। sorted(nums) নতুন লিস্ট রিটার্ন করত।",
+      "list.sort লিস্টটিকে জায়গাতেই (in place) পরিবর্তন করে এবং None রিটার্ন করে। sorted(nums) নতুন লিস্ট রিটার্ন করত।"
+    ]
+  },
+  {
+    "id": "nested-alias",
+    "stage": "collections",
+    "topic": "Mutability",
+    "title": "Build independent grid rows",
+    "code": "grid = [[0] * 2] * 2\ngrid[0][0] = 1\nprint(grid)",
+    "options": [
+      "[[1, 0], [1, 0]]",
+      "[[1, 0], [0, 0]]",
+      "[[1, 1], [1, 1]]"
+    ],
+    "answer": 0,
+    "why": [
+      "Multiplication repeats references to the same inner list. Use [[0] * 2 for _ in range(2)] for independent rows.",
+      "Trace it again. Multiplication repeats references to the same inner list. Use [[0] * 2 for _ in range(2)] for independent rows.",
+      "Trace it again. Multiplication repeats references to the same inner list. Use [[0] * 2 for _ in range(2)] for independent rows."
+    ],
+    "level": "Starter",
+    "number": null,
+    "title_bn": "স্বাধীন grid সারি তৈরি করা",
+    "why_bn": [
+      "গুণ (*) করলে একই ভেতরের লিস্টের রেফারেন্স বারবার কপি হয়। স্বাধীন সারি পেতে [[0] * 2 for _ in range(2)] ব্যবহার করুন।",
+      "আবার ট্রেস করুন। গুণ (*) করলে একই ভেতরের লিস্টের রেফারেন্স বারবার কপি হয়। স্বাধীন সারি পেতে [[0] * 2 for _ in range(2)] ব্যবহার করুন।",
+      "আবার ট্রেস করুন। গুণ (*) করলে একই ভেতরের লিস্টের রেফারেন্স বারবার কপি হয়। স্বাধীন সারি পেতে [[0] * 2 for _ in range(2)] ব্যবহার করুন।"
+    ]
+  },
+  {
+    "id": "dict-update",
+    "stage": "collections",
+    "topic": "Hash maps",
+    "title": "Count repeated values",
+    "code": "counts = {}\nfor ch in 'aba':\n    counts[ch] = counts.get(ch, 0) + 1\nprint(counts['a'])",
+    "options": [
+      "1",
+      "2",
+      "3"
+    ],
+    "answer": 1,
+    "why": [
+      "Trace it again. The first a creates count 1 and the second increases it to 2. get supplies zero for a missing key.",
+      "The first a creates count 1 and the second increases it to 2. get supplies zero for a missing key.",
+      "Trace it again. The first a creates count 1 and the second increases it to 2. get supplies zero for a missing key."
+    ],
+    "level": "Starter",
+    "number": "242",
+    "title_bn": "পুনরাবৃত্ত মান গণনা",
+    "why_bn": [
+      "আবার ট্রেস করুন। প্রথম a-তে গণনা হয় 1 এবং দ্বিতীয়টিতে বেড়ে হয় 2। অনুপস্থিত key-এর জন্য get শূন্য সরবরাহ করে।",
+      "প্রথম a-তে গণনা হয় 1 এবং দ্বিতীয়টিতে বেড়ে হয় 2। অনুপস্থিত key-এর জন্য get শূন্য সরবরাহ করে।",
+      "আবার ট্রেস করুন। প্রথম a-তে গণনা হয় 1 এবং দ্বিতীয়টিতে বেড়ে হয় 2। অনুপস্থিত key-এর জন্য get শূন্য সরবরাহ করে।"
+    ]
+  },
+  {
+    "id": "counter-missing",
+    "stage": "collections",
+    "topic": "Hash maps",
+    "title": "Read a missing frequency",
+    "code": "from collections import Counter\nc = Counter('aba')\nprint(c['z'])",
+    "options": [
+      "None",
+      "KeyError",
+      "0"
+    ],
+    "answer": 2,
+    "why": [
+      "Trace it again. Counter returns zero for a missing key, which is useful when comparing frequency requirements.",
+      "Trace it again. Counter returns zero for a missing key, which is useful when comparing frequency requirements.",
+      "Counter returns zero for a missing key, which is useful when comparing frequency requirements."
+    ],
+    "level": "Starter",
+    "number": "242",
+    "title_bn": "অনুপস্থিত frequency পড়া",
+    "why_bn": [
+      "আবার ট্রেস করুন। Counter অনুপস্থিত key-এর জন্য শূন্য রিটার্ন করে, যা frequency শর্ত তুলনা করার সময় খুবই কাজে আসে।",
+      "আবার ট্রেস করুন। Counter অনুপস্থিত key-এর জন্য শূন্য রিটার্ন করে, যা frequency শর্ত তুলনা করার সময় খুবই কাজে আসে।",
+      "Counter অনুপস্থিত key-এর জন্য শূন্য রিটার্ন করে, যা frequency শর্ত তুলনা করার সময় খুবই কাজে আসে।"
+    ]
+  },
+  {
+    "id": "set-intersection",
+    "stage": "collections",
+    "topic": "Sets",
+    "title": "Find common values",
+    "code": "print(sorted({1, 2, 3} & {2, 3, 4}))",
+    "options": [
+      "[2, 3]",
+      "[1, 2, 3, 4]",
+      "[1, 4]"
+    ],
+    "answer": 0,
+    "why": [
+      "& is set intersection: keep values present in both sets. sorted makes the printed order deterministic.",
+      "Trace it again. & is set intersection: keep values present in both sets. sorted makes the printed order deterministic.",
+      "Trace it again. & is set intersection: keep values present in both sets. sorted makes the printed order deterministic."
+    ],
+    "level": "Starter",
+    "number": null,
+    "title_bn": "সাধারণ (common) মান খোঁজা",
+    "why_bn": [
+      "& হলো set intersection: কেবল দুই set-এই থাকা মানগুলো রাখে। sorted আউটপুটের ক্রম নির্দিষ্ট রাখে।",
+      "আবার ট্রেস করুন। & হলো set intersection: কেবল দুই set-এই থাকা মানগুলো রাখে। sorted আউটপুটের ক্রম নির্দিষ্ট রাখে।",
+      "আবার ট্রেস করুন। & হলো set intersection: কেবল দুই set-এই থাকা মানগুলো রাখে। sorted আউটপুটের ক্রম নির্দিষ্ট রাখে।"
+    ]
+  },
+  {
+    "id": "set-discard",
+    "stage": "collections",
+    "topic": "Sets",
+    "title": "Remove a value safely",
+    "code": "seen = {1, 2}\nseen.discard(9)\nprint(len(seen))",
+    "options": [
+      "1",
+      "2",
+      "KeyError"
+    ],
+    "answer": 1,
+    "why": [
+      "Trace it again. discard does nothing when the value is absent. remove would raise KeyError instead.",
+      "discard does nothing when the value is absent. remove would raise KeyError instead.",
+      "Trace it again. discard does nothing when the value is absent. remove would raise KeyError instead."
+    ],
+    "level": "Starter",
+    "number": null,
+    "title_bn": "নিরাপদে মান মুছে ফেলা",
+    "why_bn": [
+      "আবার ট্রেস করুন। মানটি না থাকলেও discard কিছু করে না। এর বদলে remove ব্যবহার করলে KeyError হতো।",
+      "মানটি না থাকলেও discard কিছু করে না। এর বদলে remove ব্যবহার করলে KeyError হতো।",
+      "আবার ট্রেস করুন। মানটি না থাকলেও discard কিছু করে না। এর বদলে remove ব্যবহার করলে KeyError হতো।"
+    ]
+  },
+  {
+    "id": "dict-keys",
+    "stage": "collections",
+    "topic": "Hash maps",
+    "title": "Know what membership checks",
+    "code": "scores = {'a': 3}\nprint(3 in scores, 'a' in scores)",
+    "options": [
+      "True True",
+      "True False",
+      "False True"
+    ],
+    "answer": 2,
+    "why": [
+      "Trace it again. Dictionary membership checks keys. Use 3 in scores.values() to check values.",
+      "Trace it again. Dictionary membership checks keys. Use 3 in scores.values() to check values.",
+      "Dictionary membership checks keys. Use 3 in scores.values() to check values."
+    ],
+    "level": "Starter",
+    "number": null,
+    "title_bn": "in অপারেটর কী পরীক্ষা করে",
+    "why_bn": [
+      "আবার ট্রেস করুন। dict-এ membership পরীক্ষা (in) কেবল key যাচাই করে। মান যাচাই করতে 3 in scores.values() ব্যবহার করুন।",
+      "আবার ট্রেস করুন। dict-এ membership পরীক্ষা (in) কেবল key যাচাই করে। মান যাচাই করতে 3 in scores.values() ব্যবহার করুন।",
+      "dict-এ membership পরীক্ষা (in) কেবল key যাচাই করে। মান যাচাই করতে 3 in scores.values() ব্যবহার করুন।"
+    ]
+  },
+  {
+    "id": "tuple-key",
+    "stage": "collections",
+    "topic": "Hash maps",
+    "title": "Use coordinates as keys",
+    "code": "seen = {(1, 2): 7}\nprint(seen[(1, 2)])",
+    "options": [
+      "7",
+      "(1, 2)",
+      "TypeError"
+    ],
+    "answer": 0,
+    "why": [
+      "A tuple of integers is hashable, so it can be a dictionary key. A mutable list cannot.",
+      "Trace it again. A tuple of integers is hashable, so it can be a dictionary key. A mutable list cannot.",
+      "Trace it again. A tuple of integers is hashable, so it can be a dictionary key. A mutable list cannot."
+    ],
+    "level": "Starter",
+    "number": null,
+    "title_bn": "স্থানাঙ্ককে (coordinate) key হিসেবে ব্যবহার",
+    "why_bn": [
+      "পূর্ণসংখ্যার tuple hashable, তাই এটি dict-এর key হতে পারে। পরিবর্তনশীল (mutable) list key হতে পারে না।",
+      "আবার ট্রেস করুন। পূর্ণসংখ্যার tuple hashable, তাই এটি dict-এর key হতে পারে। পরিবর্তনশীল (mutable) list key হতে পারে না।",
+      "আবার ট্রেস করুন। পূর্ণসংখ্যার tuple hashable, তাই এটি dict-এর key হতে পারে। পরিবর্তনশীল (mutable) list key হতে পারে না।"
+    ]
+  },
+  {
+    "id": "defaultdict-list",
+    "stage": "collections",
+    "topic": "Hash maps",
+    "title": "Group values",
+    "code": "from collections import defaultdict\ngroups = defaultdict(list)\ngroups['a'].append(3)\nprint(groups['a'])",
+    "options": [
+      "3",
+      "[3]",
+      "KeyError"
+    ],
+    "answer": 1,
+    "why": [
+      "Trace it again. defaultdict(list) creates an empty list on the first missing-key lookup, then append adds 3.",
+      "defaultdict(list) creates an empty list on the first missing-key lookup, then append adds 3.",
+      "Trace it again. defaultdict(list) creates an empty list on the first missing-key lookup, then append adds 3."
+    ],
+    "level": "Starter",
+    "number": "49",
+    "title_bn": "মানগুলোকে দলে সাজানো",
+    "why_bn": [
+      "আবার ট্রেস করুন। প্রথমবার অনুপস্থিত key খুঁজলে defaultdict(list) একটি খালি লিস্ট তৈরি করে, এরপর append তাতে 3 যোগ করে।",
+      "প্রথমবার অনুপস্থিত key খুঁজলে defaultdict(list) একটি খালি লিস্ট তৈরি করে, এরপর append তাতে 3 যোগ করে।",
+      "আবার ট্রেস করুন। প্রথমবার অনুপস্থিত key খুঁজলে defaultdict(list) একটি খালি লিস্ট তৈরি করে, এরপর append তাতে 3 যোগ করে।"
+    ]
+  },
+  {
+    "id": "list-extend",
+    "stage": "collections",
+    "topic": "Lists",
+    "title": "Append versus extend",
+    "code": "nums = [1]\nnums.append([2, 3])\nnums.extend([4, 5])\nprint(len(nums))",
+    "options": [
+      "5",
+      "3",
+      "4"
+    ],
+    "answer": 2,
+    "why": [
+      "Trace it again. append adds one list as one element; extend adds 4 and 5 separately. The result has four elements.",
+      "Trace it again. append adds one list as one element; extend adds 4 and 5 separately. The result has four elements.",
+      "append adds one list as one element; extend adds 4 and 5 separately. The result has four elements."
+    ],
+    "level": "Starter",
+    "number": null,
+    "title_bn": "append বনাম extend",
+    "why_bn": [
+      "আবার ট্রেস করুন। append পুরো লিস্টটিকে একটি একক উপাদান হিসেবে যোগ করে; extend 4 এবং 5-কে আলাদাভাবে যোগ করে। ফলে মোট উপাদান হয় চারটি।",
+      "আবার ট্রেস করুন। append পুরো লিস্টটিকে একটি একক উপাদান হিসেবে যোগ করে; extend 4 এবং 5-কে আলাদাভাবে যোগ করে। ফলে মোট উপাদান হয় চারটি।",
+      "append পুরো লিস্টটিকে একটি একক উপাদান হিসেবে যোগ করে; extend 4 এবং 5-কে আলাদাভাবে যোগ করে। ফলে মোট উপাদান হয় চারটি।"
+    ]
+  },
+  {
+    "id": "generator-once",
+    "stage": "collections",
+    "topic": "Iteration",
+    "title": "Recognize one-pass iterators",
+    "code": "values = (x * x for x in [1, 2, 3])\nprint(sum(values), sum(values))",
+    "options": [
+      "14 0",
+      "14 14",
+      "6 0"
+    ],
+    "answer": 0,
+    "why": [
+      "The first sum consumes the generator: 1 + 4 + 9 = 14. An exhausted generator produces no more values.",
+      "Trace it again. The first sum consumes the generator: 1 + 4 + 9 = 14. An exhausted generator produces no more values.",
+      "Trace it again. The first sum consumes the generator: 1 + 4 + 9 = 14. An exhausted generator produces no more values."
+    ],
+    "level": "Starter",
+    "number": null,
+    "title_bn": "এক-পাসের iterator চেনা",
+    "why_bn": [
+      "প্রথম sum generator-টি শেষ করে ফেলে: 1 + 4 + 9 = 14। নিঃশেষিত generator আর কোনো মান দেয় না।",
+      "আবার ট্রেস করুন। প্রথম sum generator-টি শেষ করে ফেলে: 1 + 4 + 9 = 14। নিঃশেষিত generator আর কোনো মান দেয় না।",
+      "আবার ট্রেস করুন। প্রথম sum generator-টি শেষ করে ফেলে: 1 + 4 + 9 = 14। নিঃশেষিত generator আর কোনো মান দেয় না।"
+    ]
+  },
+  {
+    "id": "dict-items",
+    "stage": "collections",
+    "topic": "Hash maps",
+    "title": "Traverse keys and values",
+    "code": "d = {'a': 2, 'b': 3}\nprint(sum(value for key, value in d.items()))",
+    "options": [
+      "2",
+      "5",
+      "3"
+    ],
+    "answer": 1,
+    "why": [
+      "Trace it again. items yields (key, value) pairs. The generator selects each value, so sum adds 2 and 3.",
+      "items yields (key, value) pairs. The generator selects each value, so sum adds 2 and 3.",
+      "Trace it again. items yields (key, value) pairs. The generator selects each value, so sum adds 2 and 3."
+    ],
+    "level": "Starter",
+    "number": null,
+    "title_bn": "key ও value একসাথে ঘোরা",
+    "why_bn": [
+      "আবার ট্রেস করুন। items() (key, value) জোড়া দেয়। generator প্রতিটি value বেছে নেয়, তাই sum 2 এবং 3 যোগ করে।",
+      "items() (key, value) জোড়া দেয়। generator প্রতিটি value বেছে নেয়, তাই sum 2 এবং 3 যোগ করে।",
+      "আবার ট্রেস করুন। items() (key, value) জোড়া দেয়। generator প্রতিটি value বেছে নেয়, তাই sum 2 এবং 3 যোগ করে।"
+    ]
+  },
+  {
+    "id": "nested-copy",
+    "stage": "collections",
+    "topic": "Mutability",
+    "title": "Understand a shallow copy",
+    "code": "a = [[1], [2]]\nb = a.copy()\nb[0].append(3)\nprint(a[0])",
+    "options": [
+      "[1]",
+      "[3]",
+      "[1, 3]"
+    ],
+    "answer": 2,
+    "why": [
+      "Trace it again. copy creates a new outer list but shares inner lists. Mutating b[0] also changes a[0].",
+      "Trace it again. copy creates a new outer list but shares inner lists. Mutating b[0] also changes a[0].",
+      "copy creates a new outer list but shares inner lists. Mutating b[0] also changes a[0]."
+    ],
+    "level": "Starter",
+    "number": null,
+    "title_bn": "Shallow copy-র আচরণ বোঝা",
+    "why_bn": [
+      "আবার ট্রেস করুন। copy() নতুন বাইরের লিস্ট বানালেও ভেতরের লিস্টগুলো শেয়ার করে। তাই b[0] পরিবর্তন করলে a[0]-ও বদলে যায়।",
+      "আবার ট্রেস করুন। copy() নতুন বাইরের লিস্ট বানালেও ভেতরের লিস্টগুলো শেয়ার করে। তাই b[0] পরিবর্তন করলে a[0]-ও বদলে যায়।",
+      "copy() নতুন বাইরের লিস্ট বানালেও ভেতরের লিস্টগুলো শেয়ার করে। তাই b[0] পরিবর্তন করলে a[0]-ও বদলে যায়।"
+    ]
+  },
+  {
+    "id": "running-prefix",
+    "stage": "arrays",
+    "topic": "Prefix sums",
+    "title": "Build a prefix array",
+    "code": "prefix = [0]\nfor x in [2, -1, 4]:\n    prefix.append(prefix[-1] + x)\nprint(prefix)",
+    "options": [
+      "[0, 2, 1, 5]",
+      "[2, -1, 4]",
+      "[0, 2, -1, 4]"
+    ],
+    "answer": 0,
+    "why": [
+      "Each entry adds the next value to the previous prefix. The leading zero represents the empty prefix.",
+      "Trace it again. Each entry adds the next value to the previous prefix. The leading zero represents the empty prefix.",
+      "Trace it again. Each entry adds the next value to the previous prefix. The leading zero represents the empty prefix."
+    ],
+    "level": "DSA",
+    "number": "560",
+    "title_bn": "prefix অ্যারে তৈরি করা",
+    "why_bn": [
+      "প্রতিটি ধাপে আগের prefix-এর সাথে পরের মান যোগ হয়। শুরুর শূন্যটি খালি prefix নির্দেশ করে।",
+      "আবার ট্রেস করুন। প্রতিটি ধাপে আগের prefix-এর সাথে পরের মান যোগ হয়। শুরুর শূন্যটি খালি prefix নির্দেশ করে।",
+      "আবার ট্রেস করুন। প্রতিটি ধাপে আগের prefix-এর সাথে পরের মান যোগ হয়। শুরুর শূন্যটি খালি prefix নির্দেশ করে।"
+    ]
+  },
+  {
+    "id": "range-prefix",
+    "stage": "arrays",
+    "topic": "Prefix sums",
+    "title": "Answer a range sum",
+    "code": "prefix = [0, 2, 5, 9, 14]\nprint(prefix[4] - prefix[1])",
+    "options": [
+      "14",
+      "12",
+      "9"
+    ],
+    "answer": 1,
+    "why": [
+      "Trace it again. Subtract the sum before index 1 from the sum through index 3: 3 + 4 + 5 = 12. Each query is O(1).",
+      "Subtract the sum before index 1 from the sum through index 3: 3 + 4 + 5 = 12. Each query is O(1).",
+      "Trace it again. Subtract the sum before index 1 from the sum through index 3: 3 + 4 + 5 = 12. Each query is O(1)."
+    ],
+    "level": "DSA",
+    "number": "560",
+    "title_bn": "নির্দিষ্ট পরিসরের যোগফল বের করা",
+    "why_bn": [
+      "আবার ট্রেস করুন। index 3 পর্যন্ত যোগফল থেকে index 1-এর আগের যোগফল বিয়োগ করুন: 3 + 4 + 5 = 12। প্রতিটি query O(1) সময়ে হয়।",
+      "index 3 পর্যন্ত যোগফল থেকে index 1-এর আগের যোগফল বিয়োগ করুন: 3 + 4 + 5 = 12। প্রতিটি query O(1) সময়ে হয়।",
+      "আবার ট্রেস করুন। index 3 পর্যন্ত যোগফল থেকে index 1-এর আগের যোগফল বিয়োগ করুন: 3 + 4 + 5 = 12। প্রতিটি query O(1) সময়ে হয়।"
+    ]
+  },
+  {
+    "id": "two-sum-complement",
+    "stage": "arrays",
+    "topic": "Hashing",
+    "title": "Find a complementary value",
+    "code": "seen = {}\nfor i, x in enumerate([2, 7, 11]):\n    if 9 - x in seen:\n        print(seen[9 - x], i)\n        break\n    seen[x] = i",
+    "options": [
+      "1 0",
+      "0 2",
+      "0 1"
+    ],
+    "answer": 2,
+    "why": [
+      "Trace it again. At index 1 the complement of 7 is 2, already stored at index 0. Checking before insertion prevents self-matching.",
+      "Trace it again. At index 1 the complement of 7 is 2, already stored at index 0. Checking before insertion prevents self-matching.",
+      "At index 1 the complement of 7 is 2, already stored at index 0. Checking before insertion prevents self-matching."
+    ],
+    "level": "DSA",
+    "number": "1",
+    "title_bn": "পরিপূরক (complement) মান খোঁজা",
+    "why_bn": [
+      "আবার ট্রেস করুন। index 1-এ 7-এর complement হলো 2, যা আগেই index 0-তে সংরক্ষিত আছে। যোগ করার আগে পরীক্ষা করলে নিজের সাথে মিলে যাওয়া ঠেকানো যায়।",
+      "আবার ট্রেস করুন। index 1-এ 7-এর complement হলো 2, যা আগেই index 0-তে সংরক্ষিত আছে। যোগ করার আগে পরীক্ষা করলে নিজের সাথে মিলে যাওয়া ঠেকানো যায়।",
+      "index 1-এ 7-এর complement হলো 2, যা আগেই index 0-তে সংরক্ষিত আছে। যোগ করার আগে পরীক্ষা করলে নিজের সাথে মিলে যাওয়া ঠেকানো যায়।"
+    ]
+  },
+  {
+    "id": "duplicate-detection",
+    "stage": "arrays",
+    "topic": "Hashing",
+    "title": "Detect repeated elements",
+    "code": "nums = [4, 1, 4, 2]\nprint(len(set(nums)) < len(nums))",
+    "options": [
+      "True",
+      "False",
+      "3"
+    ],
+    "answer": 0,
+    "why": [
+      "The set has 3 unique values and the list has 4 entries, so at least one duplicate exists.",
+      "Trace it again. The set has 3 unique values and the list has 4 entries, so at least one duplicate exists.",
+      "Trace it again. The set has 3 unique values and the list has 4 entries, so at least one duplicate exists."
+    ],
+    "level": "DSA",
+    "number": "217",
+    "title_bn": "পুনরাবৃত্ত উপাদান শনাক্ত করা",
+    "why_bn": [
+      "set-এ 3টি অনন্য মান আছে আর লিস্টে 4টি উপাদান, তাই অন্তত একটি ডুপ্লিকেট রয়েছে।",
+      "আবার ট্রেস করুন। set-এ 3টি অনন্য মান আছে আর লিস্টে 4টি উপাদান, তাই অন্তত একটি ডুপ্লিকেট রয়েছে।",
+      "আবার ট্রেস করুন। set-এ 3টি অনন্য মান আছে আর লিস্টে 4টি উপাদান, তাই অন্তত একটি ডুপ্লিকেট রয়েছে।"
+    ]
+  },
+  {
+    "id": "window-fixed",
+    "stage": "arrays",
+    "topic": "Sliding window",
+    "title": "Move a fixed-size window",
+    "code": "nums = [2, 1, 5, 1]\nwindow = sum(nums[:3])\nwindow += nums[3] - nums[0]\nprint(window)",
+    "options": [
+      "8",
+      "7",
+      "9"
+    ],
+    "answer": 1,
+    "why": [
+      "Trace it again. Remove the leaving value 2 and add the arriving value 1. The next window is [1, 5, 1], with sum 7.",
+      "Remove the leaving value 2 and add the arriving value 1. The next window is [1, 5, 1], with sum 7.",
+      "Trace it again. Remove the leaving value 2 and add the arriving value 1. The next window is [1, 5, 1], with sum 7."
+    ],
+    "level": "DSA",
+    "number": null,
+    "title_bn": "নির্দিষ্ট আকারের window সরানো",
+    "why_bn": [
+      "আবার ট্রেস করুন। বেরিয়ে যাওয়া মান 2 বাদ দিন এবং নতুন আসা মান 1 যোগ করুন। পরের window হলো [1, 5, 1], যার যোগফল 7।",
+      "বেরিয়ে যাওয়া মান 2 বাদ দিন এবং নতুন আসা মান 1 যোগ করুন। পরের window হলো [1, 5, 1], যার যোগফল 7।",
+      "আবার ট্রেস করুন। বেরিয়ে যাওয়া মান 2 বাদ দিন এবং নতুন আসা মান 1 যোগ করুন। পরের window হলো [1, 5, 1], যার যোগফল 7।"
+    ]
+  },
+  {
+    "id": "window-longest",
+    "stage": "arrays",
+    "topic": "Sliding window",
+    "title": "Shrink until all values are unique",
+    "code": "seen = set()\nleft = best = 0\ntext = 'abba'\nfor right, ch in enumerate(text):\n    while ch in seen:\n        seen.remove(text[left])\n        left += 1\n    seen.add(ch)\n    best = max(best, right - left + 1)\nprint(best)",
+    "options": [
+      "3",
+      "4",
+      "2"
+    ],
+    "answer": 2,
+    "why": [
+      "Trace it again. The repeated b forces repeated shrinking. The longest unique substrings are ab and ba, both length 2.",
+      "Trace it again. The repeated b forces repeated shrinking. The longest unique substrings are ab and ba, both length 2.",
+      "The repeated b forces repeated shrinking. The longest unique substrings are ab and ba, both length 2."
+    ],
+    "level": "DSA",
+    "number": "3",
+    "title_bn": "সব মান অনন্য না হওয়া পর্যন্ত ছোট করা",
+    "why_bn": [
+      "আবার ট্রেস করুন। পুনরাবৃত্ত b-এর কারণে একাধিকবার window ছোট করতে হয়। সবচেয়ে বড় অনন্য substring হলো ab ও ba, দুটিরই দৈর্ঘ্য 2।",
+      "আবার ট্রেস করুন। পুনরাবৃত্ত b-এর কারণে একাধিকবার window ছোট করতে হয়। সবচেয়ে বড় অনন্য substring হলো ab ও ba, দুটিরই দৈর্ঘ্য 2।",
+      "পুনরাবৃত্ত b-এর কারণে একাধিকবার window ছোট করতে হয়। সবচেয়ে বড় অনন্য substring হলো ab ও ba, দুটিরই দৈর্ঘ্য 2।"
+    ]
+  },
+  {
+    "id": "sorted-two-pointers",
+    "stage": "arrays",
+    "topic": "Two pointers",
+    "title": "Search a sorted pair",
+    "code": "nums = [1, 3, 4, 6]\nleft, right = 0, 3\nwhile left < right:\n    total = nums[left] + nums[right]\n    if total == 7:\n        break\n    if total < 7:\n        left += 1\n    else:\n        right -= 1\nprint(left, right)",
+    "options": [
+      "0 3",
+      "1 2",
+      "0 2"
+    ],
+    "answer": 0,
+    "why": [
+      "The first pair is 1 + 6 = 7, so the loop stops immediately. Sorted order allows inward pointer moves.",
+      "Trace it again. The first pair is 1 + 6 = 7, so the loop stops immediately. Sorted order allows inward pointer moves.",
+      "Trace it again. The first pair is 1 + 6 = 7, so the loop stops immediately. Sorted order allows inward pointer moves."
+    ],
+    "level": "DSA",
+    "number": "167",
+    "title_bn": "sorted জোড়া খোঁজা",
+    "why_bn": [
+      "প্রথম জোড়াটিই 1 + 6 = 7, তাই লুপ সঙ্গে সঙ্গে থেমে যায়। sorted ক্রম থাকায় pointer ভেতরের দিকে সরানো যায়।",
+      "আবার ট্রেস করুন। প্রথম জোড়াটিই 1 + 6 = 7, তাই লুপ সঙ্গে সঙ্গে থেমে যায়। sorted ক্রম থাকায় pointer ভেতরের দিকে সরানো যায়।",
+      "আবার ট্রেস করুন। প্রথম জোড়াটিই 1 + 6 = 7, তাই লুপ সঙ্গে সঙ্গে থেমে যায়। sorted ক্রম থাকায় pointer ভেতরের দিকে সরানো যায়।"
+    ]
+  },
+  {
+    "id": "palindrome-pointers",
+    "stage": "arrays",
+    "topic": "Two pointers",
+    "title": "Compare inward",
+    "code": "text = 'abba'\nleft, right = 0, len(text) - 1\nwhile left < right and text[left] == text[right]:\n    left += 1\n    right -= 1\nprint(left >= right)",
+    "options": [
+      "False",
+      "True",
+      "None"
+    ],
+    "answer": 1,
+    "why": [
+      "Trace it again. Both outer pairs match. The pointers meet or cross, so no mismatch was found.",
+      "Both outer pairs match. The pointers meet or cross, so no mismatch was found.",
+      "Trace it again. Both outer pairs match. The pointers meet or cross, so no mismatch was found."
+    ],
+    "level": "DSA",
+    "number": "125",
+    "title_bn": "ভেতরের দিকে তুলনা করা",
+    "why_bn": [
+      "আবার ট্রেস করুন। দুই বাইরের জোড়াই মিলে গেছে। pointer দুটি মিলে যায় বা একে অপরকে পেরিয়ে যায়, অর্থাৎ কোনো অমিল পাওয়া যায়নি।",
+      "দুই বাইরের জোড়াই মিলে গেছে। pointer দুটি মিলে যায় বা একে অপরকে পেরিয়ে যায়, অর্থাৎ কোনো অমিল পাওয়া যায়নি।",
+      "আবার ট্রেস করুন। দুই বাইরের জোড়াই মিলে গেছে। pointer দুটি মিলে যায় বা একে অপরকে পেরিয়ে যায়, অর্থাৎ কোনো অমিল পাওয়া যায়নি।"
+    ]
+  },
+  {
+    "id": "move-zeroes",
+    "stage": "arrays",
+    "topic": "Two pointers",
+    "title": "Compact nonzero values",
+    "code": "nums = [0, 1, 0, 3]\nwrite = 0\nfor read in range(len(nums)):\n    if nums[read] != 0:\n        nums[write], nums[read] = nums[read], nums[write]\n        write += 1\nprint(nums)",
+    "options": [
+      "[0, 0, 1, 3]",
+      "[1, 0, 3, 0]",
+      "[1, 3, 0, 0]"
+    ],
+    "answer": 2,
+    "why": [
+      "Trace it again. write tracks the next nonzero slot. Swapping each nonzero there preserves nonzero order in O(n) time.",
+      "Trace it again. write tracks the next nonzero slot. Swapping each nonzero there preserves nonzero order in O(n) time.",
+      "write tracks the next nonzero slot. Swapping each nonzero there preserves nonzero order in O(n) time."
+    ],
+    "level": "DSA",
+    "number": "283",
+    "title_bn": "অ-শূন্য (nonzero) মান গুছিয়ে আনা",
+    "why_bn": [
+      "আবার ট্রেস করুন। write পরবর্তী অ-শূন্য জায়গা ট্র্যাক করে। প্রতিটি অ-শূন্য মান সেখানে swap করলে O(n) সময়ে তাদের ক্রম অক্ষুণ্ণ থাকে।",
+      "আবার ট্রেস করুন। write পরবর্তী অ-শূন্য জায়গা ট্র্যাক করে। প্রতিটি অ-শূন্য মান সেখানে swap করলে O(n) সময়ে তাদের ক্রম অক্ষুণ্ণ থাকে।",
+      "write পরবর্তী অ-শূন্য জায়গা ট্র্যাক করে। প্রতিটি অ-শূন্য মান সেখানে swap করলে O(n) সময়ে তাদের ক্রম অক্ষুণ্ণ থাকে।"
+    ]
+  },
+  {
+    "id": "kadane-reset",
+    "stage": "arrays",
+    "topic": "Dynamic programming",
+    "title": "Keep the best ending sum",
+    "code": "nums = [-2, 3, -1, 2]\ncurrent = best = nums[0]\nfor x in nums[1:]:\n    current = max(x, current + x)\n    best = max(best, current)\nprint(best)",
+    "options": [
+      "4",
+      "3",
+      "2"
+    ],
+    "answer": 0,
+    "why": [
+      "At 3 it is better to start fresh. Extending through -1 and 2 gives 4. Initializing from nums[0] handles all-negative arrays.",
+      "Trace it again. At 3 it is better to start fresh. Extending through -1 and 2 gives 4. Initializing from nums[0] handles all-negative arrays.",
+      "Trace it again. At 3 it is better to start fresh. Extending through -1 and 2 gives 4. Initializing from nums[0] handles all-negative arrays."
+    ],
+    "level": "DSA",
+    "number": "53",
+    "title_bn": "সর্বোচ্চ শেষ-যোগফল ধরে রাখা",
+    "why_bn": [
+      "3-এ এসে নতুন করে শুরু করাই ভালো। -1 ও 2 যোগ করে এগোলে পাওয়া যায় 4। nums[0] দিয়ে শুরু করলে সব-ঋণাত্মক অ্যারেও সঠিকভাবে চলে।",
+      "আবার ট্রেস করুন। 3-এ এসে নতুন করে শুরু করাই ভালো। -1 ও 2 যোগ করে এগোলে পাওয়া যায় 4। nums[0] দিয়ে শুরু করলে সব-ঋণাত্মক অ্যারেও সঠিকভাবে চলে।",
+      "আবার ট্রেস করুন। 3-এ এসে নতুন করে শুরু করাই ভালো। -1 ও 2 যোগ করে এগোলে পাওয়া যায় 4। nums[0] দিয়ে শুরু করলে সব-ঋণাত্মক অ্যারেও সঠিকভাবে চলে।"
+    ]
+  },
+  {
+    "id": "stock-minimum",
+    "stage": "arrays",
+    "topic": "Greedy",
+    "title": "Track the cheapest earlier price",
+    "code": "low = float(\"inf\")\nbest = 0\nfor price in [7, 1, 5, 3, 6]:\n    low = min(low, price)\n    best = max(best, price - low)\nprint(best)",
+    "options": [
+      "6",
+      "5",
+      "4"
+    ],
+    "answer": 1,
+    "why": [
+      "Trace it again. Buying at 1 and later selling at 6 yields 5. The running minimum always comes from the current or an earlier day.",
+      "Buying at 1 and later selling at 6 yields 5. The running minimum always comes from the current or an earlier day.",
+      "Trace it again. Buying at 1 and later selling at 6 yields 5. The running minimum always comes from the current or an earlier day."
+    ],
+    "level": "DSA",
+    "number": "121",
+    "title_bn": "আগের সর্বনিম্ন দাম ট্র্যাক করা",
+    "why_bn": [
+      "আবার ট্রেস করুন। 1 দামে কিনে পরে 6 দামে বেচলে লাভ হয় 5। চলমান সর্বনিম্ন দাম সবসময় বর্তমান বা তার আগের কোনো দিন থেকে আসে।",
+      "1 দামে কিনে পরে 6 দামে বেচলে লাভ হয় 5। চলমান সর্বনিম্ন দাম সবসময় বর্তমান বা তার আগের কোনো দিন থেকে আসে।",
+      "আবার ট্রেস করুন। 1 দামে কিনে পরে 6 দামে বেচলে লাভ হয় 5। চলমান সর্বনিম্ন দাম সবসময় বর্তমান বা তার আগের কোনো দিন থেকে আসে।"
+    ]
+  },
+  {
+    "id": "product-prefix",
+    "stage": "arrays",
+    "topic": "Prefix sums",
+    "title": "Store products before each position",
+    "code": "result = []\nproduct = 1\nfor x in [2, 3, 4]:\n    result.append(product)\n    product *= x\nprint(result)",
+    "options": [
+      "[2, 6, 24]",
+      "[1, 3, 4]",
+      "[1, 2, 6]"
+    ],
+    "answer": 2,
+    "why": [
+      "Trace it again. Append before multiplying: each stored value is the product strictly to the left. A suffix pass completes product-except-self.",
+      "Trace it again. Append before multiplying: each stored value is the product strictly to the left. A suffix pass completes product-except-self.",
+      "Append before multiplying: each stored value is the product strictly to the left. A suffix pass completes product-except-self."
+    ],
+    "level": "DSA",
+    "number": "238",
+    "title_bn": "প্রতিটি অবস্থানের আগের গুণফল রাখা",
+    "why_bn": [
+      "আবার ট্রেস করুন। গুণ করার আগে append করুন: এতে সংরক্ষিত প্রতিটি মান তার পুরোপুরি বামের গুণফল হয়। এরপর একটি suffix পাস product-except-self সম্পূর্ণ করে।",
+      "আবার ট্রেস করুন। গুণ করার আগে append করুন: এতে সংরক্ষিত প্রতিটি মান তার পুরোপুরি বামের গুণফল হয়। এরপর একটি suffix পাস product-except-self সম্পূর্ণ করে।",
+      "গুণ করার আগে append করুন: এতে সংরক্ষিত প্রতিটি মান তার পুরোপুরি বামের গুণফল হয়। এরপর একটি suffix পাস product-except-self সম্পূর্ণ করে।"
+    ]
+  },
+  {
+    "id": "stack-lifo",
+    "stage": "linear",
+    "topic": "Stacks & queues",
+    "title": "Remove the newest item",
+    "code": "stack = [2, 4]\nstack.append(6)\nprint(stack.pop(), stack[-1])",
+    "options": [
+      "6 4",
+      "2 4",
+      "6 6"
+    ],
+    "answer": 0,
+    "why": [
+      "A list stack is last-in, first-out. pop removes 6, leaving 4 at the top.",
+      "Trace it again. A list stack is last-in, first-out. pop removes 6, leaving 4 at the top.",
+      "Trace it again. A list stack is last-in, first-out. pop removes 6, leaving 4 at the top."
+    ],
+    "level": "DSA",
+    "number": "20",
+    "title_bn": "সবচেয়ে নতুন উপাদান সরানো",
+    "why_bn": [
+      "লিস্ট দিয়ে তৈরি stack হলো last-in, first-out (LIFO)। pop করলে 6 সরে যায় এবং শীর্ষে থাকে 4।",
+      "আবার ট্রেস করুন। লিস্ট দিয়ে তৈরি stack হলো last-in, first-out (LIFO)। pop করলে 6 সরে যায় এবং শীর্ষে থাকে 4।",
+      "আবার ট্রেস করুন। লিস্ট দিয়ে তৈরি stack হলো last-in, first-out (LIFO)। pop করলে 6 সরে যায় এবং শীর্ষে থাকে 4।"
+    ]
+  },
+  {
+    "id": "bracket-stack",
+    "stage": "linear",
+    "topic": "Stacks & queues",
+    "title": "Match bracket types",
+    "code": "stack = []\npairs = {')': '(', ']': '['}\nvalid = True\nfor ch in '([)]':\n    if ch in '([':\n        stack.append(ch)\n    elif not stack or stack.pop() != pairs[ch]:\n        valid = False\n        break\nprint(valid and not stack)",
+    "options": [
+      "True",
+      "False",
+      "IndexError"
+    ],
+    "answer": 1,
+    "why": [
+      "Trace it again. When ) arrives the stack top is [, so the types do not match. Counting brackets alone misses this ordering error.",
+      "When ) arrives the stack top is [, so the types do not match. Counting brackets alone misses this ordering error.",
+      "Trace it again. When ) arrives the stack top is [, so the types do not match. Counting brackets alone misses this ordering error."
+    ],
+    "level": "DSA",
+    "number": "20",
+    "title_bn": "ব্র্যাকেটের ধরন মেলানো",
+    "why_bn": [
+      "আবার ট্রেস করুন। ) এলে stack-এর শীর্ষে পাওয়া যায় [, তাই ধরন মেলে না। শুধু ব্র্যাকেটের সংখ্যা গুনলে এই ক্রমগত ভুল ধরা পড়ে না।",
+      ") এলে stack-এর শীর্ষে পাওয়া যায় [, তাই ধরন মেলে না। শুধু ব্র্যাকেটের সংখ্যা গুনলে এই ক্রমগত ভুল ধরা পড়ে না।",
+      "আবার ট্রেস করুন। ) এলে stack-এর শীর্ষে পাওয়া যায় [, তাই ধরন মেলে না। শুধু ব্র্যাকেটের সংখ্যা গুনলে এই ক্রমগত ভুল ধরা পড়ে না।"
+    ]
+  },
+  {
+    "id": "monotonic-next",
+    "stage": "linear",
+    "topic": "Monotonic stack",
+    "title": "Resolve a warmer day",
+    "code": "temps = [70, 72, 71]\nstack = []\nwait = [0] * 3\nfor i, t in enumerate(temps):\n    while stack and temps[stack[-1]] < t:\n        j = stack.pop()\n        wait[j] = i - j\n    stack.append(i)\nprint(wait)",
+    "options": [
+      "[1, 1, 0]",
+      "[2, 0, 0]",
+      "[1, 0, 0]"
+    ],
+    "answer": 2,
+    "why": [
+      "Trace it again. 72 resolves the earlier 70 after one day. Neither 72 nor 71 has a later warmer day. Each index is pushed and popped at most once.",
+      "Trace it again. 72 resolves the earlier 70 after one day. Neither 72 nor 71 has a later warmer day. Each index is pushed and popped at most once.",
+      "72 resolves the earlier 70 after one day. Neither 72 nor 71 has a later warmer day. Each index is pushed and popped at most once."
+    ],
+    "level": "DSA",
+    "number": "739",
+    "title_bn": "পরবর্তী উষ্ণ দিন বের করা",
+    "why_bn": [
+      "আবার ট্রেস করুন। 72 একদিন পর আগের 70-এর উত্তর ঠিক করে দেয়। 72 বা 71-এর পরে আর কোনো উষ্ণ দিন নেই। প্রতিটি ইন্ডেক্স সর্বোচ্চ একবার push ও pop হয়।",
+      "আবার ট্রেস করুন। 72 একদিন পর আগের 70-এর উত্তর ঠিক করে দেয়। 72 বা 71-এর পরে আর কোনো উষ্ণ দিন নেই। প্রতিটি ইন্ডেক্স সর্বোচ্চ একবার push ও pop হয়।",
+      "72 একদিন পর আগের 70-এর উত্তর ঠিক করে দেয়। 72 বা 71-এর পরে আর কোনো উষ্ণ দিন নেই। প্রতিটি ইন্ডেক্স সর্বোচ্চ একবার push ও pop হয়।"
+    ]
+  },
+  {
+    "id": "queue-fifo",
+    "stage": "linear",
+    "topic": "Stacks & queues",
+    "title": "Process arrivals in order",
+    "code": "from collections import deque\nq = deque([1, 2])\nq.append(3)\nq.popleft()\nprint(list(q))",
+    "options": [
+      "[2, 3]",
+      "[1, 2]",
+      "[3, 2]"
+    ],
+    "answer": 0,
+    "why": [
+      "append joins the right and popleft removes the oldest value 1. Both endpoint operations are O(1).",
+      "Trace it again. append joins the right and popleft removes the oldest value 1. Both endpoint operations are O(1).",
+      "Trace it again. append joins the right and popleft removes the oldest value 1. Both endpoint operations are O(1)."
+    ],
+    "level": "DSA",
+    "number": null,
+    "title_bn": "আসার ক্রমে প্রসেস করা",
+    "why_bn": [
+      "append ডান প্রান্তে যোগ করে এবং popleft সবচেয়ে পুরোনো মান 1 সরিয়ে দেয়। দুই প্রান্তের অপারেশনই O(1)।",
+      "আবার ট্রেস করুন। append ডান প্রান্তে যোগ করে এবং popleft সবচেয়ে পুরোনো মান 1 সরিয়ে দেয়। দুই প্রান্তের অপারেশনই O(1)।",
+      "আবার ট্রেস করুন। append ডান প্রান্তে যোগ করে এবং popleft সবচেয়ে পুরোনো মান 1 সরিয়ে দেয়। দুই প্রান্তের অপারেশনই O(1)।"
+    ]
+  },
+  {
+    "id": "heap-pop-order",
+    "stage": "linear",
+    "topic": "Heaps",
+    "title": "Extract the smallest values",
+    "code": "import heapq\nh = [5, 1, 3]\nheapq.heapify(h)\nprint(heapq.heappop(h), heapq.heappop(h))",
+    "options": [
+      "5 3",
+      "1 3",
+      "1 5"
+    ],
+    "answer": 1,
+    "why": [
+      "Trace it again. heapq is a min heap. Popping repairs the heap, so the next pop is the next-smallest value.",
+      "heapq is a min heap. Popping repairs the heap, so the next pop is the next-smallest value.",
+      "Trace it again. heapq is a min heap. Popping repairs the heap, so the next pop is the next-smallest value."
+    ],
+    "level": "DSA",
+    "number": "215",
+    "title_bn": "সবচেয়ে ছোট মানগুলো বের করা",
+    "why_bn": [
+      "আবার ট্রেস করুন। heapq হলো একটি min heap। pop করার পর heap নিজেই ঠিক হয়ে যায়, ফলে পরের pop-এ তার পরের ছোট মানটি পাওয়া যায়।",
+      "heapq হলো একটি min heap। pop করার পর heap নিজেই ঠিক হয়ে যায়, ফলে পরের pop-এ তার পরের ছোট মানটি পাওয়া যায়।",
+      "আবার ট্রেস করুন। heapq হলো একটি min heap। pop করার পর heap নিজেই ঠিক হয়ে যায়, ফলে পরের pop-এ তার পরের ছোট মানটি পাওয়া যায়।"
+    ]
+  },
+  {
+    "id": "heap-negative",
+    "stage": "linear",
+    "topic": "Heaps",
+    "title": "Represent a max heap portably",
+    "code": "import heapq\nh = [-x for x in [4, 9, 2]]\nheapq.heapify(h)\nprint(-heapq.heappop(h))",
+    "options": [
+      "-9",
+      "2",
+      "9"
+    ],
+    "answer": 2,
+    "why": [
+      "Trace it again. Negating makes the largest original value the smallest stored value. Negate again when reading it.",
+      "Trace it again. Negating makes the largest original value the smallest stored value. Negate again when reading it.",
+      "Negating makes the largest original value the smallest stored value. Negate again when reading it."
+    ],
+    "level": "DSA",
+    "number": "218",
+    "title_bn": "পোর্টেবল উপায়ে max heap তৈরি",
+    "why_bn": [
+      "আবার ট্রেস করুন। ঋণাত্মক করলে মূল সবচেয়ে বড় মানটি সংরক্ষিত সবচেয়ে ছোট মান হয়ে যায়। পড়ার সময় আবার চিহ্ন উল্টে নিন।",
+      "আবার ট্রেস করুন। ঋণাত্মক করলে মূল সবচেয়ে বড় মানটি সংরক্ষিত সবচেয়ে ছোট মান হয়ে যায়। পড়ার সময় আবার চিহ্ন উল্টে নিন।",
+      "ঋণাত্মক করলে মূল সবচেয়ে বড় মানটি সংরক্ষিত সবচেয়ে ছোট মান হয়ে যায়। পড়ার সময় আবার চিহ্ন উল্টে নিন।"
+    ]
+  },
+  {
+    "id": "heap-bounded",
+    "stage": "linear",
+    "topic": "Heaps",
+    "title": "Retain the largest k values",
+    "code": "import heapq\nh = []\nfor x in [3, 1, 5, 2, 4]:\n    heapq.heappush(h, x)\n    if len(h) > 2:\n        heapq.heappop(h)\nprint(h[0])",
+    "options": [
+      "4",
+      "5",
+      "2"
+    ],
+    "answer": 0,
+    "why": [
+      "The heap retains the largest two values, 4 and 5. Its minimum is the second-largest value. This uses O(k) space.",
+      "Trace it again. The heap retains the largest two values, 4 and 5. Its minimum is the second-largest value. This uses O(k) space.",
+      "Trace it again. The heap retains the largest two values, 4 and 5. Its minimum is the second-largest value. This uses O(k) space."
+    ],
+    "level": "DSA",
+    "number": "215",
+    "title_bn": "সবচেয়ে বড় k-টি মান ধরে রাখা",
+    "why_bn": [
+      "heap-এ সবচেয়ে বড় দুটি মান 4 ও 5 থাকে। এর সর্বনিম্ন মানটিই দ্বিতীয় বৃহত্তম। এতে O(k) মেমরি লাগে।",
+      "আবার ট্রেস করুন। heap-এ সবচেয়ে বড় দুটি মান 4 ও 5 থাকে। এর সর্বনিম্ন মানটিই দ্বিতীয় বৃহত্তম। এতে O(k) মেমরি লাগে।",
+      "আবার ট্রেস করুন। heap-এ সবচেয়ে বড় দুটি মান 4 ও 5 থাকে। এর সর্বনিম্ন মানটিই দ্বিতীয় বৃহত্তম। এতে O(k) মেমরি লাগে।"
+    ]
+  },
+  {
+    "id": "linked-follow",
+    "stage": "linear",
+    "topic": "Linked lists",
+    "title": "Follow next references",
+    "code": "nodes = {'a': 'b', 'b': 'c', 'c': None}\ncurrent = 'a'\nsteps = 0\nwhile current is not None:\n    steps += 1\n    current = nodes[current]\nprint(steps)",
+    "options": [
+      "2",
+      "3",
+      "4"
+    ],
+    "answer": 1,
+    "why": [
+      "Trace it again. The traversal visits a, b and c. None is the terminator, not another node.",
+      "The traversal visits a, b and c. None is the terminator, not another node.",
+      "Trace it again. The traversal visits a, b and c. None is the terminator, not another node."
+    ],
+    "level": "DSA",
+    "number": "206",
+    "title_bn": "next রেফারেন্স ধরে এগোনো",
+    "why_bn": [
+      "আবার ট্রেস করুন। traversal-টি a, b এবং c ভিজিট করে। None হলো শেষের সংকেত, আলাদা কোনো node নয়।",
+      "traversal-টি a, b এবং c ভিজিট করে। None হলো শেষের সংকেত, আলাদা কোনো node নয়।",
+      "আবার ট্রেস করুন। traversal-টি a, b এবং c ভিজিট করে। None হলো শেষের সংকেত, আলাদা কোনো node নয়।"
+    ]
+  },
+  {
+    "id": "linked-reverse",
+    "stage": "linear",
+    "topic": "Linked lists",
+    "title": "Reverse node links",
+    "code": "links = [1, 2, None]\nprevious, current = None, 0\nwhile current is not None:\n    nxt = links[current]\n    links[current] = previous\n    previous, current = current, nxt\nprint(previous, links)",
+    "options": [
+      "0 [1, 2, None]",
+      "2 [2, 1, None]",
+      "2 [None, 0, 1]"
+    ],
+    "answer": 2,
+    "why": [
+      "Trace it again. Save the old next link before reversing it. Node 2 becomes the head and node 0 becomes the tail.",
+      "Trace it again. Save the old next link before reversing it. Node 2 becomes the head and node 0 becomes the tail.",
+      "Save the old next link before reversing it. Node 2 becomes the head and node 0 becomes the tail."
+    ],
+    "level": "DSA",
+    "number": "206",
+    "title_bn": "node-এর লিংক উল্টানো",
+    "why_bn": [
+      "আবার ট্রেস করুন। লিংক উল্টানোর আগেই পুরোনো next লিংক সংরক্ষণ করুন। শেষে node 2 হয় head এবং node 0 হয় tail।",
+      "আবার ট্রেস করুন। লিংক উল্টানোর আগেই পুরোনো next লিংক সংরক্ষণ করুন। শেষে node 2 হয় head এবং node 0 হয় tail।",
+      "লিংক উল্টানোর আগেই পুরোনো next লিংক সংরক্ষণ করুন। শেষে node 2 হয় head এবং node 0 হয় tail।"
+    ]
+  },
+  {
+    "id": "heap-replace",
+    "stage": "linear",
+    "topic": "Heaps",
+    "title": "Replace the heap root",
+    "code": "import heapq\nh = [2, 5, 7]\nold = heapq.heapreplace(h, 6)\nprint(old, h[0])",
+    "options": [
+      "2 5",
+      "2 6",
+      "5 2"
+    ],
+    "answer": 0,
+    "why": [
+      "heapreplace removes the smallest existing value 2, inserts 6 and repairs the heap. The new minimum is 5.",
+      "Trace it again. heapreplace removes the smallest existing value 2, inserts 6 and repairs the heap. The new minimum is 5.",
+      "Trace it again. heapreplace removes the smallest existing value 2, inserts 6 and repairs the heap. The new minimum is 5."
+    ],
+    "level": "DSA",
+    "number": "215",
+    "title_bn": "heap-এর root প্রতিস্থাপন করা",
+    "why_bn": [
+      "heapreplace বিদ্যমান সবচেয়ে ছোট মান 2 সরিয়ে 6 যোগ করে এবং heap ঠিক করে নেয়। নতুন সর্বনিম্ন মান হয় 5।",
+      "আবার ট্রেস করুন। heapreplace বিদ্যমান সবচেয়ে ছোট মান 2 সরিয়ে 6 যোগ করে এবং heap ঠিক করে নেয়। নতুন সর্বনিম্ন মান হয় 5।",
+      "আবার ট্রেস করুন। heapreplace বিদ্যমান সবচেয়ে ছোট মান 2 সরিয়ে 6 যোগ করে এবং heap ঠিক করে নেয়। নতুন সর্বনিম্ন মান হয় 5।"
+    ]
+  },
+  {
+    "id": "binary-search-loop",
+    "stage": "search",
+    "topic": "Binary search",
+    "title": "Find an exact target",
+    "code": "nums = [1, 3, 5, 7]\nleft, right = 0, 3\nwhile left <= right:\n    mid = (left + right) // 2\n    if nums[mid] == 5:\n        break\n    if nums[mid] < 5:\n        left = mid + 1\n    else:\n        right = mid - 1\nprint(mid)",
+    "options": [
+      "1",
+      "2",
+      "3"
+    ],
+    "answer": 1,
+    "why": [
+      "Trace it again. The first midpoint is index 1, then the left bound becomes 2. Index 2 contains the target.",
+      "The first midpoint is index 1, then the left bound becomes 2. Index 2 contains the target.",
+      "Trace it again. The first midpoint is index 1, then the left bound becomes 2. Index 2 contains the target."
+    ],
+    "level": "DSA",
+    "number": "704",
+    "title_bn": "সঠিক target খুঁজে বের করা",
+    "why_bn": [
+      "আবার ট্রেস করুন। প্রথম মধ্যবিন্দু index 1, এরপর বাম সীমানা হয় 2। index 2-তেই target রয়েছে।",
+      "প্রথম মধ্যবিন্দু index 1, এরপর বাম সীমানা হয় 2। index 2-তেই target রয়েছে।",
+      "আবার ট্রেস করুন। প্রথম মধ্যবিন্দু index 1, এরপর বাম সীমানা হয় 2। index 2-তেই target রয়েছে।"
+    ]
+  },
+  {
+    "id": "bisect-right",
+    "stage": "search",
+    "topic": "Binary search",
+    "title": "Insert after equal values",
+    "code": "from bisect import bisect_right\nprint(bisect_right([1, 3, 3, 7], 3))",
+    "options": [
+      "1",
+      "2",
+      "3"
+    ],
+    "answer": 2,
+    "why": [
+      "Trace it again. bisect_right returns the first position after all equal 3 values: index 3. The input must already be sorted.",
+      "Trace it again. bisect_right returns the first position after all equal 3 values: index 3. The input must already be sorted.",
+      "bisect_right returns the first position after all equal 3 values: index 3. The input must already be sorted."
+    ],
+    "level": "DSA",
+    "number": null,
+    "title_bn": "সমান মানগুলোর পরে ইনসার্ট করা",
+    "why_bn": [
+      "আবার ট্রেস করুন। bisect_right সব সমান 3-এর ঠিক পরের প্রথম অবস্থানটি রিটার্ন করে: index 3। ইনপুটটি আগে থেকেই sorted হতে হবে।",
+      "আবার ট্রেস করুন। bisect_right সব সমান 3-এর ঠিক পরের প্রথম অবস্থানটি রিটার্ন করে: index 3। ইনপুটটি আগে থেকেই sorted হতে হবে।",
+      "bisect_right সব সমান 3-এর ঠিক পরের প্রথম অবস্থানটি রিটার্ন করে: index 3। ইনপুটটি আগে থেকেই sorted হতে হবে।"
+    ]
+  },
+  {
+    "id": "bisect-count",
+    "stage": "search",
+    "topic": "Binary search",
+    "title": "Count a value in a sorted list",
+    "code": "from bisect import bisect_left, bisect_right\nnums = [1, 2, 2, 2, 4]\nprint(bisect_right(nums, 2) - bisect_left(nums, 2))",
+    "options": [
+      "3",
+      "2",
+      "4"
+    ],
+    "answer": 0,
+    "why": [
+      "The equal range is [1, 4), so its length is 4 - 1 = 3. Two binary searches take O(log n) time.",
+      "Trace it again. The equal range is [1, 4), so its length is 4 - 1 = 3. Two binary searches take O(log n) time.",
+      "Trace it again. The equal range is [1, 4), so its length is 4 - 1 = 3. Two binary searches take O(log n) time."
+    ],
+    "level": "DSA",
+    "number": null,
+    "title_bn": "sorted লিস্টে একটি মান গণনা",
+    "why_bn": [
+      "সমান মানগুলোর পরিসর [1, 4), তাই এর দৈর্ঘ্য 4 - 1 = 3। দুটি binary search-এ সময় লাগে O(log n)।",
+      "আবার ট্রেস করুন। সমান মানগুলোর পরিসর [1, 4), তাই এর দৈর্ঘ্য 4 - 1 = 3। দুটি binary search-এ সময় লাগে O(log n)।",
+      "আবার ট্রেস করুন। সমান মানগুলোর পরিসর [1, 4), তাই এর দৈর্ঘ্য 4 - 1 = 3। দুটি binary search-এ সময় লাগে O(log n)।"
+    ]
+  },
+  {
+    "id": "sort-stable",
+    "stage": "search",
+    "topic": "Sorting",
+    "title": "Preserve equal-key order",
+    "code": "pairs = [('a', 2), ('b', 1), ('c', 2)]\nprint([name for name, score in sorted(pairs, key=lambda p: p[1])])",
+    "options": [
+      "['b', 'c', 'a']",
+      "['b', 'a', 'c']",
+      "['a', 'b', 'c']"
+    ],
+    "answer": 1,
+    "why": [
+      "Trace it again. Python sorting is stable: a stays before c because both have key 2. b has the smallest key, 1.",
+      "Python sorting is stable: a stays before c because both have key 2. b has the smallest key, 1.",
+      "Trace it again. Python sorting is stable: a stays before c because both have key 2. b has the smallest key, 1."
+    ],
+    "level": "DSA",
+    "number": null,
+    "title_bn": "সমান key-এর ক্রম বজায় রাখা",
+    "why_bn": [
+      "আবার ট্রেস করুন। Python-এর sorting স্থিতিশীল (stable): দুটিরই key 2 হওয়ায় a, c-এর আগেই থাকে। সবচেয়ে ছোট key 1 হলো b-এর।",
+      "Python-এর sorting স্থিতিশীল (stable): দুটিরই key 2 হওয়ায় a, c-এর আগেই থাকে। সবচেয়ে ছোট key 1 হলো b-এর।",
+      "আবার ট্রেস করুন। Python-এর sorting স্থিতিশীল (stable): দুটিরই key 2 হওয়ায় a, c-এর আগেই থাকে। সবচেয়ে ছোট key 1 হলো b-এর।"
+    ]
+  },
+  {
+    "id": "sort-multiple",
+    "stage": "search",
+    "topic": "Sorting",
+    "title": "Order by two criteria",
+    "code": "pairs = [(2, 1), (1, 3), (1, 2)]\nprint(sorted(pairs, key=lambda p: (p[0], -p[1])))",
+    "options": [
+      "[(1, 2), (1, 3), (2, 1)]",
+      "[(2, 1), (1, 3), (1, 2)]",
+      "[(1, 3), (1, 2), (2, 1)]"
+    ],
+    "answer": 2,
+    "why": [
+      "Trace it again. The first key sorts ascending; the negated second key sorts descending within an equal first key.",
+      "Trace it again. The first key sorts ascending; the negated second key sorts descending within an equal first key.",
+      "The first key sorts ascending; the negated second key sorts descending within an equal first key."
+    ],
+    "level": "DSA",
+    "number": null,
+    "title_bn": "দুটি শর্ত অনুযায়ী সাজানো",
+    "why_bn": [
+      "আবার ট্রেস করুন। প্রথম key উর্ধ্বক্রমে সাজায়; প্রথম key সমান হলে ঋণাত্মক দ্বিতীয় key নিম্নক্রমে সাজায়।",
+      "আবার ট্রেস করুন। প্রথম key উর্ধ্বক্রমে সাজায়; প্রথম key সমান হলে ঋণাত্মক দ্বিতীয় key নিম্নক্রমে সাজায়।",
+      "প্রথম key উর্ধ্বক্রমে সাজায়; প্রথম key সমান হলে ঋণাত্মক দ্বিতীয় key নিম্নক্রমে সাজায়।"
+    ]
+  },
+  {
+    "id": "merge-intervals",
+    "stage": "search",
+    "topic": "Intervals",
+    "title": "Merge an overlap",
+    "code": "merged = [[1, 3]]\nfor start, end in [[2, 6], [8, 10]]:\n    if start <= merged[-1][1]:\n        merged[-1][1] = max(merged[-1][1], end)\n    else:\n        merged.append([start, end])\nprint(merged)",
+    "options": [
+      "[[1, 6], [8, 10]]",
+      "[[1, 3], [2, 6], [8, 10]]",
+      "[[1, 10]]"
+    ],
+    "answer": 0,
+    "why": [
+      "The first two intervals overlap, but 8 starts after 6. Sorting first makes a single merge pass sufficient.",
+      "Trace it again. The first two intervals overlap, but 8 starts after 6. Sorting first makes a single merge pass sufficient.",
+      "Trace it again. The first two intervals overlap, but 8 starts after 6. Sorting first makes a single merge pass sufficient."
+    ],
+    "level": "DSA",
+    "number": "56",
+    "title_bn": "ওভারল্যাপ merge করা",
+    "why_bn": [
+      "প্রথম দুটি interval ওভারল্যাপ করে, কিন্তু 8 শুরু হয় 6-এর পরে। আগে sort করে নিলে এক পাসে সব merge করা যায়।",
+      "আবার ট্রেস করুন। প্রথম দুটি interval ওভারল্যাপ করে, কিন্তু 8 শুরু হয় 6-এর পরে। আগে sort করে নিলে এক পাসে সব merge করা যায়।",
+      "আবার ট্রেস করুন। প্রথম দুটি interval ওভারল্যাপ করে, কিন্তু 8 শুরু হয় 6-এর পরে। আগে sort করে নিলে এক পাসে সব merge করা যায়।"
+    ]
+  },
+  {
+    "id": "recursion-base",
+    "stage": "search",
+    "topic": "Recursion",
+    "title": "Stop at a base case",
+    "code": "def total(n):\n    if n == 0:\n        return 0\n    return n + total(n - 1)\nprint(total(4))",
+    "options": [
+      "4",
+      "10",
+      "24"
+    ],
+    "answer": 1,
+    "why": [
+      "Trace it again. The calls add 4 + 3 + 2 + 1 + 0. The base case stops recursion; this implementation uses O(n) call-stack space.",
+      "The calls add 4 + 3 + 2 + 1 + 0. The base case stops recursion; this implementation uses O(n) call-stack space.",
+      "Trace it again. The calls add 4 + 3 + 2 + 1 + 0. The base case stops recursion; this implementation uses O(n) call-stack space."
+    ],
+    "level": "DSA",
+    "number": null,
+    "title_bn": "base case-এ থামা",
+    "why_bn": [
+      "আবার ট্রেস করুন। কলগুলো 4 + 3 + 2 + 1 + 0 যোগ করে। base case recursion থামায়; এই বাস্তবায়নে O(n) call-stack মেমরি লাগে।",
+      "কলগুলো 4 + 3 + 2 + 1 + 0 যোগ করে। base case recursion থামায়; এই বাস্তবায়নে O(n) call-stack মেমরি লাগে।",
+      "আবার ট্রেস করুন। কলগুলো 4 + 3 + 2 + 1 + 0 যোগ করে। base case recursion থামায়; এই বাস্তবায়নে O(n) call-stack মেমরি লাগে।"
+    ]
+  },
+  {
+    "id": "backtrack-copy",
+    "stage": "search",
+    "topic": "Backtracking",
+    "title": "Save a snapshot of the path",
+    "code": "path = [1]\nanswers = []\nanswers.append(path.copy())\npath.append(2)\nprint(answers)",
+    "options": [
+      "[[1, 2]]",
+      "[1]",
+      "[[1]]"
+    ],
+    "answer": 2,
+    "why": [
+      "Trace it again. copy freezes this flat path at the time of saving. Storing path itself would share the mutable list.",
+      "Trace it again. copy freezes this flat path at the time of saving. Storing path itself would share the mutable list.",
+      "copy freezes this flat path at the time of saving. Storing path itself would share the mutable list."
+    ],
+    "level": "DSA",
+    "number": "78",
+    "title_bn": "path-এর স্ন্যাপশট সংরক্ষণ",
+    "why_bn": [
+      "আবার ট্রেস করুন। সংরক্ষণের মুহূর্তে copy() এই flat path-এর অবস্থা স্থির করে রাখে। সরাসরি path রাখলে পরিবর্তনশীল লিস্টটি শেয়ার হয়ে যেত।",
+      "আবার ট্রেস করুন। সংরক্ষণের মুহূর্তে copy() এই flat path-এর অবস্থা স্থির করে রাখে। সরাসরি path রাখলে পরিবর্তনশীল লিস্টটি শেয়ার হয়ে যেত।",
+      "সংরক্ষণের মুহূর্তে copy() এই flat path-এর অবস্থা স্থির করে রাখে। সরাসরি path রাখলে পরিবর্তনশীল লিস্টটি শেয়ার হয়ে যেত।"
+    ]
+  },
+  {
+    "id": "subset-growth",
+    "stage": "search",
+    "topic": "Backtracking",
+    "title": "Build subsets incrementally",
+    "code": "subsets = [[]]\nfor x in [1, 2]:\n    subsets += [s + [x] for s in subsets]\nprint(len(subsets))",
+    "options": [
+      "4",
+      "3",
+      "2"
+    ],
+    "answer": 0,
+    "why": [
+      "Each new element doubles the subsets: exclude it or include it. For two distinct elements the count is 2 ** 2.",
+      "Trace it again. Each new element doubles the subsets: exclude it or include it. For two distinct elements the count is 2 ** 2.",
+      "Trace it again. Each new element doubles the subsets: exclude it or include it. For two distinct elements the count is 2 ** 2."
+    ],
+    "level": "DSA",
+    "number": "78",
+    "title_bn": "ধাপে ধাপে subset তৈরি করা",
+    "why_bn": [
+      "প্রতিটি নতুন উপাদান subset-এর সংখ্যা দ্বিগুণ করে: এটি বাদ দেওয়া অথবা নেওয়া। দুটি অনন্য উপাদানের জন্য সংখ্যাটি 2 ** 2।",
+      "আবার ট্রেস করুন। প্রতিটি নতুন উপাদান subset-এর সংখ্যা দ্বিগুণ করে: এটি বাদ দেওয়া অথবা নেওয়া। দুটি অনন্য উপাদানের জন্য সংখ্যাটি 2 ** 2।",
+      "আবার ট্রেস করুন। প্রতিটি নতুন উপাদান subset-এর সংখ্যা দ্বিগুণ করে: এটি বাদ দেওয়া অথবা নেওয়া। দুটি অনন্য উপাদানের জন্য সংখ্যাটি 2 ** 2।"
+    ]
+  },
+  {
+    "id": "lower-bound",
+    "stage": "search",
+    "topic": "Binary search",
+    "title": "Find the first feasible position",
+    "code": "nums = [1, 2, 4, 4, 7]\nleft, right = 0, len(nums)\nwhile left < right:\n    mid = (left + right) // 2\n    if nums[mid] < 4:\n        left = mid + 1\n    else:\n        right = mid\nprint(left)",
+    "options": [
+      "3",
+      "2",
+      "4"
+    ],
+    "answer": 1,
+    "why": [
+      "Trace it again. The half-open interval preserves the first value at least 4. Moving right to mid keeps an equal candidate.",
+      "The half-open interval preserves the first value at least 4. Moving right to mid keeps an equal candidate.",
+      "Trace it again. The half-open interval preserves the first value at least 4. Moving right to mid keeps an equal candidate."
+    ],
+    "level": "DSA",
+    "number": "35",
+    "title_bn": "প্রথম উপযুক্ত অবস্থান খোঁজা",
+    "why_bn": [
+      "আবার ট্রেস করুন। half-open interval অন্তত 4 বা তার বড় প্রথম মানটিকে ধরে রাখে। right-কে mid-এ আনলে সমান মানটিও সম্ভাব্য হিসেবে থেকে যায়।",
+      "half-open interval অন্তত 4 বা তার বড় প্রথম মানটিকে ধরে রাখে। right-কে mid-এ আনলে সমান মানটিও সম্ভাব্য হিসেবে থেকে যায়।",
+      "আবার ট্রেস করুন। half-open interval অন্তত 4 বা তার বড় প্রথম মানটিকে ধরে রাখে। right-কে mid-এ আনলে সমান মানটিও সম্ভাব্য হিসেবে থেকে যায়।"
+    ]
+  },
+  {
+    "id": "bfs-diamond",
+    "stage": "graphs",
+    "topic": "Graphs",
+    "title": "Discover each node once",
+    "code": "from collections import deque\ngraph = {0: [1, 2], 1: [3], 2: [3], 3: []}\nq = deque([0])\nseen = {0}\norder = []\nwhile q:\n    node = q.popleft()\n    order.append(node)\n    for nxt in graph[node]:\n        if nxt not in seen:\n            seen.add(nxt)\n            q.append(nxt)\nprint(order)",
+    "options": [
+      "[0, 1, 3, 2]",
+      "[0, 1, 2, 3, 3]",
+      "[0, 1, 2, 3]"
+    ],
+    "answer": 2,
+    "why": [
+      "Trace it again. Marking discovered nodes when enqueuing prevents node 3 from being added twice. BFS expands by distance.",
+      "Trace it again. Marking discovered nodes when enqueuing prevents node 3 from being added twice. BFS expands by distance.",
+      "Marking discovered nodes when enqueuing prevents node 3 from being added twice. BFS expands by distance."
+    ],
+    "level": "DSA",
+    "number": "200",
+    "title_bn": "প্রতিটি node একবার আবিষ্কার করা",
+    "why_bn": [
+      "আবার ট্রেস করুন। queue-তে যোগ করার সময়ই discovered চিহ্নিত করলে node 3 দুবার যোগ হয় না। BFS দূরত্বের ক্রম অনুযায়ী এগোয়।",
+      "আবার ট্রেস করুন। queue-তে যোগ করার সময়ই discovered চিহ্নিত করলে node 3 দুবার যোগ হয় না। BFS দূরত্বের ক্রম অনুযায়ী এগোয়।",
+      "queue-তে যোগ করার সময়ই discovered চিহ্নিত করলে node 3 দুবার যোগ হয় না। BFS দূরত্বের ক্রম অনুযায়ী এগোয়।"
+    ]
+  },
+  {
+    "id": "bfs-distance",
+    "stage": "graphs",
+    "topic": "Graphs",
+    "title": "Track shortest unweighted distance",
+    "code": "from collections import deque\ngraph = {0: [1], 1: [2], 2: []}\ndistance = {0: 0}\nq = deque([0])\nwhile q:\n    node = q.popleft()\n    for nxt in graph[node]:\n        if nxt not in distance:\n            distance[nxt] = distance[node] + 1\n            q.append(nxt)\nprint(distance[2])",
+    "options": [
+      "2",
+      "3",
+      "1"
+    ],
+    "answer": 0,
+    "why": [
+      "Distance counts edges, not nodes. The path 0 -> 1 -> 2 has two edges.",
+      "Trace it again. Distance counts edges, not nodes. The path 0 -> 1 -> 2 has two edges.",
+      "Trace it again. Distance counts edges, not nodes. The path 0 -> 1 -> 2 has two edges."
+    ],
+    "level": "DSA",
+    "number": "994",
+    "title_bn": "সর্বনিম্ন unweighted দূরত্ব ট্র্যাক করা",
+    "why_bn": [
+      "দূরত্ব বলতে node নয়, edge-এর সংখ্যা বোঝায়। 0 -> 1 -> 2 পথে দুটি edge আছে।",
+      "আবার ট্রেস করুন। দূরত্ব বলতে node নয়, edge-এর সংখ্যা বোঝায়। 0 -> 1 -> 2 পথে দুটি edge আছে।",
+      "আবার ট্রেস করুন। দূরত্ব বলতে node নয়, edge-এর সংখ্যা বোঝায়। 0 -> 1 -> 2 পথে দুটি edge আছে।"
+    ]
+  },
+  {
+    "id": "dfs-components",
+    "stage": "graphs",
+    "topic": "Graphs",
+    "title": "Count disconnected groups",
+    "code": "graph = {0: [1], 1: [0], 2: []}\nseen = set()\ndef visit(node):\n    if node in seen:\n        return\n    seen.add(node)\n    for nxt in graph[node]:\n        visit(nxt)\ncomponents = 0\nfor node in graph:\n    if node not in seen:\n        components += 1\n        visit(node)\nprint(components)",
+    "options": [
+      "1",
+      "2",
+      "3"
+    ],
+    "answer": 1,
+    "why": [
+      "Trace it again. Nodes 0 and 1 form one component; isolated node 2 forms another. The visited set also stops cycles.",
+      "Nodes 0 and 1 form one component; isolated node 2 forms another. The visited set also stops cycles.",
+      "Trace it again. Nodes 0 and 1 form one component; isolated node 2 forms another. The visited set also stops cycles."
+    ],
+    "level": "DSA",
+    "number": "200",
+    "title_bn": "বিচ্ছিন্ন দলগুলো গণনা",
+    "why_bn": [
+      "আবার ট্রেস করুন। node 0 এবং 1 মিলে একটি component তৈরি করে; বিচ্ছিন্ন node 2 আরেকটি। visited set cycle-ও আটকায়।",
+      "node 0 এবং 1 মিলে একটি component তৈরি করে; বিচ্ছিন্ন node 2 আরেকটি। visited set cycle-ও আটকায়।",
+      "আবার ট্রেস করুন। node 0 এবং 1 মিলে একটি component তৈরি করে; বিচ্ছিন্ন node 2 আরেকটি। visited set cycle-ও আটকায়।"
+    ]
+  },
+  {
+    "id": "grid-neighbours",
+    "stage": "graphs",
+    "topic": "Graphs",
+    "title": "Stay inside grid bounds",
+    "code": "rows = cols = 3\nr, c = 0, 0\nvalid = []\nfor dr, dc in [(1, 0), (-1, 0), (0, 1), (0, -1)]:\n    nr, nc = r + dr, c + dc\n    if 0 <= nr < rows and 0 <= nc < cols:\n        valid.append((nr, nc))\nprint(len(valid))",
+    "options": [
+      "4",
+      "3",
+      "2"
+    ],
+    "answer": 2,
+    "why": [
+      "Trace it again. A top-left corner has only down and right neighbours. Explicit bounds avoid Python negative-index wraparound.",
+      "Trace it again. A top-left corner has only down and right neighbours. Explicit bounds avoid Python negative-index wraparound.",
+      "A top-left corner has only down and right neighbours. Explicit bounds avoid Python negative-index wraparound."
+    ],
+    "level": "DSA",
+    "number": "200",
+    "title_bn": "grid-এর সীমার ভেতরে থাকা",
+    "why_bn": [
+      "আবার ট্রেস করুন। ওপর-বাম কোণার কেবল নিচে ও ডানে neighbor থাকে। স্পষ্ট সীমা পরীক্ষা Python-এর নেগেটিভ ইন্ডেক্স wraparound এড়ায়।",
+      "আবার ট্রেস করুন। ওপর-বাম কোণার কেবল নিচে ও ডানে neighbor থাকে। স্পষ্ট সীমা পরীক্ষা Python-এর নেগেটিভ ইন্ডেক্স wraparound এড়ায়।",
+      "ওপর-বাম কোণার কেবল নিচে ও ডানে neighbor থাকে। স্পষ্ট সীমা পরীক্ষা Python-এর নেগেটিভ ইন্ডেক্স wraparound এড়ায়।"
+    ]
+  },
+  {
+    "id": "tree-inorder",
+    "stage": "graphs",
+    "topic": "Trees",
+    "title": "Traverse left, node, right",
+    "code": "tree = (2, (1, None, None), (3, None, None))\ndef inorder(node):\n    if node is None:\n        return []\n    value, left, right = node\n    return inorder(left) + [value] + inorder(right)\nprint(inorder(tree))",
+    "options": [
+      "[1, 2, 3]",
+      "[2, 1, 3]",
+      "[3, 2, 1]"
+    ],
+    "answer": 0,
+    "why": [
+      "Inorder visits the left subtree before the root and then the right subtree. For a BST it produces sorted values.",
+      "Trace it again. Inorder visits the left subtree before the root and then the right subtree. For a BST it produces sorted values.",
+      "Trace it again. Inorder visits the left subtree before the root and then the right subtree. For a BST it produces sorted values."
+    ],
+    "level": "DSA",
+    "number": "94",
+    "title_bn": "বাম, node, ডান ক্রমে traversal",
+    "why_bn": [
+      "inorder আগে বাম subtree, তারপর root এবং শেষে ডান subtree ভিজিট করে। BST-এর ক্ষেত্রে এটি sorted মান দেয়।",
+      "আবার ট্রেস করুন। inorder আগে বাম subtree, তারপর root এবং শেষে ডান subtree ভিজিট করে। BST-এর ক্ষেত্রে এটি sorted মান দেয়।",
+      "আবার ট্রেস করুন। inorder আগে বাম subtree, তারপর root এবং শেষে ডান subtree ভিজিট করে। BST-এর ক্ষেত্রে এটি sorted মান দেয়।"
+    ]
+  },
+  {
+    "id": "tree-height",
+    "stage": "graphs",
+    "topic": "Trees",
+    "title": "Compute depth from children",
+    "code": "tree = (1, (2, (3, None, None), None), None)\ndef depth(node):\n    if node is None:\n        return 0\n    return 1 + max(depth(node[1]), depth(node[2]))\nprint(depth(tree))",
+    "options": [
+      "2",
+      "3",
+      "1"
+    ],
+    "answer": 1,
+    "why": [
+      "Trace it again. The empty subtree has depth zero. The longest root-to-leaf chain contains three nodes.",
+      "The empty subtree has depth zero. The longest root-to-leaf chain contains three nodes.",
+      "Trace it again. The empty subtree has depth zero. The longest root-to-leaf chain contains three nodes."
+    ],
+    "level": "DSA",
+    "number": "104",
+    "title_bn": "child থেকে গভীরতা নির্ণয়",
+    "why_bn": [
+      "আবার ট্রেস করুন। খালি subtree-এর গভীরতা শূন্য। root থেকে leaf পর্যন্ত দীর্ঘতম চেইনে তিনটি node আছে।",
+      "খালি subtree-এর গভীরতা শূন্য। root থেকে leaf পর্যন্ত দীর্ঘতম চেইনে তিনটি node আছে।",
+      "আবার ট্রেস করুন। খালি subtree-এর গভীরতা শূন্য। root থেকে leaf পর্যন্ত দীর্ঘতম চেইনে তিনটি node আছে।"
+    ]
+  },
+  {
+    "id": "union-find-root",
+    "stage": "graphs",
+    "topic": "Union find",
+    "title": "Follow representative links",
+    "code": "parent = [0, 0, 1, 3]\ndef find(x):\n    while x != parent[x]:\n        parent[x] = parent[parent[x]]\n        x = parent[x]\n    return x\nprint(find(2) == find(0))",
+    "options": [
+      "False",
+      "2",
+      "True"
+    ],
+    "answer": 2,
+    "why": [
+      "Trace it again. Node 2 reaches 1 then 0, so both have representative 0. Path halving shortens future traversals.",
+      "Trace it again. Node 2 reaches 1 then 0, so both have representative 0. Path halving shortens future traversals.",
+      "Node 2 reaches 1 then 0, so both have representative 0. Path halving shortens future traversals."
+    ],
+    "level": "DSA",
+    "number": null,
+    "title_bn": "প্রতিনিধি (representative) লিংক অনুসরণ",
+    "why_bn": [
+      "আবার ট্রেস করুন। node 2 থেকে 1 হয়ে 0-তে পৌঁছানো যায়, তাই উভয়ের প্রতিনিধিই 0। path halving ভবিষ্যতের খোঁজ দ্রুত করে।",
+      "আবার ট্রেস করুন। node 2 থেকে 1 হয়ে 0-তে পৌঁছানো যায়, তাই উভয়ের প্রতিনিধিই 0। path halving ভবিষ্যতের খোঁজ দ্রুত করে।",
+      "node 2 থেকে 1 হয়ে 0-তে পৌঁছানো যায়, তাই উভয়ের প্রতিনিধিই 0। path halving ভবিষ্যতের খোঁজ দ্রুত করে।"
+    ]
+  },
+  {
+    "id": "topological-ready",
+    "stage": "graphs",
+    "topic": "Graphs",
+    "title": "Start with no prerequisites",
+    "code": "indegree = [0, 1, 0, 2]\nprint([i for i, count in enumerate(indegree) if count == 0])",
+    "options": [
+      "[0, 2]",
+      "[1, 3]",
+      "[0]"
+    ],
+    "answer": 0,
+    "why": [
+      "An indegree of zero means no incoming prerequisites remain. Both 0 and 2 can enter the initial ready queue.",
+      "Trace it again. An indegree of zero means no incoming prerequisites remain. Both 0 and 2 can enter the initial ready queue.",
+      "Trace it again. An indegree of zero means no incoming prerequisites remain. Both 0 and 2 can enter the initial ready queue."
+    ],
+    "level": "DSA",
+    "number": "207",
+    "title_bn": "পূর্বশর্তহীন node দিয়ে শুরু",
+    "why_bn": [
+      "indegree শূন্য মানে কোনো আগত পূর্বশর্ত বাকি নেই। তাই 0 এবং 2 উভয়েই প্রাথমিক ready queue-তে ঢুকতে পারে।",
+      "আবার ট্রেস করুন। indegree শূন্য মানে কোনো আগত পূর্বশর্ত বাকি নেই। তাই 0 এবং 2 উভয়েই প্রাথমিক ready queue-তে ঢুকতে পারে।",
+      "আবার ট্রেস করুন। indegree শূন্য মানে কোনো আগত পূর্বশর্ত বাকি নেই। তাই 0 এবং 2 উভয়েই প্রাথমিক ready queue-তে ঢুকতে পারে।"
+    ]
+  },
+  {
+    "id": "climbing-stairs",
+    "stage": "graphs",
+    "topic": "Dynamic programming",
+    "title": "Reuse the previous two states",
+    "code": "previous, current = 1, 1\nfor step in range(2, 5):\n    previous, current = current, previous + current\nprint(current)",
+    "options": [
+      "4",
+      "5",
+      "8"
+    ],
+    "answer": 1,
+    "why": [
+      "Trace it again. Ways to step n equal ways to n-1 plus ways to n-2. Steps 2, 3 and 4 have 2, 3 and 5 ways.",
+      "Ways to step n equal ways to n-1 plus ways to n-2. Steps 2, 3 and 4 have 2, 3 and 5 ways.",
+      "Trace it again. Ways to step n equal ways to n-1 plus ways to n-2. Steps 2, 3 and 4 have 2, 3 and 5 ways."
+    ],
+    "level": "DSA",
+    "number": "70",
+    "title_bn": "আগের দুটি state পুনর্ব্যবহার",
+    "why_bn": [
+      "আবার ট্রেস করুন। n-তম ধাপে যাওয়ার উপায় হলো (n-1) ও (n-2)-তম ধাপের উপায়ের যোগফল। ধাপ 2, 3 ও 4-এর জন্য উপায় যথাক্রমে 2, 3 ও 5টি।",
+      "n-তম ধাপে যাওয়ার উপায় হলো (n-1) ও (n-2)-তম ধাপের উপায়ের যোগফল। ধাপ 2, 3 ও 4-এর জন্য উপায় যথাক্রমে 2, 3 ও 5টি।",
+      "আবার ট্রেস করুন। n-তম ধাপে যাওয়ার উপায় হলো (n-1) ও (n-2)-তম ধাপের উপায়ের যোগফল। ধাপ 2, 3 ও 4-এর জন্য উপায় যথাক্রমে 2, 3 ও 5টি।"
+    ]
+  },
+  {
+    "id": "coin-change-dp",
+    "stage": "graphs",
+    "topic": "Dynamic programming",
+    "title": "Build a minimum from smaller amounts",
+    "code": "coins = [1, 3]\ndp = [0] + [99] * 4\nfor amount in range(1, 5):\n    for coin in coins:\n        if coin <= amount:\n            dp[amount] = min(dp[amount], dp[amount - coin] + 1)\nprint(dp[4])",
+    "options": [
+      "4",
+      "1",
+      "2"
+    ],
+    "answer": 2,
+    "why": [
+      "Trace it again. Amount 4 uses 3 + 1, requiring two coins. The DP stores the best result for every smaller amount.",
+      "Trace it again. Amount 4 uses 3 + 1, requiring two coins. The DP stores the best result for every smaller amount.",
+      "Amount 4 uses 3 + 1, requiring two coins. The DP stores the best result for every smaller amount."
+    ],
+    "level": "DSA",
+    "number": "322",
+    "title_bn": "ছোট amount থেকে সর্বনিম্ন মান গড়া",
+    "why_bn": [
+      "আবার ট্রেস করুন। amount 4 বানাতে 3 + 1 অর্থাৎ দুটি কয়েন লাগে। DP প্রতিটি ছোট amount-এর সেরা ফলাফল সংরক্ষণ করে রাখে।",
+      "আবার ট্রেস করুন। amount 4 বানাতে 3 + 1 অর্থাৎ দুটি কয়েন লাগে। DP প্রতিটি ছোট amount-এর সেরা ফলাফল সংরক্ষণ করে রাখে।",
+      "amount 4 বানাতে 3 + 1 অর্থাৎ দুটি কয়েন লাগে। DP প্রতিটি ছোট amount-এর সেরা ফলাফল সংরক্ষণ করে রাখে।"
+    ]
+  },
+  {
+    "id": "xor-single",
+    "stage": "graphs",
+    "topic": "Bit manipulation",
+    "title": "Cancel paired values",
+    "code": "value = 0\nfor x in [4, 1, 4, 2, 2]:\n    value ^= x\nprint(value)",
+    "options": [
+      "1",
+      "4",
+      "0"
+    ],
+    "answer": 0,
+    "why": [
+      "x XOR x is zero and zero XOR x is x. When every other value appears twice, only the unpaired 1 remains.",
+      "Trace it again. x XOR x is zero and zero XOR x is x. When every other value appears twice, only the unpaired 1 remains.",
+      "Trace it again. x XOR x is zero and zero XOR x is x. When every other value appears twice, only the unpaired 1 remains."
+    ],
+    "level": "DSA",
+    "number": "136",
+    "title_bn": "জোড়া মান কাটাকাটি করা",
+    "why_bn": [
+      "x XOR x হলো শূন্য এবং 0 XOR x হলো x। বাকি প্রতিটি মান দুবার এলে কেবল জোড়াবিহীন 1 বাকি থাকে।",
+      "আবার ট্রেস করুন। x XOR x হলো শূন্য এবং 0 XOR x হলো x। বাকি প্রতিটি মান দুবার এলে কেবল জোড়াবিহীন 1 বাকি থাকে।",
+      "আবার ট্রেস করুন। x XOR x হলো শূন্য এবং 0 XOR x হলো x। বাকি প্রতিটি মান দুবার এলে কেবল জোড়াবিহীন 1 বাকি থাকে।"
+    ]
+  },
+  {
+    "id": "clear-lowest-bit",
+    "stage": "graphs",
+    "topic": "Bit manipulation",
+    "title": "Count set bits",
+    "code": "n = 13\ncount = 0\nwhile n:\n    n &= n - 1\n    count += 1\nprint(count)",
+    "options": [
+      "4",
+      "3",
+      "13"
+    ],
+    "answer": 1,
+    "why": [
+      "Trace it again. 13 is binary 1101. Each n & (n - 1) clears its lowest set bit, so the loop runs three times.",
+      "13 is binary 1101. Each n & (n - 1) clears its lowest set bit, so the loop runs three times.",
+      "Trace it again. 13 is binary 1101. Each n & (n - 1) clears its lowest set bit, so the loop runs three times."
+    ],
+    "level": "DSA",
+    "number": "191",
+    "title_bn": "set bit গণনা করা",
+    "why_bn": [
+      "আবার ট্রেস করুন। 13-এর বাইনারি রূপ 1101। প্রতিটি n & (n - 1) এর সর্বনিম্ন set bit-টি মুছে দেয়, তাই লুপটি তিনবার চলে।",
+      "13-এর বাইনারি রূপ 1101। প্রতিটি n & (n - 1) এর সর্বনিম্ন set bit-টি মুছে দেয়, তাই লুপটি তিনবার চলে।",
+      "আবার ট্রেস করুন। 13-এর বাইনারি রূপ 1101। প্রতিটি n & (n - 1) এর সর্বনিম্ন set bit-টি মুছে দেয়, তাই লুপটি তিনবার চলে।"
+    ]
+  }
+]
